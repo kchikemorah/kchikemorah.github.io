@@ -1,30 +1,35 @@
 p{
     font-size: 25px;
-    font-family:fantasy;
+    font-family:'Courier New', Courier, monospace;
     color: brown
 }
 h1{
    font-family: fantasy;
-   color: darkblue;
+   color: olive;
    font-size: 200%;
 }
 h2{
+   font-family: fantasy;
    color: darkcyan;
-}
-{
-   margin: 0;
-   padding: 0;
 }
 
 body {
    font-family: 'Arial', sans-serif;
+}
+.frontcover {
+   display: flex;
+   position:center;
+   justify-content: center;
+   font-size: 200px;
+   letter-spacing: 10px;
+
 }
 
 .navbar {
    display: flex;
    position: sticky;
    align-items: center;
-   justify-content: space-between;
+   justify-content: center;
    top: 0px;
    background: rgba(0, 0, 0, 0.6) url(
 'https://media.geeksforgeeks.org/wp-content/uploads/20201215124609/Capture-300x14.PNG');
@@ -37,6 +42,7 @@ body {
 .nav-list {
    display: flex;
    list-style: none;
+   justify-content: center;
 }
 
 .nav-list li {
