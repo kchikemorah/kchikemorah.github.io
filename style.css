@@ -5,7 +5,10 @@ p{
 }
 h1{
    color: darkolivegreen;
+   
 }
 h2{
    color: forestgreen;
 }
+
+@media

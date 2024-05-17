@@ -1,0 +1,88 @@
+p{
+    font-size: 25px;
+    font-family:fantasy;
+    color: brown
+}
+h1{
+   font-family: fantasy;
+   color: darkblue;
+   font-size: 200%;
+}
+h2{
+   color: darkcyan;
+}
+{
+   margin: 0;
+   padding: 0;
+}
+
+body {
+   font-family: 'Arial', sans-serif;
+}
+
+.navbar {
+   display: flex;
+   position: sticky;
+   align-items: center;
+   justify-content: space-between;
+   top: 0px;
+   background: rgba(0, 0, 0, 0.6) url(
+'https://media.geeksforgeeks.org/wp-content/uploads/20201215124609/Capture-300x14.PNG');
+   background-blend-mode: darken;
+   background-size: cover;
+   color: white;
+   padding: 10px 20px;
+}
+
+.nav-list {
+   display: flex;
+   list-style: none;
+}
+
+.nav-list li {
+   margin-right: 20px;
+}
+
+.nav-list li:last-child {
+   margin-right: 0;
+}
+
+.nav-list li a {
+   text-decoration: none;
+   color: olive;
+   font-size: 18px;
+   font-family: fantasy;
+   transition: color 0.3s ease-in-out;
+}
+
+.nav-list li a:hover {
+   color: darkolivegreen;
+   /* Change the color on hover */
+}
+
+.rightNav {
+   text-align: right;
+}
+
+#search {
+   padding: 8px;
+   font-size: 16px;
+   border: 2px solid whitesmoke;
+   border-radius: 5px;
+}
+
+.btn {
+   background-color: brown;
+   color: #000;
+   border: none;
+   padding: 8px 12px;
+   border-radius: 5px;
+   cursor: pointer;
+   transition: background-color 0.3s ease-in-out;
+}
+
+.btn:hover {
+   background-color: #000;
+   /* Change the background color on hover */
+   color: #ffd700;
+}
