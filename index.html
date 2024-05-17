@@ -3,9 +3,37 @@
     <head>
         <title> Kene's Adult Life! </title> <!--style and title always in the head-->
         <link rel="stylesheet" href="style.css">
+        <style>
+            .dropbtn{
+                background-color: darkolivegreen;
+                color: forestgreen;
+                border: ridge;
+                border-radius: 15px;
+            }
+            .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: lightgray;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            }
+
+            .dropdown-content a {
+            padding:  5px;
+            text-decoration: none;
+            display: block;
+}
+
+            .dropdown-content a:hover {background-color: darkolivegreen;}
+
+            .dropdown:hover .dropdown-content {display: block;}
+
+            .dropdown:hover .dropbtn {background-color: forestgreen;} 
+        </style>
     </head>
 
-    <body style="background-color: darkseagreen">
+    <body style="background-color: darkseagreen"> 
         <div style="color:cadetblue; font-size: 100px; border: 10px solid forestgreen; border-style: ridge;" > Who is Kene?  <span style = "color:darkolivegreen; font-size: 20px" > Computer Science + Math, (and a minor in lingustics)</span></div>
         <br>
         <br>
@@ -31,9 +59,21 @@
         <br>
         origami
         <br>
-        long tv shows
+         </p>
+        <div class="dropdown">
+            <button class="dropbtn"><p>long tv shows</p></button>
+            <div class="dropdown-content">
+              <a href="https://onceuponatime.fandom.com/wiki/Once_Upon_a_Time_Wiki"><p> Once Upon a Time</p></a>
+              <a href="https://marvelcinematicuniverse.fandom.com/wiki/Agents_of_S.H.I.E.L.D."><p> Agents of Shield</p></a>
+              <a href="https://avatar.fandom.com/wiki/Avatar_Wiki"><p>Avatar: The Last Airbender</p></a>
+            </div>
+          </div>
         <br> 
-        reading
+        <p>
+        <a href="https://docs.google.com/document/d/1aFbIkOn6DvvCzDB8tAYdjFlnS4k-TuSZFVUiRtUPWwI/edit?usp=sharing" target="_blank"><p>reading</p></a>
+        
+        <a href="poetry.html" target="_blank"> <p>spoken word poetry</p></a>
+ 
         </p>
        
 
