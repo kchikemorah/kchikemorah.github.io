@@ -22,11 +22,8 @@
             </div>-->
         </nav>
         <h1><strong> Rudy Francisco </strong><h1>
-        <p> Porsha Olayiwola is a black queer artist who shares her experiences and reflections of the world that we live in. 
-            In her poetry, she focuses on her black experience in the United States. the history of slavery, the stereotypes of
-             black women, and so much more. Her performance skills are impeccable, and we watch her take the persona
-              of whoever she writes about, whether it be
-             <a href=https://www.youtube.com/watch?v=53kJF0DQtNo> capitalism</a>, or the <a href= https://www.youtube.com/watch?v=bSoITsaSs0M> misunderstood "angry black woman." </a>
+        <p> Rudy Fransicso is a fabulous love poet. He marks a lot of his poems with 'I'm not a live poet' before describing the most beautiufl depictions of love that you can imagine. 
+            >
         </p>
     </body>
 </html>

@@ -1,4 +1,8 @@
-<html>
+<?php 
+    include('init.php');
+    echoHeader('Spoken Word Poetry');
+?>
+<!-- <html>
     <head>
         <title> Spoken Word Poetry </title>
         <link rel="stylesheet" href="style1.css">
@@ -14,7 +18,7 @@
                 <li><a href="rudy_francisco.php">Rudy Francisco</a></li>
                 <li><a href="phil_kaye.php">Phil Kaye</a></li>
                 <li><a href="https://youtube.com/playlist?list=PLH8ZQwl-Kp38QMquDIv7AsOWIxm75kkqI&si=oyp5wd5Tlbuio7pV" target="_blank"> a playlist of my favorites!</a></li>
-            </ul>
+            </ul> -->
 
             
            <!-- <div class="rightNav">
@@ -24,5 +28,8 @@
             </div>-->
         </nav>
         <h1 class ="frontcover"> spoken word! <h1>
-    </body>
-</html>
+    <?php
+        echoFooter();
+        ?>
+<!--      </body>
+ </html> -->
