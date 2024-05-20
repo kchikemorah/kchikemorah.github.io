@@ -21,9 +21,9 @@ img {
    border-style: double;
    border-radius: 10px
 }
-.dropbtn{
-   background-color: darkolivegreen;
-   color: forestgreen;
+.button{
+   background-color: ;
+   color: #6B818C;
    border: ridge;
    border-radius: 15px;
 }

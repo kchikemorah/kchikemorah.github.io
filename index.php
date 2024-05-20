@@ -1,4 +1,3 @@
-
 <html>
     <head>
         <title> Kene's Adult Life! </title> <!--style and title always in the head-->
@@ -27,19 +26,19 @@
         </div>
 
         <div class="leftcontainer">
-        <img src="parallel.jpg" alt = "parallel parking" style="width:50%;height:70%; border: 10px solid darkolivegreen; border-style: double; border-radius: 10px">  </img>
+        <img src="parallel.jpg" alt = "parallel parking" style="width:50%;height:70%;">  </img>
         <p> 3. (consequently to 2) parallel parked in St. Louis </p>
          </div>
 
          <div class="rightcontainer">
         <p> 4. Paid my first month of auto insurance</p>
-        <img src="progressive.png" alt = "insurance" style="width:30%;height:30%; border: 10px solid darkolivegreen; border-style: double; border-radius: 10px">  </img>
+        <img src="progressive.png" alt = "insurance" style="width:30%;height:30%;">  </img>
         </div>
         <p> 5. Survived my first day of work!!!!! </p>
-        <h2 style="border: 10px solid cadetblue; border-style: ridge; border-radius: 20px;"><center> Miscellaneous</center></h2> 
+        <h2 style="border: 10px solid #E2AFDE; border-style: ridge; border-radius: 20px;"><center> Miscellaneous</center></h2> 
         <p>
-        <div class = "aboutmecontainer">
-            <h1> i love legos!</h1>
+        <div class = "aboutme">
+            <button class = 'button'><h1> i love legos!<h1></button>
             <h1> i love origami!</h1>
             <h1> i love <a href="reading.php" target="_blank">reading</a> !</h1>
         </div>
