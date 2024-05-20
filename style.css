@@ -11,4 +11,7 @@ h2{
    color: forestgreen;
 }
 
-@media
+.aboutme{
+   display:flex;
+   justify-content: space-between;
+}

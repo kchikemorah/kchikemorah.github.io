@@ -1,7 +1,7 @@
 <html>
     <head>
         <title> Porsha Olayiwola </title>
-        <link rel="stylesheet" href="poetrystyle.css">
+        <link rel="stylesheet" href="style1.css">
     </head>
 
     <body> 
@@ -11,8 +11,8 @@
             <ul class="nav-list">
                 <li><a href="poetry.php">Home</a></li>
                 <li><a href="porsha_olayiwola.php">Porsha Olayiwola</a></li>
-                <li><a href="#rudy-franscisco">Rudy Francisco</a></li>
-                <li><a href="#phil-kaye">Phil Kaye</a></li>
+                <li><a href="rudy_francisco.php">Rudy Francisco</a></li>
+                <li><a href="phil_kaye.php">Phil Kaye</a></li>
                 <li><a href="https://youtube.com/playlist?list=PLH8ZQwl-Kp38QMquDIv7AsOWIxm75kkqI&si=oyp5wd5Tlbuio7pV" target="_blank"> a playlist of my favorites!</a></li>
             </ul>
            <!-- <div class="rightNav">
