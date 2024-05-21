@@ -1,16 +1,16 @@
 p{
     font-size: 25px;
     font-family:'Courier New', Courier, monospace;
-    color: #522A27;
+    color: black;
 }
 h1{
    font-family: fantasy;
-   color: #522A27;
+   color: black;
    font-size: 200%;
 }
 h2{
    font-family: fantasy;
-   color: #6B818C;
+   color: black;
 }
 
 body {
@@ -47,11 +47,11 @@ text-decoration: none;
 display: block;
 }
 
-.dropdown-content a:hover {background-color: darkolivegreen;}
+.dropdown-content a:hover {background-color: #EFE3EE;}
 
 .dropdown:hover .dropdown-content {display: block;}
 
-.dropdown:hover .dropbtn {background-color: forestgreen;} 
+.dropdown:hover .dropbtn {background-color: #E4B9E5;} 
 
 .leftcontainer{
    display:flex;
@@ -77,11 +77,9 @@ display: block;
 .navbar {
    display: flex;
    position: sticky;
-   align-items: center;
-   justify-content: center;
+   align-items:flex-start;
    top: 0px;
-   background: rgba(0, 0, 0, 0.6) url(
-'https://media.geeksforgeeks.org/wp-content/uploads/20201215124609/Capture-300x14.PNG');
+   background-color: #E4B9E5;
    background-blend-mode: darken;
    background-size: cover;
    color: white;
@@ -104,14 +102,14 @@ display: block;
 
 .nav-list li a {
    text-decoration: none;
-   color: olive;
+   color: black;
    font-size: 18px;
    font-family: fantasy;
    transition: color 0.3s ease-in-out;
 }
 
 .nav-list li a:hover {
-   color: darkolivegreen;
+   color: #D9D9D9;
    /* Change the color on hover */
 }
 

@@ -5,6 +5,9 @@
     </head>
 
     <body style="background-color: #6B818C"> 
+    
+
+
         <div style="color:#522a27; font-size: 100px; border: 10px #E2AFDE; border-style: ridge;" > Who is Kene?  <span style = "color:#08415C; font-size: 20px" > Computer Science + Math, (and a minor in lingustics)</span></div>
         <br>
         <br>
@@ -54,7 +57,7 @@
         <br> 
         <p>
         
-        <a href="poetry.php" target="_blank"> <p>spoken word poetry</p></a>
+        <a href="view_posts.php?postId=1" target="_blank"> <p>spoken word poetry</p></a>
  
         </p>
        

@@ -1,4 +1,8 @@
-<html>
+<?php 
+    include('init.php');
+    echoHeader('Porsha Olayiwola');
+?>
+<!-- <html>
     <head>
         <title> Porsha Olayiwola </title>
         <link rel="stylesheet" href="style1.css">
@@ -14,13 +18,13 @@
                 <li><a href="rudy_francisco.php">Rudy Francisco</a></li>
                 <li><a href="phil_kaye.php">Phil Kaye</a></li>
                 <li><a href="https://youtube.com/playlist?list=PLH8ZQwl-Kp38QMquDIv7AsOWIxm75kkqI&si=oyp5wd5Tlbuio7pV" target="_blank"> a playlist of my favorites!</a></li>
-            </ul>
+            </ul> -->
            <!-- <div class="rightNav">
                 <input type="text" name="search"
                        id="search" placeholder="Search">
                 <button class="btn btn-sm">Search</button>
-            </div>-->
-        </nav>
+            </div>
+        </nav>-->
         <h1><strong> Porsha Olayiwola</strong><h1>
         <p> Porsha Olayiwola is a black queer artist who shares her experiences and reflections of the world that we live in. 
             In her poetry, she focuses on her black experience in the United States. the history of slavery, the stereotypes of
@@ -28,5 +32,6 @@
               of whoever she writes about, whether it be
              <a href=https://www.youtube.com/watch?v=53kJF0DQtNo> capitalism</a>, or the <a href= https://www.youtube.com/watch?v=bSoITsaSs0M> misunderstood "angry black woman." </a>
         </p>
-    </body>
-</html>
+    <?php
+    echoFooter();
+    ?>
