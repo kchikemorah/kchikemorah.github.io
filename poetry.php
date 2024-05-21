@@ -1,6 +1,6 @@
 <?php 
     include('init.php');
-    echoHeader('Spoken Word Poetry');
+    echoHeader('Spoken Word Poetry', getAllPosts());
 ?>
 <!-- <html>
     <head>

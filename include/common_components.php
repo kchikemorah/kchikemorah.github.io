@@ -1,6 +1,9 @@
 <?php 
-function echoHeader($pageTitle){
-
+function echoHeader($pageTitle, $posts){
+    $navbar = "";
+    foreach($posts as $id => $post){
+        $navbar = $navbar."<li><a href='view_posts.php?postId=".$id."'>" .$post['title']. "</a></li>";
+    }
     echo(
         "<html>
         <head>
@@ -13,11 +16,7 @@ function echoHeader($pageTitle){
             
             <nav class='navbar'>
                 <ul class='nav-list'>
-                    <li><a href='view_posts.php?postId=1'>Home</a></li>
-                    <li><a href='view_posts.php?postId=2'>Porsha Olayiwola</a></li>
-                    <li><a href='view_posts.php?postId=3'>Rudy Francisco</a></li>
-                    <li><a href='view_posts.php?postId=4'>Phil Kaye</a></li>
-                    <li><a href='https://youtube.com/playlist?list=PLH8ZQwl-Kp38QMquDIv7AsOWIxm75kkqI&si=oyp5wd5Tlbuio7pV' target='_blank'> a playlist of my favorites!</a></li>
+                   ".$navbar."
                 </ul>
                 </nav>"
 
@@ -28,3 +27,7 @@ function echoFooter(){
         </body>
     </html>");
 }
+// <li><a href='view_posts.php?postId=2'>Porsha Olayiwola</a></li>
+// <li><a href='view_posts.php?postId=3'>Rudy Francisco</a></li>
+// <li><a href='view_posts.php?postId=4'>Phil Kaye</a></li>
+// <li><a href='https://youtube.com/playlist?list=PLH8ZQwl-Kp38QMquDIv7AsOWIxm75kkqI&si=oyp5wd5Tlbuio7pV' target='_blank'> a playlist of my favorites!</a></li>

@@ -1,7 +1,7 @@
 <?php
 include("init.php");
-echoHeader("Spoken Word Poetry");
- $pageInfo = getPost($_REQUEST["postId"]);
+echoHeader("Spoken Word Poetry", getAllPosts());
+$pageInfo = getPost($_REQUEST["postId"]);
 
 if ($pageInfo["postId"]== 1){
     echo" <h1 class = 'frontcover'> " .$pageInfo["title"]."</h1>";

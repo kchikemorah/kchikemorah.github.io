@@ -38,7 +38,7 @@
         <p> 5. Survived my first day of work!!!!! </p>
         <h2 style="border: 10px solid cadetblue; border-style: ridge; border-radius: 20px;"><center> Miscellaneous</center></h2> 
         <p>
-        <div class = "aboutmecontainer">
+        <div class = "aboutme">
             <h1> i love legos!</h1>
             <h1> i love origami!</h1>
             <h1> i love <a href="reading.php" target="_blank">reading</a> !</h1>
@@ -63,7 +63,7 @@
         <br> 
         <p>
         
-        <a href="poetry.php" target="_blank"> <p>spoken word poetry</p></a>
+        <a href="view_posts.php?postId=1" target="_blank"> <p>spoken word poetry</p></a>
  
         </p>
        
