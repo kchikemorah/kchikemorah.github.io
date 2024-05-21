@@ -43,22 +43,14 @@
             <h1> i love <a href="reading.php" target="_blank">reading</a> !</h1>
         </div>
         <div class = "aboutme">
-            <h1> i love poetry! </h1>
+        <a href="view_posts.php?postId=1" target="_blank"> <button class = 'button'> <h1> i love poetry! </h1></button></a>
             <h1> i love my girlfriend! </h1>
             <h1> i love life! </h1>
         </div>
 
-        <img src="up house.jpg" alt = "up house lego set" style="float:right;width:30%;height:30%; border: 10px solid darkolivegreen; border-style: double; border-radius: 10px"> 
+        <img src="up house.jpg" alt = "up house lego set" style="float:right;width:30%;height:30%;> 
     
          </p>
-       <!-- <div class="dropdown">
-            <button class="dropbtn"><p>long tv shows</p></button>
-            <div class="dropdown-content">
-              <a href="https://onceuponatime.fandom.com/wiki/Once_Upon_a_Time_Wiki"><p> Once Upon a Time</p></a>
-              <a href="https://marvelcinematicuniverse.fandom.com/wiki/Agents_of_S.H.I.E.L.D."><p> Agents of Shield</p></a>
-              <a href="https://avatar.fandom.com/wiki/Avatar_Wiki"><p>Avatar: The Last Airbender</p></a>
-            </div>
-          </div>-->
         <br> 
         <p>
         

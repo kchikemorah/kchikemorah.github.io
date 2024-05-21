@@ -22,10 +22,15 @@ img {
    border-radius: 10px
 }
 .button{
-   background-color: ;
-   color: #6B818C;
+   background-color: #6B818C;
+   color: #08415C;
    border: ridge;
-   border-radius: 15px;
+   border-radius: 15px ;
+   width: 200px;
+}
+.button:hover {
+   background-color: #08415C ;
+   /* Change the background color on hover */
 }
 .dropdown-content {
 display: none;
@@ -122,7 +127,7 @@ display: block;
 }
 
 .btn {
-   background-color: brown;
+   background-color:#522A27;
    color: #000;
    border: none;
    padding: 8px 12px;
