@@ -4,6 +4,7 @@ echoHeader("All About Kene", getAllPosts());
 $pageInfo = getPost($_REQUEST["postId"]);
 $pageComments = getCommentsOnPost($_REQUEST["postId"]);
 
+// debugOutput($pageInfo);
 
 echo" <h1 class = 'frontcover'> " .$pageInfo["title"]."</h1>";
 
@@ -19,6 +20,7 @@ foreach($pageComments as $id=>$comment){
 else{
     echo "<i>no comments yet.</i>";
 }
+
 
 
 
