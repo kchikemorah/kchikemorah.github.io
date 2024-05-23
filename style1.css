@@ -1,35 +1,57 @@
 p{
-    font-size: 25px;
+    font-size: 20px;
     font-family:'Courier New', Courier, monospace;
     color: black;
 }
 h1{
    font-family: fantasy;
    color: black;
-   font-size: 200%;
+   font-size: 50px;
 }
 h2{
-   font-family: fantasy;
-   color: black;
+      font-family: fantasy;
+      color: black;
+      font-size: 200%;
 }
-
+h3{
+   font-family: fantasy;
+   font-size: 30px;
+}
+button{
+   font-family: fantasy;
+   font-size: 40px;
+}
 body {
    font-family: 'Arial', sans-serif;
 }
 img {
-   border: 10px solid #08415C;
+   border: 10px solid #E4B9E5;
    border-style: double;
-   border-radius: 10px
+   border-radius: 10px;
+   object-fit: fill;
+   
+}
+.buttons{
+   display: flex;
+   flex-direction: row;
+   gap: 40px;
+   height: 200px;
+   margin-block: 40px;
 }
 .button{
-   background-color: #6B818C;
-   color: #08415C;
+   flex: 1;
+   background-color: EFE3EE;
+   color: black;
    border: ridge;
+   font-family: fantasy;
+   font-size: 40px;
    border-radius: 15px ;
-   width: 200px;
+   text-decoration: none;
+   padding-top:80px;
+   text-align: center;
 }
 .button:hover {
-   background-color: #08415C ;
+   background-color: #D9D9D9 ;
    /* Change the background color on hover */
 }
 .dropdown-content {
@@ -64,6 +86,18 @@ display: block;
 .aboutme{
    display:flex;;
    justify-content: space-around;
+   gap:20px;
+   align-items:center;
+}
+.aboutme1{
+   flex: 1;
+}
+.aboutme1 img {
+   max-width: 100%; /* Ensure the image doesn't exceed its container */
+   height: auto; /* Maintain aspect ratio */
+}
+.aboutme2{
+   flex: 2;
 }
 .frontcover {
    display: flex;

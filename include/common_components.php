@@ -16,10 +16,11 @@ function echoHeader($pageTitle, $posts){
             
             <nav class='navbar'>
                 <ul class='nav-list'>
-                <li><a href='poetry.php'>Who Is Kene?</a></li>
+                <li><a href='newindex.php'>Who Is Kene?</a></li>
                    ".$navbar."
                 </ul>
                 </nav>"
+                
 
     );
 }
