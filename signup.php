@@ -9,7 +9,7 @@ echo" <h1 class='frontcover' > Sign Up <h1>
         <br>
         <label for = 'password'> Password: </label><input type = 'text' name = 'password'/>
         <br>
-        <input type = 'submit' class = 'button'>
+        <input type = 'submit' class = 'button'  style = 'padding-top: 0px>
 
 </form>
 </div>";
@@ -35,9 +35,10 @@ if (isset($_REQUEST['username'])&& isset($_REQUEST['password'])){
         exit;   
     }
     else{
-        $_SESSION['username']= $_REQUEST['username'];
         saveNewUser($_REQUEST['username'],$_REQUEST['password']);
+        $_SESSION['user']= $_REQUEST['username'];
         header('location:newindex.php');
+        
     }
 
 }

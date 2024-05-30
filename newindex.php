@@ -2,12 +2,8 @@
     include('include/init.php');
     // $posts = getAllPosts();
     // debugOutput($posts);
-    if (isset($_SESSION("username"))){
-        echoSessionHeader('Who Is Kene', getAllPosts(), $_SESSION["username"]);
-    }
-    else{
-        echoHeader('Who Is Kene?', getAllPosts());
-    }
+   
+    echoHeader('Who Is Kene?', getAllPosts());
    
 ?>
 <br>
