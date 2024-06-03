@@ -209,3 +209,11 @@ display: block;
       font-size:10px;
    }
 }
+.hiddenJsButton{
+   display: none; 
+}
+.visibleJsButton{
+   display: block;
+   color: cyan;
+   font-size: 10px;
+}

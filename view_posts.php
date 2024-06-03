@@ -1,10 +1,31 @@
 <?php
 include("include/init.php");
 echoHeader("All About Kene", getAllPosts());
+$id 
 $pageInfo = getPost($_REQUEST["postId"]);
 $pageComments = getCommentsOnPost($_REQUEST["postId"]);
-$currentUser = '';
+GLOBAL $currentUser;
 // debugOutput($pageInfo);
+?>
+<!-- <script> 
+    function submitComment() {
+    fetch('ajax_endpoint.php').then(
+        newComment => newComment.text()
+    ).then(
+        newComment => (document.createElement('div style = 'border:ridge; padding: 5px'').innerText = newComment)
+
+    );
+    
+
+    /*
+    - send request to server for information
+    --gets its 
+    --updates html using getelement stuff
+    */
+} ,
+    </script> -->
+   
+<?php
 
 echo" <h1 class = 'frontcover'> " .$pageInfo["title"]."</h1>";
 
@@ -25,16 +46,7 @@ foreach($pageComments as $id=>$comment){
         <input type= 'submit' value='Edit'/>
         ";
 
-        if (isset($_REQUEST['editText'])){
-            debugOutput($_REQUEST);
-            exit;
-            if (!empty($_REQUEST['editText'])){
-                dbQuery("
-                UPDATE comments 
-                SET comment=".$_REQUEST['editText']."
-                 WHERE commentId=".$comment['commentId']);
-            }
-        }
+       
     
     
     }
@@ -58,7 +70,7 @@ function saveComment( $name,$content, $postId){
     $dateTimeString = date_format($now, 'Y-m-d H:i:s');
 
     dbQuery("
-    INSERT INTO comments (name, comment, postId, dateOfComment)
+    INSERT INTO comments (commentId, name, comment, postId, dateOfComment)
     VALUES(:name,:content,:postId, :dateTimeString)", 
     [
         "name" => $name,
@@ -76,25 +88,18 @@ if(isset($_REQUEST['commentContent'])){
 }
 else{
     saveComment( $currentUser, $_REQUEST['commentContent'],$_REQUEST['postId']);
-    header('location:?postId='.$_REQUEST['postId']);  
+    header('location:?postId='.$_REQUEST['postId']);
+   
+    
+     
 }
-}
-// if (isset($_REQUEST['commentName'])&& isset($_REQUEST['commentContent'])){
-//     if(empty($_REQUEST['commentName'])){
-//         echo "<p style ='color: red;'> Please enter your name. </p>"; 
-//         exit;
-//     }
-//     else if (empty($_REQUEST['commentContent'])){
-//         echo "<p style = 'color: red;'> Please write a comment </p>";
-//         exit;
-//     }
-//     else{
-//         saveComment( $_REQUEST['commentName'], $_REQUEST['commentContent'],$_REQUEST['postId']);
-//         header('location:?postId='.$_REQUEST['postId']);
 
-//     }
+}
+
+
+    
         
-// }
+
 
 
 

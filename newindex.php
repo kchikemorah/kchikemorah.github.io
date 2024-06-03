@@ -64,6 +64,28 @@ border-radius: 62px;'> <h1 class = 'frontcover'>Who Is Kene?</h1> </div>
 </div>
 
 
+<a onclick='showHiddenText()'>Javascript</a>
+<p class='hiddenJsButton'>it says something</p>
+<script>
+    function showHiddenText(){
+
+        // var a; //can change , regular, globally available in any scope, problematic
+        // let b; //mutable, changing
+        // const c; //cannot change, doesn't matter right now
+        console.log("this should eventually show a bunch of other stuff");
+     var firstHiddenButton = document.getElementsByClassName("hiddenJsButton")[0];
+     //console.log(firstHiddenButton);;
+     var listOfClassesAppliedToButton = firstHiddenButton.classList;
+     //console.log(listofClassesAppliedToButton);
+     if(listOfClassesAppliedToButton.contains("visibleJsButton")){
+        firstHiddenButton.classList.remove("visibleJsButton");
+     }
+     else{
+        firstHiddenButton.classList.add("visibleJsButton");
+     }
+    }
+    </script>
+
 
     <?php
         echoFooter();
