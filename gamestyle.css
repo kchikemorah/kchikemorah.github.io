@@ -1,7 +1,20 @@
 
 .conveyorBelt {
-    background-color: brown;
+    display: flex;
+    position: relative;
+    gap: 0;
     height:120px;
+    width: 100%;
+}
+.beltRolls{
+    flex: 1;
+    background-color: brown;
+    height: 120px;
+    border-radius: 10px;
+    width: 30px;
+    border-style: outset; 
+    border-color: black;
+
 }
 .containers{
     display: flex;
@@ -10,17 +23,50 @@
     gap: 40px;
    
 }
-.bin{
+.bin1{
     flex: 1;
-    width: 200px;
-    height: 70px;
+    width: 120px;
+    height: 150px;
     margin: 10px;
     text-align: center; 
     background-color: grey;
+    border-style: solid;
+    border-color: red;
+    border-width: 5px;
+}
+.bin2{
+    width: 200px;
+    height: 100px;
+    margin: 10px;
+    text-align: center; 
+    background-color: grey;
+    border-style: outset;
+    border-color: orange;
+    border-width: 5px;
+}
+.bin3{
+    width: 300px;
+    height: 140px;
+    margin: 10px;
+    text-align: center; 
+    background-color: grey;
+    border-style: outset;
+    border-color:yellow;
+    border-width: 5px;
+}
+.bin4{
+    width: 130px;
+    height: 100px;
+    margin: 10px;
+    text-align: center; 
+    background-color: grey;
+    border-style: outset;
+    border-color:green;
+    border-width: 5px;
 }
 .player{
-    position: absolute;
-    bottom: 600px;
+    position: relative;
+    top: 100px;
     left: 100px;
 }
 .playerHead{ 
@@ -28,7 +74,7 @@
     height:  70px;
     width: 70px;
     border-radius: 50%;
-    background-color: yellow;
+    background-color: black;
     top: 10px;
    
 }
@@ -41,7 +87,7 @@
 .spine{
     position: absolute;
     left: 25px;
-    background-color: yellow;
+    background-color: black;
     width: 20px;
     height: 50px;
 }
@@ -51,7 +97,7 @@
 	height: 0;
     top: 12.5px;
 	border-top: 10px solid transparent;
-	border-right: 50px solid yellow;
+	border-right: 50px solid black;
 	border-bottom: 10px solid transparent;
     left: -20px;
 }
@@ -62,7 +108,46 @@
     top: 12.5px;
     right: 25px;
 	border-top: 10px solid transparent;
-	border-left: 50px solid yellow;
+	border-left: 50px solid black;
 	border-bottom: 10px solid transparent;
    
+}
+.item1{
+    position:absolute;
+    width: 50px;
+    height: 70px;
+    background-color: red;
+    bottom: 20px;
+    left: 350px;
+    border-style: solid;
+
+}
+.item2{
+    position: absolute;
+    width:20px;
+    height:100px;
+    background-color: orange;
+    top: 10px;
+    left: 200px;
+    transform: rotate(20deg);
+    border-style: solid;
+}
+.item3{
+    position: absolute;
+    width: 200px;
+    height: 50px;
+    background-color: yellow;
+    top: 20px;
+    left: 500px;
+    border-style: solid;
+}
+.item4{
+    position: absolute;
+    top: 12.5px;
+    border-style: solid black;
+	border-left: 50px solid transparent;
+	border-right: 50px solid transparent;
+	border-bottom: 100px solid purple;
+    left: 800px;
+     
 }
