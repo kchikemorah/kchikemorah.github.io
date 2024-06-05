@@ -6,14 +6,14 @@ include('include/init.php');
 
 if(isset($_REQUEST['commentContent'])){
     if (empty($_REQUEST['commentContent'])){
-        echo "<p style = 'color: red;'> Please write a comment </p>";
-        exit;
+        return "<p style = 'color: red;'> Please write a comment </p>";
+        
 }
 else{
     saveComment( $currentUser, $_REQUEST['commentContent'],$_REQUEST['postId']);
     //header('location:?postId='.$_REQUEST['postId']);
     //echo "<h4> ".$comment["commentId"]." @".$comment['name']." ".$comment["dateOfComment"]."</h4>".$comment["comment"];
-    echo "this is a new comment";   
+    return "this is a new comment";   
 }
 }
 function saveComment( $name,$content, $postId){
