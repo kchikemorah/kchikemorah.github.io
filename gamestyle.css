@@ -1,0 +1,68 @@
+
+.conveyorBelt {
+    background-color: brown;
+    height:120px;
+}
+.containers{
+    display: flex;
+    position: absolute;
+    bottom: 100px;
+    gap: 40px;
+   
+}
+.bin{
+    flex: 1;
+    width: 200px;
+    height: 70px;
+    margin: 10px;
+    text-align: center; 
+    background-color: grey;
+}
+.player{
+    position: absolute;
+    bottom: 600px;
+    left: 100px;
+}
+.playerHead{ 
+    position: absolute;
+    height:  70px;
+    width: 70px;
+    border-radius: 50%;
+    background-color: yellow;
+    top: 10px;
+   
+}
+.playerBody{
+    position: absolute;
+    top: 80px;
+    width: 120px;
+   
+}
+.spine{
+    position: absolute;
+    left: 25px;
+    background-color: yellow;
+    width: 20px;
+    height: 50px;
+}
+.leftHand {
+    position: absolute;
+	width: 0;
+	height: 0;
+    top: 12.5px;
+	border-top: 10px solid transparent;
+	border-right: 50px solid yellow;
+	border-bottom: 10px solid transparent;
+    left: -20px;
+}
+.rightHand {
+    position: absolute;
+	width: 0;
+	height: 0;
+    top: 12.5px;
+    right: 25px;
+	border-top: 10px solid transparent;
+	border-left: 50px solid yellow;
+	border-bottom: 10px solid transparent;
+   
+}
