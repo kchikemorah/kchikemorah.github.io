@@ -7,9 +7,9 @@ echo" <h1 class='frontcover' > Sign Up <h1>
     <form method = 'post' action ='' style = 'text-align:center'>
         <label for = 'username'> Username: </label><input type='text' name = 'username' id = 'username'/>
         <br>
-        <label for = 'password'> Password: </label><input type = 'text' name = 'password'/>
+        <label for = 'password'> Password: </label><input type = 'password' name = 'password'/>
         <br>
-        <input type = 'submit' class = 'button'  style = 'padding-top: 0px>
+        <input type = 'submit' class = 'button'  style = 'padding-top: 0px' value='sign up'/>
 
 </form>
 </div>";

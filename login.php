@@ -9,7 +9,7 @@ echo" <h1 class='frontcover' > Login <h1>
     <form method='post' action='' style='text-align:center'>
         <label for = 'username'> Username: </label><input type='text' name = 'username' id = 'username'/>
         <br>
-        <label for = 'password'> Password: </label><input type = 'text' name = 'password'/>
+        <label for = 'password'> Password: </label><input type = 'password' name = 'password'/>
         <br>
         <a href = 'signup.php'><center style = 'font-size: 10px;'> Don't have an account? Sign up here!</center> </a>
         
@@ -29,13 +29,10 @@ if (isset($_REQUEST['username']) && isset($_REQUEST['password'])){
         exit;   
     }
     else{
-        $user = dbQuery("
-        SELECT * FROM users 
-        WHERE userEmail = :username",[ "username" => $_REQUEST['username'] ]
-         )->fetch();;
+        $user = getUser($_REQUEST['username']);
         if ($user){
             if (sha1($_REQUEST['password'].$user['salt']) === $user['password']){
-                $_SESSION['user']= $_REQUEST['username'];
+                $_SESSION['userId']= $user['userId'];
                 header('location:newindex.php');
             }
             else{
