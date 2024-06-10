@@ -3,9 +3,13 @@
     <title> Play </title>
     <link rel='stylesheet' href='gamestyle.css'/>      
     </head>
-    <body style='margin:0;'>
-    <div id='wrapper'></div>
+    <body style='margin:0; overflow: hidden'>
+    <div id='wrapper' class = 'wrapper'></div>
     <script>
+        var player;
+        var playerX = 400;
+        var playerY = 200;
+    
         function paintScreen(){
         var wrapper = document.getElementById('wrapper');
         wrapper.innerHTML = `
@@ -14,8 +18,6 @@
         var conveyorBelt = document.createElement('div');
         conveyorBelt.className = 'conveyorBelt';
         conveyorBelt.innerHTML =`
-        <div class='beltRolls'></div>
-        <div class='beltRolls'></div>
         <div class='beltRolls'></div>
         <div class='beltRolls'></div>
         <div class='beltRolls'></div>
@@ -46,7 +48,7 @@
         var containersDiv = document.createElement('div');
         containersDiv.className = "containers";
         document.body.appendChild(containersDiv);
-        var containers = []
+        var containers = [];
         containers[0] = document.createElement('div');
         containers[1] = document.createElement('div');
         containers[2] = document.createElement('div');
@@ -61,62 +63,76 @@
 
         
 
-        var player = document.createElement('div');
+        player = document.createElement('div');
         player.className = 'player';
-        var playerX = 400;
-        var playerY = 100;
         player.style.top = playerY + 'px';
         player.style.left = playerX + 'px';
         document.body.appendChild(player);
+
         var playerHead = document.createElement('div');
         playerHead.className = 'playerHead';
         player.appendChild(playerHead);
+
         var playerBody = document.createElement('div');
         playerBody.className = 'playerBody';
         player.appendChild(playerBody);
+
         var spine = document.createElement('div');
         spine.className = 'spine';
         playerBody.appendChild(spine);
+
         var leftHand = document.createElement('div');
         leftHand.className = 'leftHand';
         playerBody.appendChild(leftHand);
+
         var rightHand = document.createElement('div');
         rightHand.className = 'rightHand';
         playerBody.appendChild(rightHand);
-        var playerX = 150;
-        var playerY = 600;
-        player.element.top = playerY + 'px';
-        player.element.left = playerX + 'px';
-
-        // <div class='conveyorBelt'>
-            
-                
-        //           <div class='beltRolls'></div>
-            
-             
-        //     <div class='item1'></div>
-        //     <div class='item2'></div>
-        //     <div class='item3'></div>
-        //     <div class='item4'></div>
-        // </div>
-
-        // <div class = 'containers'>
-        //     <div class='bin1'> bin 1</div>
-        //     <div class='bin2'> bin 2</div>
-        //     <div class='bin3'> bin 3</div>
-        //     <div class='bin4'> bin 4</div>
-        // </div>
-
-        // <div class='player'>
-        //     <div class='playerHead'></div>
-        //     <div class='playerBody'>
-        //         <div class='spine'></div>
-        //         <div class='leftHand'></div>
-        //         <div class='rightHand'></div>
-        // </div>'`;
-       
+    }
+    var viewportWidth = window.innerWidth;
+    var viewportHeight = window.innerHeight;
+    var playKeys = {};
+    function keyBeingPressed(event){
+        playKeys[event.code]= true;
+    }
+    function keyNotBeingPressed(event){
+        playKeys[event.code] = false;
+    }
+document.addEventListener('keydown', keyBeingPressed);
+document.addEventListener('keyup', keyNotBeingPressed);
+    function movePlayer(){
+        if(playKeys['KeyW'] && playerY - 5 > 0){
+            playerY -= 10;
         }
-        paintScreen();
+    
+        if(playKeys['KeyS'] && playerY + player.offsetHeight + 5  < viewportHeight ){
+        playerY += 10;
+        }
+    
+        if(playKeys['KeyA'] && playerX - 5 > 0){
+            playerX -= 10;
+        }
+        if(playKeys['KeyD'] && playerX + player.offsetWidth + 5 < viewportWidth){
+        playerX += 10;
+        }
+    
+        
+        player.style.top = playerY + 'px';
+        player.style.left = playerX + 'px';
+        }
+        
+        
+         
+         function gameLoop(){
+            movePlayer();
+            requestAnimationFrame(gameLoop);
+         }
+
+         paintScreen();
+         gameLoop();
+         
+        
+        
         </script>
          
         
