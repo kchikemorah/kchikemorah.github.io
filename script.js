@@ -3,10 +3,10 @@ var playerX = 400;
 var playerY = 200;
 //an object in js is a set of key-value pairs
 var items = {
-    item1: { element: document.createElement('div'), x: 800, y: 500, onBelt: true},
-    item2: { element: document.createElement('div'), x: 600, y: 400, onBelt: true},
-    item3: { element: document.createElement('div'), x: 200, y: 200, onBelt: true},
-    item4: { element: document.createElement('div'), x: 400, y: 300, onBelt: true}
+    item1: { element: document.createElement('div'), x: 800, y: 10, onBelt: true},
+    item2: { element: document.createElement('div'), x: 600, y: 10, onBelt: true},
+    item3: { element: document.createElement('div'), x: 200, y: 30, onBelt: true},
+    item4: { element: document.createElement('div'), x: 400, y: 10, onBelt: true}
 };
 
 items.item1.element.className = 'item1';
@@ -19,18 +19,28 @@ items.item4.element.className = 'item4';
 items.item4.element.id = '4';
 function paintItemsOnBelt(items) {
     for (let i in items) {
-        if (items[i].onBelt){
+        // if (items[i].onBelt){
         items[i].element.style.left = items[i].x + 'px';
         document.getElementById('conveyorBelt').appendChild(items[i].element);
-    }
+    //}
 }
 }
 function moveItemsOnBelt(items){
     for (let i in items){
         if(items[i].onBelt){
             items[i].x +=  10;
-            items[i].element.style.left = items[i].x + 'px';
+            if(items[i].x > viewportWidth){
+                items[i].onBelt = false;
+                items[i].x +=-100;
+                items[i].y = 600;
+               
+                break;
+                //items[i].x = 0;
+            }
+            
         }
+        items[i].element.style.left = items[i].x + 'px';
+            items[i].element.style.top = items[i].y + 'px';
     }
 }
 //need a function to tell me when the item has fallen off the belt/ no longer on frame, so change onBelt to false
@@ -116,17 +126,21 @@ function paintScreen() {
     rightHand.className = 'rightHand';
     playerBody.appendChild(rightHand);
 }
+
 var viewportWidth = window.innerWidth;
 var viewportHeight = window.innerHeight;
 var playKeys = {}; //eventually will store four key-true/false pairs 
+
 function keyBeingPressed(event) {
     playKeys[event.code] = true;
 }
 function keyNotBeingPressed(event) {
     playKeys[event.code] = false;
 }
+
 document.addEventListener('keydown', keyBeingPressed);
 document.addEventListener('keyup', keyNotBeingPressed);
+
 function movePlayer() {
     if (playKeys['KeyW'] && playerY - 5 > 0) {
         playerY -= 10;
@@ -147,17 +161,19 @@ function movePlayer() {
     player.style.left = playerX + 'px';
 }
 
-
-
-function gameLoop(items) {
+function gameLoop() {
+    var targetFPS = 50;
     movePlayer();
     moveItemsOnBelt(items);
-    requestAnimationFrame(gameLoop);
+   
+    requestAnimationFrame(() => {
+        setTimeout(gameLoop, targetFPS);
+    });
 
 }
 
 paintScreen();
 paintItemsOnBelt(items);
-gameLoop(items);
+gameLoop();
 
 
