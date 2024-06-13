@@ -43,12 +43,51 @@ function moveItemsOnBelt(items){
             items[i].element.style.top = items[i].y + 'px';
     }
 }
+function pickUpItem(){ //made in pickUpStuff
+    
+    var closeEnoughItem;
+    for(let i in items){
+        var thisItem = items[i];
+        var playerReferencePointX = playerX + playerHead.offsetWidth; //center of the head
+        var playerReferencePointY = playerY + playerHead.offsetWidth/2;
+        console.log(playerReferencePointX + "and" + playerReferencePointY + " vs " + playerX + "and" + playerY);
+        var distance = [
+            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - thisItem.x), 2)) + (Math.pow(Math.abs(playerReferencePointY - thisItem.y), 2))),
+            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (thisItem.x + thisItem.element.offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY- thisItem.y), 2))),
+            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (thisItem.x + thisItem.element.offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY - (thisItem.y + thisItem.element.offsetHeight)), 2))),
+            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - thisItem.x), 2)) + (Math.pow(Math.abs(playerY - (thisItem.y + thisItem.element.offsetHeight)), 2))),
+        ];
+        for (let j of distance) {
+            if( j <= 50 ){
+                //pick up
+                playerIsCarrying = j;
+                ;
+                //break;
+            }
+        }
+    }
+}
+
 //need a function to tell me when the item has fallen off the belt/ no longer on frame, so change onBelt to false
 //make the items move, not the belt
 //make the belt move! animating across the screen and reappearing
+var wrapper = document.getElementById('wrapper'); //moved these out of the paint function in pickUpStuff
+var conveyorBelt = document.createElement('div');
+var containersDiv = document.createElement('div');
+var containers = [];
+containers[0] = document.createElement('div');
+containers[1] = document.createElement('div');
+containers[2] = document.createElement('div');
+containers[3] = document.createElement('div');
+var playerHead = document.createElement('div');
+var playerBody = document.createElement('div');
+var spine = document.createElement('div');
+var leftHand = document.createElement('div');
+var rightHand = document.createElement('div');
+var playerIsCarrying = null;
 
 function paintScreen() {
-    var wrapper = document.getElementById('wrapper');
+    
     wrapper.innerHTML = `
         <div id='wrapper'>
         <div style='background-color: white; height: 60px;'></div>`
@@ -84,14 +123,10 @@ function paintScreen() {
     // for(let i=0; i<items.length; i++){
     //     conveyorBelt.appendChild(items[i]);
     // }
-    var containersDiv = document.createElement('div');
+    
     containersDiv.className = "containers";
     document.body.appendChild(containersDiv);
-    var containers = [];
-    containers[0] = document.createElement('div');
-    containers[1] = document.createElement('div');
-    containers[2] = document.createElement('div');
-    containers[3] = document.createElement('div');
+
     containers[0].className = 'bin1';
     containers[1].className = 'bin2';
     containers[2].className = 'bin3';
@@ -106,23 +141,19 @@ function paintScreen() {
     player.style.left = playerX + 'px';
     document.body.appendChild(player);
 
-    var playerHead = document.createElement('div');
+    
     playerHead.className = 'playerHead';
     player.appendChild(playerHead);
-
-    var playerBody = document.createElement('div');
+   
     playerBody.className = 'playerBody';
     player.appendChild(playerBody);
-
-    var spine = document.createElement('div');
+   
     spine.className = 'spine';
     playerBody.appendChild(spine);
-
-    var leftHand = document.createElement('div');
+   
     leftHand.className = 'leftHand';
     playerBody.appendChild(leftHand);
-
-    var rightHand = document.createElement('div');
+   
     rightHand.className = 'rightHand';
     playerBody.appendChild(rightHand);
 }
@@ -141,9 +172,12 @@ function keyNotBeingPressed(event) {
 document.addEventListener('keydown', keyBeingPressed);
 document.addEventListener('keyup', keyNotBeingPressed);
 
-function movePlayer() {
+function movePlayer() { //edited in pickUpStuff
     if (playKeys['KeyW'] && playerY - 5 > 0) {
         playerY -= 10;
+        if(playerIsCarrying != null){
+            playerIsCarrying
+        }
     }
 
     if (playKeys['KeyS'] && playerY + player.offsetHeight + 5 < viewportHeight) {
@@ -161,11 +195,12 @@ function movePlayer() {
     player.style.left = playerX + 'px';
 }
 
+
 function gameLoop() {
     var targetFPS = 50;
     movePlayer();
-    moveItemsOnBelt(items);
-   
+   // moveItemsOnBelt(items);
+   pickUpItem();
     requestAnimationFrame(() => {
         setTimeout(gameLoop, targetFPS);
     });
