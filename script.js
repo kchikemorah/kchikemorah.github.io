@@ -1,6 +1,7 @@
 var player;
 var playerX = 400;
 var playerY = 200;
+
 //an object in js is a set of key-value pairs
 var items = {
     item1: { element: document.createElement('div'), x: 800, y: 10, onBelt: true},
@@ -8,7 +9,7 @@ var items = {
     item3: { element: document.createElement('div'), x: 200, y: 30, onBelt: true},
     item4: { element: document.createElement('div'), x: 400, y: 10, onBelt: true}
 };
-console.log(items);
+// console.log(items);
 
 
 items.item1.element.className = 'item1';
@@ -20,6 +21,7 @@ items.item3.element.id = '3';
 items.item4.element.className = 'item4';
 items.item4.element.id = '4';
 function paintItemsOnBelt(items) {
+    // console.log(items);
     for (let i in items) {
         // if (items[i].onBelt){
         
@@ -33,12 +35,12 @@ function moveItemsOnBelt(items){
         if(items[i].onBelt){
             items[i].x +=  10;
             if(items[i].x > viewportWidth){
-                items[i].onBelt = false;
-                items[i].x +=-100;
-                items[i].y = 600;
+                // items[i].onBelt = false;
+                // items[i].x +=-100;
+                // items[i].y = 600;
                
-                break;
-                //items[i].x = 0;
+               
+                items[i].x = 0;
             }
             
         }
@@ -47,13 +49,13 @@ function moveItemsOnBelt(items){
     }
 }
 var playerIsCarrying = null;
-function pickUpItem(){ //made in pickUpStuff
+function pickUpItem(event){ //made in pickUpStuff
     for(let i in items){
         var thisItem = items[i];
         var playerReferencePointX = playerX + playerHead.offsetWidth; //center of the head
         var playerReferencePointY = playerY + playerHead.offsetWidth/2;
-        console.log(playerReferencePointX + "and" + playerReferencePointY + " vs " + playerX + "and" + playerY);
-        console.log(items);
+       // console.log(playerReferencePointX + "and" + playerReferencePointY + " vs " + playerX + "and" + playerY);
+        // console.log(items);
         var distance = [
             Math.sqrt((Math.pow(Math.abs(playerReferencePointX - thisItem.x), 2)) + (Math.pow(Math.abs(playerReferencePointY - thisItem.y), 2))),
             Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (thisItem.x + thisItem.element.offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY- thisItem.y), 2))),
@@ -61,16 +63,37 @@ function pickUpItem(){ //made in pickUpStuff
             Math.sqrt((Math.pow(Math.abs(playerReferencePointX - thisItem.x), 2)) + (Math.pow(Math.abs(playerY - (thisItem.y + thisItem.element.offsetHeight)), 2))),
         ];
         for (let j of distance) {
-            if( j <= 50 ){
-                //pick up
-                console.log(`this item ${i} wiill be picked up!`);
-                //playerIsCarrying = j;
-                ;
-                //break;
+            if( j <= 50 && event.code == "Space"){
+                //console.log(`this item ${i} wiill be picked up!`);
+                playKeys["Space"] = !playKeys["Space"];
+            
+                // if(playerIsCarrying == thisItem){
+                //     playerIsCarrying = null;
+                // }
+                if(playKeys["Space"] == true){
+                playerIsCarrying = thisItem; //pick up
+                console.log(playerIsCarrying)
+                items[i].onBelt = false;
+                break;
+                }
+                else{
+                    playerIsCarrying = null; //drop it
+                    items[i].onBelt = true;
+                    break;
+                }
+            }
+                
+                }
+               
             }
         }
-    }
-}
+    
+
+// function dropItem(){
+//     if (playKeys["Space"] == false){
+//         playerIsCarrying = null;
+//     }
+// }
 
 //need a function to tell me when the item has fallen off the belt/ no longer on frame, so change onBelt to false
 //make the items move, not the belt
@@ -164,14 +187,27 @@ function paintScreen() {
 
 var viewportWidth = window.innerWidth;
 var viewportHeight = window.innerHeight;
-var playKeys = {}; //eventually will store four key-true/false pairs 
+var playKeys = {}; // will store  key-true/false pairs 
+playKeys["Space"] = false;
 
 function keyBeingPressed(event) {
-    playKeys[event.code] = true;
+    if (event.code != "Space"){
+     playKeys[event.code] = true;
+     console.log(playKeys);
+    }
 }
+
+
 function keyNotBeingPressed(event) {
-    playKeys[event.code] = false;
+    if (event.code != "Space"){
+         playKeys[event.code] = false;
+    } 
 }
+
+// function keyWasPressed(event){
+//     playKeys[event.code] = !playKeys[event.code];
+//     console.log(playKeys[event.code]);
+// }
 
 document.addEventListener('keydown', keyBeingPressed);
 document.addEventListener('keyup', keyNotBeingPressed);
@@ -203,23 +239,24 @@ function movePlayer() { //edited in pickUpStuff
              }
     }
     for( let i in items){
-        if (items[i] = playerIsCarrying){
+        if (items[i] == playerIsCarrying){
             items[i].x = playerIsCarrying.x;
             items[i].y = playerIsCarrying.y;
-            items[i].element.style.left = item.x + 'px';
-            items[i].element.style.top = item.y; + 'px';
+            items[i].element.style.left = items[i].x + 'px';
+            items[i].element.style.top = items[i].y; + 'px';
         }
     }
     player.style.top = playerY + 'px';
     player.style.left = playerX + 'px';
 }
-
+document.addEventListener('keypress', pickUpItem);
 
 function gameLoop() {
     var targetFPS = 50;
     movePlayer();
-   // moveItemsOnBelt(items);
-   pickUpItem();
+   moveItemsOnBelt(items);
+  // pickUpItem();
+  // dropItem();
     requestAnimationFrame(() => {
         setTimeout(gameLoop, targetFPS);
     });
