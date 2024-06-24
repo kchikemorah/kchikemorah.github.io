@@ -97,15 +97,19 @@ function pickUpItem(event) { //made in pickUpStuff
                             for (bin in containers){
                             var curBin = containers[bin];
                             // this only checks bin1 right now, but should check more
-                            var itemIsAboveBin = posY < bin.y;
+                            var itemIsAboveBin = posY < curBin.y;
                             var itemIsInsideLeftWallOfBin = posX >= curBin.x;
-                            var itemIsInsideRightWallOfBin = ((posX+ items[i].element.offsetWidth) <= (bin.x + bin.element.offsetWidth));
+                            console.log(curBin);
+                            var itemIsInsideRightWallOfBin = ((posX+ items[i].element.offsetWidth) <= (curBin.x + curBin.element.offsetWidth));
                            
                             
                             if (!itemIsOnScreen || (!itemIsAboveBin && itemIsInsideLeftWallOfBin && itemIsInsideRightWallOfBin) ) {
                                if (!itemIsOnScreen){console.log('item is not on the screen');}
                                else{
-                                console.log(`it is inside ${bin}`);
+                                //snap in place
+                                posY += curBin.element.offsetHeight-items[i].element.offsetHeight - 10;
+                                items[i].element.style.top = posY + 'px';
+                                console.log(`${i} is inside ${bin}`);
                                 console.log(itemIsAboveBin);
                                 console.log(itemIsInsideLeftWallOfBin);
                                 console.log(itemIsInsideRightWallOfBin);
@@ -113,7 +117,7 @@ function pickUpItem(event) { //made in pickUpStuff
                                 clearInterval(id[i]);
                             } 
                             else {
-                                console.log(`it is not inside ${bin}`);
+                                console.log(`${i} is not inside ${bin}`);
                                 posY++;
                                 items[i].y = posY;
                                 items[i].element.style.top  = posY + 'px';
