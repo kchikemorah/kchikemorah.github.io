@@ -4,10 +4,10 @@ var playerY = 200;
 
 //an object in js is a set of key-value pairs
 var items = {
-    item1: { element: document.createElement('div'), x: 800, y: 70, onBelt: true, inPackage: false },
-    item2: { element: document.createElement('div'), x: 600, y: 70, onBelt: true, inPackage: false },
-    item3: { element: document.createElement('div'), x: 200, y: 90, onBelt: true, inPackage: false },
-    item4: { element: document.createElement('div'), x: 400, y: 70, onBelt: true, inPackage: false }
+    item1: { element: document.createElement('img'), x: 800, y: 70, onBelt: true, inPackage: false },
+    item2: { element: document.createElement('img'), x: 600, y: 70, onBelt: true, inPackage: false },
+    item3: { element: document.createElement('img'), x: 200, y: 90, onBelt: true, inPackage: false },
+    item4: { element: document.createElement('img'), x: 400, y: 70, onBelt: true, inPackage: false }
 };
 // console.log(items);
 
@@ -20,6 +20,22 @@ items.item3.element.className = 'item3';
 items.item3.element.id = '3';
 items.item4.element.className = 'item4';
 items.item4.element.id = '4';
+items.item1.element.src = "tile_0115.png";
+items.item1.element.alt = "item1";
+items.item2.element.src = "tile_0116.png";
+items.item2.element.alt = "item2";
+items.item3.element.src = "tile_0114.png";
+items.item3.element.alt = "item3";
+items.item4.element.src = "tile_0117.png";
+items.item4.element.alt = "item4";
+items.item5 = {element: document.createElement('img'), x: 1000, y: 80, onBelt:true};
+items.item5.element.src = "tile_0095.png";
+items.item5.element.alt = "item5";
+items.item5.element.className = 'item4';
+items.item6 = {element: document.createElement('img'), x: 1200, y: 75, onBelt:true};
+items.item6.element.src = "tile_0107.png";
+items.item6.element.alt = "item6";
+items.item6.element.className = 'item6';
 function paintItemsOnBelt(items) {
 
     for (let i in items) {
@@ -54,8 +70,8 @@ var playerIsCarrying = null;
 function pickUpItem(event) { //made in pickUpStuff
     for (let i in items) {
         var thisItem = items[i];
-        var playerReferencePointX = playerX + playerHead.offsetWidth; //center of the head
-        var playerReferencePointY = playerY + playerHead.offsetWidth / 2;
+        var playerReferencePointX = playerX + player.offsetWidth/2; //center of the head
+        var playerReferencePointY = playerY + player.offsetWidth / 2;
 
         var distance = [
             Math.sqrt((Math.pow(Math.abs(playerReferencePointX - thisItem.x), 2)) + (Math.pow(Math.abs(playerReferencePointY - thisItem.y), 2))),
@@ -66,7 +82,10 @@ function pickUpItem(event) { //made in pickUpStuff
         for (let j of distance) {
             if (j <= 50 && event.code == "Space") {
                 //console.log(`this item ${i} wiill be picked up!`);
-                playKeys["Space"] = !playKeys["Space"];
+                playKeys["Space"] = !playKeys["Space"]
+                
+                
+                console.log(playKeys["Space"]);
 
 
 
@@ -117,7 +136,6 @@ function pickUpItem(event) { //made in pickUpStuff
                                 clearInterval(id[i]);
                             } 
                             else {
-                                console.log(`${i} is not inside ${bin}`);
                                 posY++;
                                 items[i].y = posY;
                                 items[i].element.style.top  = posY + 'px';
@@ -128,7 +146,10 @@ function pickUpItem(event) { //made in pickUpStuff
                     }
                 }
             }
-
+            else{
+                playKeys["Space"] == false;
+                playerIsCarrying = null;
+            }
 
 
         }
@@ -166,11 +187,11 @@ var containers = {
     bin4: { element: document.createElement('div'), x: 1000, y: 600 }
 }
 
-var playerHead = document.createElement('div');
-var playerBody = document.createElement('div');
-var spine = document.createElement('div');
-var leftHand = document.createElement('div');
-var rightHand = document.createElement('div');
+// var playerHead = document.createElement('div');
+// var playerBody = document.createElement('div');
+// var spine = document.createElement('div');
+// var leftHand = document.createElement('div');
+// var rightHand = document.createElement('div');
 
 function paintBins() {
 
@@ -184,51 +205,62 @@ function paintBins() {
 function paintScreen() {
 
     wrapper.innerHTML = `
-        <div id='whitespace'>
-        <div style='background-color: white; height: 60px;'></div>`
+        
+        <div style='height: 60px;'></div>`
     var conveyorBelt = document.createElement('div');
     conveyorBelt.className = 'conveyorBelt';
     conveyorBelt.id = 'conveyorBelt';
     conveyorBelt.innerHTML = `
-        <div class='beltRolls'></div>
-        <div class='beltRolls'></div>
-        <div class='beltRolls'></div>
-        <div class='beltRolls'></div>
-        <div class='beltRolls'></div>
-        <div class='beltRolls'></div>
-        <div class='beltRolls'></div>
-        <div class='beltRolls'></div>
-        <div class='beltRolls'></div>
-        <div class='beltRolls'></div>
-        <div class='beltRolls'></div>
-        <div class='beltRolls'></div>
-        <div class='beltRolls'></div>
-        <div class='beltRolls'></div>`;
+         <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>`;
     wrapper.appendChild(conveyorBelt);
 
 
 
-    player = document.createElement('div');
+    player = document.createElement('img');
+    player.src = "tile_0112.png";
+    player.alt = "my character";
     player.className = 'player';
     player.style.top = playerY + 'px';
     player.style.left = playerX + 'px';
     wrapper.appendChild(player);
 
+  
 
-    playerHead.className = 'playerHead';
-    player.appendChild(playerHead);
+    // playerHead.className = 'playerHead';
+    // player.appendChild(playerHead);
 
-    playerBody.className = 'playerBody';
-    player.appendChild(playerBody);
+    // playerBody.className = 'playerBody';
+    // player.appendChild(playerBody);
 
-    spine.className = 'spine';
-    playerBody.appendChild(spine);
+    // spine.className = 'spine';
+    // playerBody.appendChild(spine);
 
-    leftHand.className = 'leftHand';
-    playerBody.appendChild(leftHand);
+    // leftHand.className = 'leftHand';
+    // playerBody.appendChild(leftHand);
 
-    rightHand.className = 'rightHand';
-    playerBody.appendChild(rightHand);
+    // rightHand.className = 'rightHand';
+    // playerBody.appendChild(rightHand);
 }
 
 var viewportWidth = window.innerWidth;
