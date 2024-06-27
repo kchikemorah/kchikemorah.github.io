@@ -42,6 +42,17 @@
     border-width: 5px;
     border-top: 5px transparent;
 }
+.bin1Cover{
+    position: absolute;
+    height: 120px;
+    border-style: solid;
+    border-color: red;
+    border-top: 5px transparent;
+    border-left: 5px transparent;
+    border-bottom: 5px transparent;
+    border-right: 5px solid red;
+
+}
 
 .bin2 {
     position: absolute;
@@ -78,9 +89,17 @@
     border-style: outset;
     border-color: green;
     border-width: 5px;
-    border-top: 5px transparent;
+    border-top: transparent;
 }
-
+.receiptsSection{
+    position: absolute;
+    display: flex;
+    flex-flow: column;
+    top: 150px;
+    left: 0px;
+    width: 100px;
+    gap: 5px;
+}
 .player {
     position: absolute;
     top: 100px;

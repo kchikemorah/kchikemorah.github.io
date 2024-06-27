@@ -4,11 +4,11 @@ var playerY = 200;
 
 //an object in js is a set of key-value pairs
 var items = {
-    item1: { element: document.createElement('img'), x: 800, y: 70, onBelt: true, inPackage: false },
-    item2: { element: document.createElement('img'), x: 600, y: 70, onBelt: true, inPackage: false },
-    item3: { element: document.createElement('img'), x: 200, y: 90, onBelt: true, inPackage: false },
-    item4: { element: document.createElement('img'), x: 400, y: 70, onBelt: true, inPackage: false }
-};
+    item1: { element: document.createElement('img'), x: 800, y: 70, onBelt: true, inPackage: false, type: 'type1' },
+    item2: { element: document.createElement('img'), x: 600, y: 70, onBelt: true, inPackage: false, type: 'type2' },
+    item3: { element: document.createElement('img'), x: 200, y: 90, onBelt: true, inPackage: false, type: 'type3' },
+    item4: { element: document.createElement('img'), x: 400, y: 70, onBelt: true, inPackage: false, type: 'type4' }
+};  //name them with a type
 // console.log(items);
 
 
@@ -28,11 +28,11 @@ items.item3.element.src = "tile_0114.png";
 items.item3.element.alt = "item3";
 items.item4.element.src = "tile_0117.png";
 items.item4.element.alt = "item4";
-items.item5 = {element: document.createElement('img'), x: 1000, y: 80, onBelt:true};
+items.item5 = {element: document.createElement('img'), x: 1000, y: 80, onBelt:true, type: 'type5'};
 items.item5.element.src = "tile_0095.png";
 items.item5.element.alt = "item5";
 items.item5.element.className = 'item4';
-items.item6 = {element: document.createElement('img'), x: 1200, y: 75, onBelt:true};
+items.item6 = {element: document.createElement('img'), x: 1200, y: 75, onBelt:true, type: 'type6'};
 items.item6.element.src = "tile_0107.png";
 items.item6.element.alt = "item6";
 items.item6.element.className = 'item6';
@@ -68,6 +68,7 @@ function moveItemsOnBelt(items) {
 var playerIsCarrying = null;
 
 function pickUpItem(event) { //made in pickUpStuff
+    loop1: 
     for (let i in items) {
         var thisItem = items[i];
         var playerReferencePointX = playerX + player.offsetWidth/2; //center of the head
@@ -79,28 +80,33 @@ function pickUpItem(event) { //made in pickUpStuff
             Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (thisItem.x + thisItem.element.offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY - (thisItem.y + thisItem.element.offsetHeight)), 2))),
             Math.sqrt((Math.pow(Math.abs(playerReferencePointX - thisItem.x), 2)) + (Math.pow(Math.abs(playerY - (thisItem.y + thisItem.element.offsetHeight)), 2))),
         ];
+        loop2:
         for (let j of distance) {
             if (j <= 50 && event.code == "Space") {
-                //console.log(`this item ${i} wiill be picked up!`);
-                playKeys["Space"] = !playKeys["Space"]
+                playKeys["Space"] = !playKeys["Space"];
                 
                 
-                console.log(playKeys["Space"]);
+                console.log("space:" + playKeys["Space"]);
+            
 
 
 
 
                 if (playKeys["Space"] == true) {
+                    console.log(`this item ${i} will be picked up!`);
                     playerIsCarrying = thisItem; //pick up
                     items[i].onBelt = false;
-                    break;
+                    break loop1;
                 }
                 else {
+                    console.log(`this item ${i} should be let go!`);
                     playerIsCarrying = null; //drop it
+                    console.log(playerIsCarrying);
                     items[i].onBelt = false;
                     //how to distinguish if its on the belt
                     if (items[i].y <= 70 && items[i].y >= 0) {
                         items[i].onBelt = true;
+                        break loop1;
                     }
                     else {
                         //make it drop
@@ -118,7 +124,7 @@ function pickUpItem(event) { //made in pickUpStuff
                             // this only checks bin1 right now, but should check more
                             var itemIsAboveBin = posY < curBin.y;
                             var itemIsInsideLeftWallOfBin = posX >= curBin.x;
-                            console.log(curBin);
+                            //console.log(curBin);
                             var itemIsInsideRightWallOfBin = ((posX+ items[i].element.offsetWidth) <= (curBin.x + curBin.element.offsetWidth));
                            
                             
@@ -126,12 +132,14 @@ function pickUpItem(event) { //made in pickUpStuff
                                if (!itemIsOnScreen){console.log('item is not on the screen');}
                                else{
                                 //snap in place
-                                posY += curBin.element.offsetHeight-items[i].element.offsetHeight - 10;
+                                posY += curBin.element.offsetHeight-items[i].element.offsetHeight - 5;
+                                console.log(posY);
                                 items[i].element.style.top = posY + 'px';
+                                console.log(items[i].element.style.top);
                                 console.log(`${i} is inside ${bin}`);
-                                console.log(itemIsAboveBin);
-                                console.log(itemIsInsideLeftWallOfBin);
-                                console.log(itemIsInsideRightWallOfBin);
+                               // console.log(itemIsAboveBin);
+                                //console.log(itemIsInsideLeftWallOfBin);
+                                //console.log(itemIsInsideRightWallOfBin);
                                }
                                 clearInterval(id[i]);
                             } 
@@ -143,13 +151,11 @@ function pickUpItem(event) { //made in pickUpStuff
                         }
 
                         }
+                        break loop1;
                     }
                 }
-            }
-            else{
-                playKeys["Space"] == false;
-                playerIsCarrying = null;
-            }
+        }
+           
 
 
         }
@@ -181,10 +187,10 @@ var conveyorBelt = document.createElement('div');
 
 
 var containers = {
-    bin1: { element: document.createElement('div'), x: 100, y: 600 },
-    bin2: { element: document.createElement('div'), x: 300, y: 600 },
-    bin3: { element: document.createElement('div'), x: 600, y: 600 },
-    bin4: { element: document.createElement('div'), x: 1000, y: 600 }
+    bin1: { element: document.createElement('div'), x: 100, y: 700 },
+    bin2: { element: document.createElement('div'), x: 300, y: 700 },
+    bin3: { element: document.createElement('div'), x: 600, y: 700 },
+    bin4: { element: document.createElement('div'), x: 1000, y:700 }
 }
 
 // var playerHead = document.createElement('div');
@@ -200,8 +206,58 @@ function paintBins() {
         containers[i].element.style.top = containers[i].y;
         containers[i].element.className = `${i}`;
         wrapper.appendChild(containers[i].element);
+        var bincover = document.createElement('div');
+        bincover.className = 'bin1Cover';
+        bincover.style.top = 580 + 'px';
+        bincover.style.left = 240 + 'px';
+        wrapper.appendChild(bincover);
     }
 }
+function paintShippingArea(){
+    var shippingTable = {element: document.createElement('img'), x: 910, y: 300};
+    shippingTable.element.src = 'rect.jpg';
+    shippingTable.element.alt = 'shipping area';
+    shippingTable.element.style.left = shippingTable.x + 'px';
+    shippingTable.element.style.top = shippingTable.y + 'px';
+    shippingTable.element.style.position = 'absolute';
+    shippingTable.element.style.transform = 'rotate(90deg)';
+    wrapper.appendChild(shippingTable.element);
+    
+}
+
+var receipts = [];
+
+function paintReceipts(){
+   var receiptsSection = document.getElementById('receipts'); 
+    for (i in receipts){
+        var receiptDiv = document.createElement('div');
+        receiptDiv.style.backgroundImage = "url('tan_inlay.png')";
+        // receiptDiv.src = "tan_inlay.png";
+        // receiptDiv.alt = `receipt paper ${i}`;
+        var receipt = receipts[i]; 
+        for ( itemType in receipt){ //itemType is the key
+            var amount = receipt[itemType]; //this is the value
+            receiptDiv.innerHTML += ` ${itemType}: ${amount} <br>`;
+        }
+        console.log(receiptsSection);
+        receiptsSection.appendChild(receiptDiv);
+    }
+
+   
+    // var shift = 0;
+    // for( i in receipts){
+    // receipts[i].element.src = "tan_inlay.png";
+    // receipts[i].element.alt = `receipt paper ${i}`;
+    // receipts[i].element.style.top = (150 + (110*shift)) +  'px';
+    // receipts[i].element.style.left = 0 + 'px';
+    // receipts[i].element.style.width = 100 + 'px';
+    // receipts[i].element.style.height = 100 + 'px';
+    // receipts[i].element.style.backgroundColor = 'transparent';
+    // receipts[i].element.style.position = 'absolute';
+    // wrapper.appendChild(receipts[i].element);
+    // shift ++;
+    }
+
 function paintScreen() {
 
     wrapper.innerHTML = `
@@ -262,6 +318,31 @@ function paintScreen() {
     // rightHand.className = 'rightHand';
     // playerBody.appendChild(rightHand);
 }
+function generateOrder(){
+
+    //start with a box of max 5 items
+    var maxItemsInBox = 5;
+    var typesOfItems = ["type1", "type2", "type3", "type4", "type5", "type6"];
+    //randomly pick an item
+    var chosenItems = {};
+    for (var i = 0; i < maxItemsInBox; i++){
+    var randomItem = Math.floor(Math.random()*typesOfItems.length);
+    if( typesOfItems[randomItem] in chosenItems){
+        chosenItems[typesOfItems[randomItem]] ++; 
+    }
+    else{
+    chosenItems[typesOfItems[randomItem]] = 1;
+    }
+    }
+    console.log(chosenItems); //now display them
+    receipts.push(chosenItems);
+    
+    
+}
+function pickUpBins(){ //keyP
+
+}
+//document.addEventListener('keypress');
 
 var viewportWidth = window.innerWidth;
 var viewportHeight = window.innerHeight;
@@ -343,7 +424,12 @@ function gameLoop() {
 
 paintScreen();
 paintItemsOnBelt(items);
+generateOrder();
+generateOrder();
+paintReceipts();
+//paintShippingArea();
 paintBins();
+
 gameLoop();
 
 
