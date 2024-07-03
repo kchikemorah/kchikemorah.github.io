@@ -51,12 +51,12 @@ function moveItemsOnBelt(items) {
         if (items[i].onBelt) {
             items[i].x += 10;
             if (items[i].x > viewportWidth) {
-                // items[i].onBelt = false;
-                // items[i].x +=-100;
-                // items[i].y = 600;
+                items[i].onBelt = false;
+                items[i].x +=-100;
+                items[i].y = 600;
 
 
-                items[i].x = 0;
+                // items[i].x = 0;
             }
 
         }
@@ -226,7 +226,7 @@ function paintShippingArea(){
 }
 
 var receipts = [];
-
+var itemSrcs = { 'type1': "tile_0115.png" , 'type2': "tile_0116.png" , 'type3': "tile_0114.png" , 'type4': "tile_0117.png", 'type5': "tile_0095.png", 'type6': "tile_0107.png" };
 function paintReceipts(){
    var receiptsSection = document.getElementById('receipts'); 
     for (i in receipts){
@@ -235,9 +235,10 @@ function paintReceipts(){
         // receiptDiv.src = "tan_inlay.png";
         // receiptDiv.alt = `receipt paper ${i}`;
         var receipt = receipts[i]; 
+        receiptDiv.innerHTML += ` Order No. ${Math.floor(Math.random()*999999)} <br>`;
         for ( itemType in receipt){ //itemType is the key
             var amount = receipt[itemType]; //this is the value
-            receiptDiv.innerHTML += ` ${itemType}: ${amount} <br>`;
+            receiptDiv.innerHTML += `<img src = ${itemSrcs[itemType]}> x ${amount} </img>  <br>`;
         }
         console.log(receiptsSection);
         receiptsSection.appendChild(receiptDiv);
@@ -288,7 +289,10 @@ function paintScreen() {
         <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
         <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
         <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>`;
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>`
+
     wrapper.appendChild(conveyorBelt);
 
 
@@ -338,6 +342,15 @@ function generateOrder(){
     receipts.push(chosenItems);
     
     
+}
+
+function generateNewItemOnBelt(){
+    var randomItem = Math.floor(Math.random()*typesOfItems.length);
+    var itemType = typesOfItems[randomItem];
+    var newItemIndex = items.length
+    items[newItemIndex] =  { element: document.createElement('img'), x: 0, y: 70, onBelt: true, inPackage: false, type: itemType };
+    items[newItemIndex].element.src = ItemSrcs[itemType];
+    items[newItemIndex].element.alt = `item${newItemIndex}`;
 }
 function pickUpBins(){ //keyP
 
@@ -410,26 +423,36 @@ function movePlayer() { //edited in pickUpStuff
 }
 document.addEventListener('keypress', pickUpItem);
 
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+var start = true;
 function gameLoop() {
+ 
     var targetFPS = 50;
     movePlayer();
+    paintItemsOnBelt(items);
     moveItemsOnBelt(items);
-
 
     requestAnimationFrame(() => {
         setTimeout(gameLoop, targetFPS);
     });
+    
 
 }
 
 paintScreen();
-paintItemsOnBelt(items);
+
 generateOrder();
 generateOrder();
 paintReceipts();
 //paintShippingArea();
 paintBins();
-
+while (start == true){
+    sleep(300).then(() => {generateNewItemOnBelt()});
+    
+}
 gameLoop();
 
 
