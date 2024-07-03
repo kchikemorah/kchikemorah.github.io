@@ -3,39 +3,39 @@ var playerX = 400;
 var playerY = 200;
 
 //an object in js is a set of key-value pairs
-var items = {
-    item1: { element: document.createElement('img'), x: 800, y: 70, onBelt: true, inPackage: false, type: 'type1' },
-    item2: { element: document.createElement('img'), x: 600, y: 70, onBelt: true, inPackage: false, type: 'type2' },
-    item3: { element: document.createElement('img'), x: 200, y: 90, onBelt: true, inPackage: false, type: 'type3' },
-    item4: { element: document.createElement('img'), x: 400, y: 70, onBelt: true, inPackage: false, type: 'type4' }
-};  //name them with a type
+var items = [
+    { element: document.createElement('img'), x: 800, y: 70, onBelt: true, inPackage: false, type: 'type1' },
+    { element: document.createElement('img'), x: 600, y: 70, onBelt: true, inPackage: false, type: 'type2' },
+    { element: document.createElement('img'), x: 200, y: 90, onBelt: true, inPackage: false, type: 'type3' },
+    { element: document.createElement('img'), x: 400, y: 70, onBelt: true, inPackage: false, type: 'type4' }
+];  //name them with a type
 // console.log(items);
 
 
-items.item1.element.className = 'item1';
-items.item1.element.id = '1';
-items.item2.element.className = 'item2';
-items.item2.element.id = '2';
-items.item3.element.className = 'item3';
-items.item3.element.id = '3';
-items.item4.element.className = 'item4';
-items.item4.element.id = '4';
-items.item1.element.src = "tile_0115.png";
-items.item1.element.alt = "item1";
-items.item2.element.src = "tile_0116.png";
-items.item2.element.alt = "item2";
-items.item3.element.src = "tile_0114.png";
-items.item3.element.alt = "item3";
-items.item4.element.src = "tile_0117.png";
-items.item4.element.alt = "item4";
-items.item5 = {element: document.createElement('img'), x: 1000, y: 80, onBelt:true, type: 'type5'};
-items.item5.element.src = "tile_0095.png";
-items.item5.element.alt = "item5";
-items.item5.element.className = 'item4';
-items.item6 = {element: document.createElement('img'), x: 1200, y: 75, onBelt:true, type: 'type6'};
-items.item6.element.src = "tile_0107.png";
-items.item6.element.alt = "item6";
-items.item6.element.className = 'item6';
+items[0].element.className = 'item1';
+items[0].element.id = '1';
+items[1].element.className = 'item2';
+items[1].element.id = '2';
+items[2].element.className = 'item3';
+items[2].element.id = '3';
+items[3].element.className = 'item4';
+items[3].element.id = '4';
+items[0].element.src = "type1.svg";
+items[0].element.alt = "item1";
+items[1].element.src = "type2.svg";
+items[1].element.alt = "item2";
+items[2].element.src = "type3.svg";
+items[2].element.alt = "item3";
+items[3].element.src = "type4.svg";
+items[3].element.alt = "item4";
+items.push({element: document.createElement('img'), x: 1000, y: 80, onBelt:true, type: 'type5'});
+items[4].element.src = "type5.svg";
+items[4].element.alt = "item5";
+items[4].element.className = 'item5';
+items.push({element: document.createElement('img'), x: 1200, y: 75, onBelt:true, type: 'type6'});
+items[5].element.src = "type6.svg";
+items[5].element.alt = "item6";
+items[5].element.className = 'item6';
 function paintItemsOnBelt(items) {
 
     for (let i in items) {
@@ -51,9 +51,13 @@ function moveItemsOnBelt(items) {
         if (items[i].onBelt) {
             items[i].x += 10;
             if (items[i].x > viewportWidth) {
-                items[i].onBelt = false;
-                items[i].x +=-100;
-                items[i].y = 600;
+                generateNewItemOnBelt();
+                paintItemsOnBelt();
+                 items[i].onBelt = false;
+                 var itemDumpX = Math.random()*50+100;
+                 var itemDumpY = Math.random()*50 + 500;
+                 items[i].x +=-itemDumpX;
+                 items[i].y = itemDumpY;
 
 
                 // items[i].x = 0;
@@ -187,10 +191,10 @@ var conveyorBelt = document.createElement('div');
 
 
 var containers = {
-    bin1: { element: document.createElement('div'), x: 100, y: 700 },
-    bin2: { element: document.createElement('div'), x: 300, y: 700 },
-    bin3: { element: document.createElement('div'), x: 600, y: 700 },
-    bin4: { element: document.createElement('div'), x: 1000, y:700 }
+    bin1: { element: document.createElement('img'), x: 100, y: 600 },
+    bin2: { element: document.createElement('img'), x: 300, y: 600 },
+    bin3: { element: document.createElement('img'), x: 600, y: 600 },
+    bin4: { element: document.createElement('img'), x: 1000, y:600 }
 }
 
 // var playerHead = document.createElement('div');
@@ -205,12 +209,14 @@ function paintBins() {
         containers[i].element.style.left = containers[i].x;
         containers[i].element.style.top = containers[i].y;
         containers[i].element.className = `${i}`;
+        containers[i].element.src = 'darkbrownbox.svg';
+        containers[i].element.alt = 'orange box';
         wrapper.appendChild(containers[i].element);
-        var bincover = document.createElement('div');
-        bincover.className = 'bin1Cover';
-        bincover.style.top = 580 + 'px';
-        bincover.style.left = 240 + 'px';
-        wrapper.appendChild(bincover);
+        // var bincover = document.createElement('div');
+        // bincover.className = 'bin1Cover';
+        // bincover.style.top = 580 + 'px';
+        // bincover.style.left = 240 + 'px';
+        // wrapper.appendChild(bincover);
     }
 }
 function paintShippingArea(){
@@ -226,7 +232,9 @@ function paintShippingArea(){
 }
 
 var receipts = [];
-var itemSrcs = { 'type1': "tile_0115.png" , 'type2': "tile_0116.png" , 'type3': "tile_0114.png" , 'type4': "tile_0117.png", 'type5': "tile_0095.png", 'type6': "tile_0107.png" };
+
+var itemSrcs = { 'type1': "type1.svg" , 'type2': "type2.svg" , 'type3': "type3.svg" , 'type4': "type4.svg", 'type5': "type5.svg", 'type6': "type6.svg" };
+
 function paintReceipts(){
    var receiptsSection = document.getElementById('receipts'); 
     for (i in receipts){
@@ -268,37 +276,37 @@ function paintScreen() {
     conveyorBelt.className = 'conveyorBelt';
     conveyorBelt.id = 'conveyorBelt';
     conveyorBelt.innerHTML = `
-         <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'tile_0054.png' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>`
+         <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>`
 
     wrapper.appendChild(conveyorBelt);
 
 
 
     player = document.createElement('img');
-    player.src = "tile_0112.png";
+    player.src = "character.svg";
     player.alt = "my character";
     player.className = 'player';
     player.style.top = playerY + 'px';
@@ -322,11 +330,15 @@ function paintScreen() {
     // rightHand.className = 'rightHand';
     // playerBody.appendChild(rightHand);
 }
+
+var typesOfItems = ["type1", "type2", "type3", "type4", "type5", "type6"];
+
+
 function generateOrder(){
 
     //start with a box of max 5 items
     var maxItemsInBox = 5;
-    var typesOfItems = ["type1", "type2", "type3", "type4", "type5", "type6"];
+    
     //randomly pick an item
     var chosenItems = {};
     for (var i = 0; i < maxItemsInBox; i++){
@@ -345,16 +357,18 @@ function generateOrder(){
 }
 
 function generateNewItemOnBelt(){
+    
     var randomItem = Math.floor(Math.random()*typesOfItems.length);
     var itemType = typesOfItems[randomItem];
-    var newItemIndex = items.length
-    items[newItemIndex] =  { element: document.createElement('img'), x: 0, y: 70, onBelt: true, inPackage: false, type: itemType };
-    items[newItemIndex].element.src = ItemSrcs[itemType];
+    var newItemIndex = items.length;
+    items.push({element: document.createElement('img'), x: 0, y: 70, onBelt: true, inPackage: false, type: itemType });
+    console.log(items[newItemIndex]);
+    items[newItemIndex].element.src = itemSrcs[itemType];
     items[newItemIndex].element.alt = `item${newItemIndex}`;
 }
-function pickUpBins(){ //keyP
+// function pickUpBins(){ //keyP
 
-}
+// }
 //document.addEventListener('keypress');
 
 var viewportWidth = window.innerWidth;
@@ -430,9 +444,8 @@ function sleep(ms) {
 var start = true;
 function gameLoop() {
  
-    var targetFPS = 50;
+    var targetFPS = 60;
     movePlayer();
-    paintItemsOnBelt(items);
     moveItemsOnBelt(items);
 
     requestAnimationFrame(() => {
@@ -443,16 +456,20 @@ function gameLoop() {
 }
 
 paintScreen();
-
+paintItemsOnBelt(items);
+// generateNewItemOnBelt();
+console.log(items);
+ //throw new Error();
+ 
 generateOrder();
 generateOrder();
 paintReceipts();
 //paintShippingArea();
 paintBins();
-while (start == true){
-    sleep(300).then(() => {generateNewItemOnBelt()});
+// while (start == true){
+//     sleep(300).then(() => {generateNewItemOnBelt()});
     
-}
+// }
 gameLoop();
 
 

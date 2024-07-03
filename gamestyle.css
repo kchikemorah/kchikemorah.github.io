@@ -32,15 +32,12 @@
 } */
 .bin1 {
     position: absolute;
-    width: 120px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
   
-    text-align: center;
+  
     /* background-color: grey; */
-    border-style: solid;
-    border-color: red;
-    border-width: 5px;
-    border-top: 5px transparent;
+
 }
 .bin1Cover{
     position: absolute;
@@ -56,40 +53,30 @@
 
 .bin2 {
     position: absolute;
-    width: 200px;
-    height: 100px;
+    width: 400px;
+    height: 200px;
    
-    text-align: center;
+  
     /* background-color: grey; */
-    border-style: outset;
-    border-color: orange;
-    border-width: 5px;
-    border-top: 5px transparent;
+   
 }
 
 .bin3 {
     position: absolute;
     width: 300px;
-    height: 140px;
+    height: 400px;
    
-    text-align: center;
+   
     /* background-color: grey; */
-    border-style: outset;
-    border-color: yellow;
-    border-width: 5px;
-    border-top: 5px transparent;
 }
 
 .bin4 {
     position: absolute;
     width: 130px;
-    height: 100px;
+    height: 400px;
     text-align: center;
     /* background-color: grey; */
-    border-style: outset;
-    border-color: green;
-    border-width: 5px;
-    border-top: transparent;
+    
 }
 .receiptsSection{
     position: absolute;
