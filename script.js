@@ -36,36 +36,35 @@ items.push({element: document.createElement('img'), x: 1200, y: 75, onBelt:true,
 items[5].element.src = "type6.svg";
 items[5].element.alt = "item6";
 items[5].element.className = 'item6';
-function paintItemsOnBelt(items) {
+function paintItemsOnBelt(items) { //just renders, doesnt change values
 
     for (let i in items) {
         // if (items[i].onBelt){
-
         items[i].element.style.left = items[i].x + 'px';
+        items[i].element.style.top = items[i].y + 'px';
         document.getElementById('wrapper').appendChild(items[i].element);
         //}
     }
 }
-function moveItemsOnBelt(items) {
+function moveItemsOnBelt(items) { //actually changes the item object
     for (let i in items) {
         if (items[i].onBelt) {
             items[i].x += 10;
+            console.log("increasing x of " + i);
             if (items[i].x > viewportWidth) {
-                generateNewItemOnBelt();
-                paintItemsOnBelt();
-                 items[i].onBelt = false;
-                 var itemDumpX = Math.random()*50+100;
-                 var itemDumpY = Math.random()*50 + 500;
-                 items[i].x +=-itemDumpX;
-                 items[i].y = itemDumpY;
-
-
+                console.log(`item ${i} is off the screen, x = ${items[i].x}`)
+                console.log(items[i]);
+                //generateNewItemOnBelt();
+                items[i].onBelt = false;
+                var itemDumpX = Math.random() * 50 + 100;
+                var itemDumpY = Math.random() * 50 + 500;
+                items[i].x += -itemDumpX;
+                items[i].y = itemDumpY;
                 // items[i].x = 0;
             }
 
         }
-        items[i].element.style.left = items[i].x + 'px';
-        items[i].element.style.top = items[i].y + 'px';
+
     }
 }
 
@@ -332,37 +331,43 @@ function paintScreen() {
 var typesOfItems = ["type1", "type2", "type3", "type4", "type5", "type6"];
 
 
-function generateOrder(){
+function generateOrder() {
 
     //start with a box of max 5 items
     var maxItemsInBox = 5;
-    
+
     //randomly pick an item
     var chosenItems = {};
-    for (var i = 0; i < maxItemsInBox; i++){
-    var randomItem = Math.floor(Math.random()*typesOfItems.length);
-    if( typesOfItems[randomItem] in chosenItems){
-        chosenItems[typesOfItems[randomItem]] ++; 
-    }
-    else{
-    chosenItems[typesOfItems[randomItem]] = 1;
-    }
+    for (var i = 0; i < maxItemsInBox; i++) {
+        var randomItem = Math.floor(Math.random() * typesOfItems.length);
+        if (typesOfItems[randomItem] in chosenItems) {
+            chosenItems[typesOfItems[randomItem]]++;
+        }
+        else {
+            chosenItems[typesOfItems[randomItem]] = 1;
+        }
     }
     console.log(chosenItems); //now display them
     receipts.push(chosenItems);
-    
-    
+
+
 }
 
-function generateNewItemOnBelt(){
-    
-    var randomItem = Math.floor(Math.random()*typesOfItems.length);
+function generateNewItemOnBelt() {
+
+    var randomItem = Math.floor(Math.random() * typesOfItems.length);
     var itemType = typesOfItems[randomItem];
-    var newItemIndex = items.length;
-    items.push({element: document.createElement('img'), x: 0, y: 70, onBelt: true, inPackage: false, type: itemType });
-    console.log(items[newItemIndex]);
-    items[newItemIndex].element.src = itemSrcs[itemType];
-    items[newItemIndex].element.alt = `item${newItemIndex}`;
+
+    console.log(items.length);
+    var newItemElement = document.createElement('img');
+    newItemElement.src = itemSrcs[itemType];
+    newItemElement.alt = `item${items.length}`;
+    newItemElement.style.position = "absolute";
+    newItemElement.style.width = 40 + 'px';
+    newItemElement.style.height = 40 + 'px';
+    items.push({ element: newItemElement, x: 0, y: 70, onBelt: true, inPackage: false, type: itemType });
+
+
 }
 // function pickUpBins(){ //keyP
 
@@ -441,13 +446,14 @@ function sleep(ms) {
 }
 var start = true;
 function gameLoop() {
- 
+
     var targetFPS = 60;
+    paintItemsOnBelt(items);
     movePlayer();
     moveItemsOnBelt(items);
-
     requestAnimationFrame(() => {
         setTimeout(gameLoop, targetFPS);
+       
     });
     
 
@@ -455,17 +461,14 @@ function gameLoop() {
 
 paintScreen();
 paintItemsOnBelt(items);
-// generateNewItemOnBelt();
-console.log(items);
- //throw new Error();
- 
 generateOrder();
 generateOrder();
 paintReceipts();
 //paintShippingArea();
 paintBins();
 // while (start == true){
-//     sleep(300).then(() => {generateNewItemOnBelt()});
+//     sleep(300).then(() => {
+///setTimeout(generateNewItemOnBelt(), 300);
     
 // }
 gameLoop();
