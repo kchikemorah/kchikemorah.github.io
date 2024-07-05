@@ -30,53 +30,69 @@
     gap: 40px;
 
 } */
-
 .bin1 {
     position: absolute;
-    width: 120px;
-    height: 150px;
-    text-align: center;
+    width: 200px;
+    height: 200px;
+  
+  
+    /* background-color: grey; */
+
+}
+.bin1Cover{
+    position: absolute;
+    height: 120px;
     border-style: solid;
     border-color: red;
-    border-width: 5px;
+    border-top: 5px transparent;
+    border-left: 5px transparent;
+    border-bottom: 5px transparent;
+    border-right: 5px solid red;
+
 }
 
 .bin2 {
     position: absolute;
-    width: 200px;
-    height: 100px;
-    text-align: center;
-    border-style: outset;
-    border-color: orange;
-    border-width: 5px;
+    width: 400px;
+    height: 200px;
+   
+  
+    /* background-color: grey; */
+   
 }
 
 .bin3 {
     position: absolute;
     width: 300px;
-    height: 140px;
-    text-align: center;
-    border-style: outset;
-    border-color: yellow;
-    border-width: 5px;
+    height: 400px;
+   
+   
+    /* background-color: grey; */
 }
 
 .bin4 {
     position: absolute;
     width: 130px;
-    height: 100px;
+    height: 400px;
     text-align: center;
-    border-style: outset;
-    border-color: green;
-    border-width: 5px;
+    /* background-color: grey; */
+    
 }
-
+.receiptsSection{
+    position: absolute;
+    display: flex;
+    flex-flow: column;
+    top: 150px;
+    left: 0px;
+    width: 100px;
+    gap: 5px;
+}
 .player {
     position: absolute;
     top: 100px;
     left: 100px;
-    width: 120px;
-    height: 120px;
+    width: 70px;
+    height: 70px;
 
 }
 
@@ -131,36 +147,37 @@
 
 .item1 {
     position: absolute;
-    width: 50px;
-    height: 70px;
-    background-color: red;
-    border-style: solid;
+    width: 40px;
+    height: 40px;
 
 }
 
 .item2 {
     position: absolute;
-    width: 20px;
-    height: 100px;
-    background-color: orange;
     transform: rotate(20deg);
-    border-style: solid;
+    width: 40px;
+    height: 40px;
 }
 
 .item3 {
     position: absolute;
-    width: 200px;
-    height: 50px;
-    background-color: yellow;
-    border-style: solid;
+    width: 40px;
+    height: 40px;
 }
 
 .item4 {
     position: absolute;
-    border-style: solid black;
-    border-left: 50px solid transparent;
-    border-right: 50px solid transparent;
-    border-bottom: 100px solid purple;
-   
+    width: 40px;
+    height: 40px;
+}
+.item5{
+    position: absolute;
+    width: 40px;
+    height: 40px;
 
+}
+.item6{
+    position: absolute;
+    width: 40px;
+    height: 40px;
 }
