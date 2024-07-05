@@ -118,14 +118,14 @@ function pickUpItem(event) { //made in pickUpStuff
                          var posX = items[i].x;
 
 
-                        clearInterval(id[i]);
-                        id[i] = setInterval(frame, 10);
+                        clearInterval(setIntervalCallIds[i]);
+                        setIntervalCallIds[i] = setInterval(frame, 10);
                         function frame() {
 
                             var itemIsOnScreen = posY < 878;
                             for (bin in containers){
                             var curBin = containers[bin];
-                            // this only checks bin1 right now, but should check more
+                            
                             var itemIsAboveBin = posY < curBin.y;
                             var itemIsInsideLeftWallOfBin = posX >= curBin.x;
                             //console.log(curBin);
@@ -141,9 +141,7 @@ function pickUpItem(event) { //made in pickUpStuff
                                 items[i].element.style.top = posY + 'px';
                                 console.log(items[i].element.style.top);
                                 console.log(`${i} is inside ${bin}`);
-                               // console.log(itemIsAboveBin);
-                                //console.log(itemIsInsideLeftWallOfBin);
-                                //console.log(itemIsInsideRightWallOfBin);
+              
                                }
                                 clearInterval(id[i]);
                             } 
@@ -174,7 +172,7 @@ function pickUpItem(event) { //made in pickUpStuff
 
 
 
-var id = { item1: null, item2: null, item3: null, item4: null };
+var setIntervalCallIds = { item1: null, item2: null, item3: null, item4: null };
 function isThereACollision() {
 
 }
@@ -471,5 +469,3 @@ paintBins();
     
 // }
 gameLoop();
-
-
