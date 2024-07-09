@@ -4,12 +4,11 @@ var playerY = 200;
 
 //an object in js is a set of key-value pairs
 var items = [
-    { element: document.createElement('img'), x: 800, y: 70, onBelt: true, inPackage: false, type: 'type1' },
-    { element: document.createElement('img'), x: 600, y: 70, onBelt: true, inPackage: false, type: 'type2' },
-    { element: document.createElement('img'), x: 200, y: 90, onBelt: true, inPackage: false, type: 'type3' },
-    { element: document.createElement('img'), x: 400, y: 70, onBelt: true, inPackage: false, type: 'type4' }
-];  //name them with a type
-// console.log(items);
+    { element: document.createElement('img'), x: 800, y: 70, onBelt: true, inPackageId: null, type: 'type1' },
+    { element: document.createElement('img'), x: 600, y: 70, onBelt: true, inPackageId: null, type: 'type2' },
+    { element: document.createElement('img'), x: 200, y: 90, onBelt: true, inPackageId: null, type: 'type3' },
+    { element: document.createElement('img'), x: 400, y: 70, onBelt: true, inPackageId: null, type: 'type4' }
+]; 
 
 
 items[0].element.className = 'item1';
@@ -29,11 +28,13 @@ items[2].element.alt = "item3";
 items[3].element.src = "type4.svg";
 items[3].element.alt = "item4";
 items.push({element: document.createElement('img'), x: 1000, y: 80, onBelt:true, type: 'type5'});
+items[4].element.id = '5';
 items[4].element.src = "type5.svg";
 items[4].element.alt = "item5";
 items[4].element.className = 'item5';
 items.push({element: document.createElement('img'), x: 1200, y: 75, onBelt:true, type: 'type6'});
 items[5].element.src = "type6.svg";
+items[5].element.id = '6';
 items[5].element.alt = "item6";
 items[5].element.className = 'item6';
 function paintItemsOnBelt(items) { //just renders, doesnt change values
@@ -50,11 +51,8 @@ function moveItemsOnBelt(items) { //actually changes the item object
     for (let i in items) {
         if (items[i].onBelt) {
             items[i].x += 10;
-            console.log("increasing x of " + i);
             if (items[i].x > viewportWidth) {
-                console.log(`item ${i} is off the screen, x = ${items[i].x}`)
-                console.log(items[i]);
-                //generateNewItemOnBelt();
+                generateNewItemOnBelt();
                 items[i].onBelt = false;
                 var itemDumpX = Math.random() * 50 + 100;
                 var itemDumpY = Math.random() * 50 + 500;
@@ -99,12 +97,14 @@ function pickUpItem(event) { //made in pickUpStuff
                     console.log(`this item ${i} will be picked up!`);
                     playerIsCarrying = thisItem; //pick up
                     items[i].onBelt = false;
+                    if (items[i].inPackageId != null){
+                        containers[items[i].inPackageId].itemIndexInBin.splice(items.indexOf(i), 1); //remove item from bin it was just in
+                    }
                     break loop1;
                 }
                 else {
                     console.log(`this item ${i} should be let go!`);
                     playerIsCarrying = null; //drop it
-                    console.log(playerIsCarrying);
                     items[i].onBelt = false;
                     //how to distinguish if its on the belt
                     if (items[i].y <= 70 && items[i].y >= 0) {
@@ -127,7 +127,6 @@ function pickUpItem(event) { //made in pickUpStuff
                             
                             var itemIsAboveBin = posY < curBin.y;
                             var itemIsInsideLeftWallOfBin = posX >= curBin.x;
-                            //console.log(curBin);
                             var itemIsInsideRightWallOfBin = ((posX+ items[i].element.offsetWidth) <= (curBin.x + curBin.element.offsetWidth));
                            
                             
@@ -135,14 +134,15 @@ function pickUpItem(event) { //made in pickUpStuff
                                if (!itemIsOnScreen){console.log('item is not on the screen');}
                                else{
                                 //snap in place
-                                posY += curBin.element.offsetHeight-items[i].element.offsetHeight - 5;
-                                console.log(posY);
+                                posY += curBin.element.offsetHeight-items[i].element.offsetHeight - curBin.element.offsetHeight/2;
                                 items[i].element.style.top = posY + 'px';
-                                console.log(items[i].element.style.top);
                                 console.log(`${i} is inside ${bin}`);
+                                items[i].inPackageId = `${bin}`;
+                                containers[bin].itemIndexInBin.push(i);
+                                console.log(containers[bin].itemIndexInBin);
               
                                }
-                                clearInterval(id[i]);
+                                clearInterval(setIntervalCallIds[i]);
                             } 
                             else {
                                 posY++;
@@ -172,6 +172,7 @@ function pickUpItem(event) { //made in pickUpStuff
 
 
 var setIntervalCallIds = { item1: null, item2: null, item3: null, item4: null };
+
 function isThereACollision() {
 
 }
@@ -188,17 +189,12 @@ var conveyorBelt = document.createElement('div');
 
 
 var containers = {
-    bin1: { element: document.createElement('img'), x: 100, y: 600 },
-    bin2: { element: document.createElement('img'), x: 300, y: 600 },
-    bin3: { element: document.createElement('img'), x: 600, y: 600 },
-    bin4: { element: document.createElement('img'), x: 1000, y:600 }
-}
+    bin1: { element: document.createElement('img'), x: 100, y: 600, itemIndexInBin: [] },
+    bin2: { element: document.createElement('img'), x: 300, y: 600, itemIndexInBin: [] },
+    bin3: { element: document.createElement('img'), x: 600, y: 600, itemIndexInBin: [] },
+    bin4: { element: document.createElement('img'), x: 1000, y:600, itemIndexInBin: [] }
+};
 
-// var playerHead = document.createElement('div');
-// var playerBody = document.createElement('div');
-// var spine = document.createElement('div');
-// var leftHand = document.createElement('div');
-// var rightHand = document.createElement('div');
 
 function paintBins() {
 
@@ -206,15 +202,29 @@ function paintBins() {
         containers[i].element.style.left = containers[i].x;
         containers[i].element.style.top = containers[i].y;
         containers[i].element.className = `${i}`;
+        containers[i].element.id = `{i}`;
         containers[i].element.src = 'darkbrownbox.svg';
         containers[i].element.alt = 'orange box';
         wrapper.appendChild(containers[i].element);
+        
         // var bincover = document.createElement('div');
         // bincover.className = 'bin1Cover';
         // bincover.style.top = 580 + 'px';
         // bincover.style.left = 240 + 'px';
         // wrapper.appendChild(bincover);
     }
+//     for (var i in containers) {
+        
+//         containers[i].element.style.left = containers[i].x + 'px';
+//         containers[i].element.style.top = containers[i].y + 'px';
+//         containers[i].element.className = `bin ${i}`;
+//         containers[i].element.id = i;
+//         containers[i].element.setAttribute('width', '200px'); // Adjust width as needed
+//         containers[i].element.setAttribute('height', '200px'); // Adjust height as needed
+//         containers[i].element.setAttribute('viewBox', '0 0 100 100'); // 
+//         containers[i].element.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'darkbrownbox.svg#svgRoot');
+//         wrapper.appendChild(containers[i].element);
+// }
 }
 function paintShippingArea(){
     var shippingTable = {element: document.createElement('img'), x: 910, y: 300};
@@ -236,7 +246,7 @@ function paintReceipts(){
    var receiptsSection = document.getElementById('receipts'); 
     for (i in receipts){
         var receiptDiv = document.createElement('div');
-        receiptDiv.style.backgroundImage = "url('tan_inlay.png')";
+        receiptDiv.style.backgroundImage = "url('receipt paper.png')";
         // receiptDiv.src = "tan_inlay.png";
         // receiptDiv.alt = `receipt paper ${i}`;
         var receipt = receipts[i]; 
@@ -245,7 +255,7 @@ function paintReceipts(){
             var amount = receipt[itemType]; //this is the value
             receiptDiv.innerHTML += `<img src = ${itemSrcs[itemType]}> x ${amount} </img>  <br>`;
         }
-        console.log(receiptsSection);
+       
         receiptsSection.appendChild(receiptDiv);
     }
 
@@ -272,7 +282,8 @@ function paintScreen() {
     var conveyorBelt = document.createElement('div');
     conveyorBelt.className = 'conveyorBelt';
     conveyorBelt.id = 'conveyorBelt';
-    conveyorBelt.innerHTML = `
+    for (var i = 0; i < 2; i++){
+    conveyorBelt.innerHTML += `
          <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
         <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
         <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
@@ -296,7 +307,8 @@ function paintScreen() {
         <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
         <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
         <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>
-        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img>`
+        <img  src = 'conveyorbelt-tile.svg' alt = 'conveyorTop' style='width: 60px; height: 60px; transform: rotate(90deg)'></img> <br>`;
+    }
 
     wrapper.appendChild(conveyorBelt);
 
@@ -310,22 +322,6 @@ function paintScreen() {
     player.style.left = playerX + 'px';
     wrapper.appendChild(player);
 
-  
-
-    // playerHead.className = 'playerHead';
-    // player.appendChild(playerHead);
-
-    // playerBody.className = 'playerBody';
-    // player.appendChild(playerBody);
-
-    // spine.className = 'spine';
-    // playerBody.appendChild(spine);
-
-    // leftHand.className = 'leftHand';
-    // playerBody.appendChild(leftHand);
-
-    // rightHand.className = 'rightHand';
-    // playerBody.appendChild(rightHand);
 }
 
 var typesOfItems = ["type1", "type2", "type3", "type4", "type5", "type6"];
@@ -347,7 +343,7 @@ function generateOrder() {
             chosenItems[typesOfItems[randomItem]] = 1;
         }
     }
-    console.log(chosenItems); //now display them
+   
     receipts.push(chosenItems);
 
 
@@ -357,30 +353,28 @@ function generateNewItemOnBelt() {
 
     var randomItem = Math.floor(Math.random() * typesOfItems.length);
     var itemType = typesOfItems[randomItem];
-
-    console.log(items.length);
     var newItemElement = document.createElement('img');
+    newItemElement.id = items.length;
     newItemElement.src = itemSrcs[itemType];
     newItemElement.alt = `item${items.length}`;
     newItemElement.style.position = "absolute";
     newItemElement.style.width = 40 + 'px';
     newItemElement.style.height = 40 + 'px';
-    items.push({ element: newItemElement, x: 0, y: 70, onBelt: true, inPackage: false, type: itemType });
+    items.push({ element: newItemElement, x: 0, y: 70, onBelt: true, inPackageId: null, type: itemType });
 
 
 }
-// function pickUpBins(){ //keyP
 
-// }
-//document.addEventListener('keypress');
+
 
 var viewportWidth = window.innerWidth;
 var viewportHeight = window.innerHeight;
 var playKeys = {}; // will store  key-true/false pairs 
 playKeys["Space"] = false;
+playKeys["KeyP"] = false;
 
 function keyBeingPressed(event) {
-    if (event.code != "Space") {
+    if (event.code != "Space" && event.code != "KeyP") {
         playKeys[event.code] = true;
         
     }
@@ -388,57 +382,109 @@ function keyBeingPressed(event) {
 
 
 function keyNotBeingPressed(event) {
-    if (event.code != "Space") {
+    if (event.code != "Space" && event.code != "KeyP") {
         playKeys[event.code] = false;
     }
 }
 
-// function keyWasPressed(event){
-//     playKeys[event.code] = !playKeys[event.code];
-//     console.log(playKeys[event.code]);
-// }
+
 
 document.addEventListener('keydown', keyBeingPressed);
 document.addEventListener('keyup', keyNotBeingPressed);
 
 function movePlayer() { //edited in pickUpStuff
+    var changeInX = 0;
+    var changeInY = 0;
     if (playKeys['KeyW'] && playerY - 5 > 0) {
-        playerY -= 10;
-        if (playerIsCarrying != null) {
-            playerIsCarrying.y -= 10;
-        }
+        changeInY -=10;
     }
     if (playKeys['KeyS'] && playerY + player.offsetHeight + 5 < viewportHeight) {
-        playerY += 10;
-        if (playerIsCarrying != null) {
-            playerIsCarrying.y += 10;
-        }
+        changeInY +=10;
     }
 
     if (playKeys['KeyA'] && playerX - 5 > 0) {
-        playerX -= 10;
-        if (playerIsCarrying != null) {
-            playerIsCarrying.x -= 10;
-        }
+        changeInX -=10;
     }
     if (playKeys['KeyD'] && playerX + player.offsetWidth + 5 < viewportWidth) {
-        playerX += 10;
-        if (playerIsCarrying != null) {
-            playerIsCarrying.x += 10;
-        }
+        changeInX +=10;
     }
+    playerY += changeInY;
+    playerX += changeInX;
     for (let i in items) {
-        if (items[i] == playerIsCarrying) {
+        if (items[i] == playerIsCarrying && playerIsCarrying != null) {
+            playerIsCarrying.x += changeInX;
+            playerIsCarrying.y += changeInY;
             items[i].x = playerIsCarrying.x;
             items[i].y = playerIsCarrying.y;
             items[i].element.style.left = items[i].x + 'px';
-            items[i].element.style.top = items[i].y; + 'px';
+            items[i].element.style.top = items[i].y + 'px';
         }
+    }
+    for (let c in containers){
+        if (containers[c] == playerIsCarrying && playerIsCarrying != null) {
+            playerIsCarrying.x += changeInX;
+            playerIsCarrying.y += changeInY;
+            containers[c].x = playerIsCarrying.x;
+            containers[c].y = playerIsCarrying.y;
+            containers[c].element.style.left = containers[c].x + 'px';
+            containers[c].element.style.top = containers[c].y + 'px';
+            for (let i of containers[c].itemIndexInBin){
+                var itemInThisBin = items[i];
+                itemInThisBin.x += changeInX;
+                itemInThisBin.y += changeInY;
+                itemInThisBin.element.style.left = itemInThisBin.x + 'px';
+                itemInThisBin.element.style.top = itemInThisBin.y + 'px';
+
+            }
+            
+        }  
     }
     player.style.top = playerY + 'px';
     player.style.left = playerX + 'px';
+    
 }
 document.addEventListener('keypress', pickUpItem);
+document.addEventListener('keypress', (event) => {
+    if (event.code == "KeyP") { // Example: Enter key
+        pickUpBin(event);
+    }
+});
+function pickUpBin(event){ 
+    loop3:
+    for (let i in containers) {
+        var thisBin = containers[i];
+        var playerReferencePointX = playerX + player.offsetWidth/2; //center of the head
+        var playerReferencePointY = playerY + player.offsetWidth / 2;
+
+        var distance = [
+            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - thisBin.x), 2)) + (Math.pow(Math.abs(playerReferencePointY - thisBin.y), 2))),
+            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (thisBin.x + thisBin.element.offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY - thisBin.y), 2))),
+            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (thisBin.x + thisBin.element.offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY - (thisBin.y + thisBin.element.offsetHeight)), 2))),
+            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - thisBin.x), 2)) + (Math.pow(Math.abs(playerY - (thisBin.y + thisBin.element.offsetHeight)), 2))),
+        ];
+        loop4:
+        for ( let dist of distance){
+            if (dist <= 50 && event.code == 'KeyP'){
+                console.log("P: " + playKeys["KeyP"]);                
+                console.log(dist + ' from ' + i);
+                playKeys["KeyP"]= !playKeys["KeyP"];
+                console.log("P: " + playKeys["KeyP"]);
+            if (playKeys["KeyP"] == true) {
+                console.log(`this package ${i} will be picked up!`);
+                playerIsCarrying = thisBin; //pick up
+                console.log(playerIsCarrying);
+                break loop3;
+        }
+            else{
+                console.log(`this package ${i} will be dropped off!`);
+                playerIsCarrying = null;
+                break loop3;
+            }
+    }
+    }
+}
+
+}
 
 
 function sleep(ms) {
@@ -449,8 +495,9 @@ function gameLoop() {
 
     var targetFPS = 60;
     paintItemsOnBelt(items);
+    paintBins();
     movePlayer();
-    moveItemsOnBelt(items);
+    //moveItemsOnBelt(items);
     requestAnimationFrame(() => {
         setTimeout(gameLoop, targetFPS);
        

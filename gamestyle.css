@@ -34,12 +34,8 @@
     position: absolute;
     width: 200px;
     height: 200px;
-  
-  
-    /* background-color: grey; */
-
 }
-.bin1Cover{
+/* .bin1Cover{
     position: absolute;
     height: 120px;
     border-style: solid;
@@ -48,35 +44,26 @@
     border-left: 5px transparent;
     border-bottom: 5px transparent;
     border-right: 5px solid red;
-
-}
+} */
 
 .bin2 {
     position: absolute;
     width: 400px;
     height: 200px;
-   
-  
-    /* background-color: grey; */
-   
 }
 
 .bin3 {
     position: absolute;
     width: 300px;
     height: 400px;
-   
-   
-    /* background-color: grey; */
+    object-fit: fill;
 }
 
 .bin4 {
     position: absolute;
     width: 130px;
     height: 400px;
-    text-align: center;
-    /* background-color: grey; */
-    
+    text-align: center;    
 }
 .receiptsSection{
     position: absolute;
