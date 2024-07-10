@@ -60,6 +60,7 @@ function moveAllItems(items) {
             }
 
         }
+        
 
     }
 }
