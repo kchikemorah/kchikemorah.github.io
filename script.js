@@ -72,24 +72,15 @@ function pickUpItem(event) { //made in pickUpStuff
     loop1: 
     for (let i in items) {
         var thisItem = items[i];
-        var playerReferencePointX = playerX + player.offsetWidth/2; //center of the head
-        var playerReferencePointY = playerY + player.offsetWidth / 2;
 
-        var distance = [
-            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - thisItem.x), 2)) + (Math.pow(Math.abs(playerReferencePointY - thisItem.y), 2))),
-            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (thisItem.x + thisItem.element.offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY - thisItem.y), 2))),
-            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (thisItem.x + thisItem.element.offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY - (thisItem.y + thisItem.element.offsetHeight)), 2))),
-            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - thisItem.x), 2)) + (Math.pow(Math.abs(playerY - (thisItem.y + thisItem.element.offsetHeight)), 2))),
-        ];
+        var distances = distancesFromObject(thisItem);
         loop2:
-        for (let j of distance) {
+        for (let j of distances) {
             if (j <= 50 && event.code == "Space") {
                 playKeys["Space"] = !playKeys["Space"];
                 
                 
                 console.log("space:" + playKeys["Space"]);
-            
-
 
 
 
@@ -243,35 +234,26 @@ var receipts = [];
 var itemSrcs = { 'type1': "type1.svg" , 'type2': "type2.svg" , 'type3': "type3.svg" , 'type4': "type4.svg", 'type5': "type5.svg", 'type6': "type6.svg" };
 
 function paintReceipts(){
-   var receiptsSection = document.getElementById('receipts'); 
+  // var receiptsSection = document.getElementById('receipts'); 
+   //document.getElementById('wrapper').appendChild(receiptsSection);
     for (i in receipts){
         var receiptDiv = document.createElement('div');
         receiptDiv.style.backgroundImage = "url('receipt paper.png')";
+        receiptDiv.style.position = 'absolute';
         // receiptDiv.src = "tan_inlay.png";
         // receiptDiv.alt = `receipt paper ${i}`;
         var receipt = receipts[i]; 
         receiptDiv.innerHTML += ` Order No. ${Math.floor(Math.random()*999999)} <br>`;
         for ( itemType in receipt){ //itemType is the key
+            if( itemType != 'x' && itemType != 'y'){
             var amount = receipt[itemType]; //this is the value
             receiptDiv.innerHTML += `<img src = ${itemSrcs[itemType]}> x ${amount} </img>  <br>`;
+            }
         }
        
-        receiptsSection.appendChild(receiptDiv);
+       // receiptsSection.appendChild(receiptDiv);
+       document.getElementById('wrapper').appendChild(receiptDiv);
     }
-
-   
-    // var shift = 0;
-    // for( i in receipts){
-    // receipts[i].element.src = "tan_inlay.png";
-    // receipts[i].element.alt = `receipt paper ${i}`;
-    // receipts[i].element.style.top = (150 + (110*shift)) +  'px';
-    // receipts[i].element.style.left = 0 + 'px';
-    // receipts[i].element.style.width = 100 + 'px';
-    // receipts[i].element.style.height = 100 + 'px';
-    // receipts[i].element.style.backgroundColor = 'transparent';
-    // receipts[i].element.style.position = 'absolute';
-    // wrapper.appendChild(receipts[i].element);
-    // shift ++;
     }
 
 function paintScreen() {
@@ -326,13 +308,13 @@ function paintScreen() {
 
 var typesOfItems = ["type1", "type2", "type3", "type4", "type5", "type6"];
 
-
+var lastEmptyReceiptPosition = 150;
 function generateOrder() {
 
     //start with a box of max 5 items
     var maxItemsInBox = 5;
 
-    //randomly pick an item
+    
     var chosenItems = {};
     for (var i = 0; i < maxItemsInBox; i++) {
         var randomItem = Math.floor(Math.random() * typesOfItems.length);
@@ -342,10 +324,14 @@ function generateOrder() {
         else {
             chosenItems[typesOfItems[randomItem]] = 1;
         }
+       
     }
-   
+    chosenItems['x'] = 0;
+    chosenItems['y'] = lastEmptyReceiptPosition;
+    lastEmptyReceiptPosition += 200;
     receipts.push(chosenItems);
 
+    
 
 }
 
@@ -443,27 +429,45 @@ function movePlayer() { //edited in pickUpStuff
     player.style.left = playerX + 'px';
     
 }
-document.addEventListener('keypress', pickUpItem);
+
 document.addEventListener('keypress', (event) => {
     if (event.code == "KeyP") { // Example: Enter key
         pickUpBin(event);
     }
+    if (event.code == "Enter"){
+        checkOffReceipt(event);
+    }
+    if (event.code == "Space"){
+        pickUpItem(event);
+    }
 });
+var lastRemovedReceiptIndex = -1;
+function checkOffReceipt(event){
+//enter rips of a receipt, enter again closes a box
+for (i of receipts){
+    distances = distancesFromObject(i)
+}
+
+}
+function distancesFromObject(object){
+    var playerReferencePointX = playerX + player.offsetWidth/2; //center of the head
+    var playerReferencePointY = playerY + player.offsetWidth / 2;
+    var distances = [
+        Math.sqrt((Math.pow(Math.abs(playerReferencePointX - object.x), 2)) + (Math.pow(Math.abs(playerReferencePointY - object.y), 2))),
+        Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (object.x + object.element.offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY - object.y), 2))),
+        Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (object.x + object.element.offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY - (object.y + object.element.offsetHeight)), 2))),
+        Math.sqrt((Math.pow(Math.abs(playerReferencePointX - object.x), 2)) + (Math.pow(Math.abs(playerY - (object.y + object.element.offsetHeight)), 2))),
+    ]; 
+    return distances;
+}
 function pickUpBin(event){ 
     loop3:
     for (let i in containers) {
         var thisBin = containers[i];
-        var playerReferencePointX = playerX + player.offsetWidth/2; //center of the head
-        var playerReferencePointY = playerY + player.offsetWidth / 2;
-
-        var distance = [
-            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - thisBin.x), 2)) + (Math.pow(Math.abs(playerReferencePointY - thisBin.y), 2))),
-            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (thisBin.x + thisBin.element.offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY - thisBin.y), 2))),
-            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (thisBin.x + thisBin.element.offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY - (thisBin.y + thisBin.element.offsetHeight)), 2))),
-            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - thisBin.x), 2)) + (Math.pow(Math.abs(playerY - (thisBin.y + thisBin.element.offsetHeight)), 2))),
-        ];
+        var distances = distancesFromObject(thisBin);
+       
         loop4:
-        for ( let dist of distance){
+        for ( let dist of distances){
             if (dist <= 50 && event.code == 'KeyP'){
                 console.log("P: " + playKeys["KeyP"]);                
                 console.log(dist + ' from ' + i);

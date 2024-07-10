@@ -8,7 +8,7 @@
 
     <div id='wrapper' class = 'wrapper'></div>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> -->
-    <div id = 'receipts' class = 'receiptsSection'></div>
+    <!-- <div id = 'receipts' class = 'receiptsSection'></div> -->
     <script src = 'script.js'> </script>
 
        
