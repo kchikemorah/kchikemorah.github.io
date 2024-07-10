@@ -46,7 +46,7 @@ function paintAllItems(items) {
         
     }
 }
-function moveAllItems(items) { 
+function moveItemsOnBelt(items) { 
     for (let i in items) {
         if (items[i].onBelt) {
             items[i].x += 10;
@@ -441,7 +441,7 @@ function gameLoop() {
     paintAllItems(items);
     paintBins();
     movePlayer();
-    moveAllItems(items);
+    moveItemsOnBelt(items);
     requestAnimationFrame(() => {
         setTimeout(gameLoop, targetFPS);
        
