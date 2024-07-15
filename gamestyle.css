@@ -33,47 +33,26 @@
 .bin1 {
     position: absolute;
     width: 200px;
-    height: 200px;
+    height: 100px;
 }
-/* .bin1Cover{
-    position: absolute;
-    height: 120px;
-    border-style: solid;
-    border-color: red;
-    border-top: 5px transparent;
-    border-left: 5px transparent;
-    border-bottom: 5px transparent;
-    border-right: 5px solid red;
-} */
-
 .bin2 {
     position: absolute;
-    width: 400px;
-    height: 200px;
+    width: 250px;
+    height: 140px;
 }
 
 .bin3 {
     position: absolute;
     width: 300px;
-    height: 400px;
-    object-fit: fill;
+    height: 170px;
 }
 
 .bin4 {
     position: absolute;
     width: 130px;
-    height: 400px;
-    text-align: center;    
+    height: 150px;    
 }
-.receiptsSection{
-    position: absolute;
-    display: flex;
-    flex-flow: column;
-    top: 150px;
-    left: 0px;
-    width: 100px;
-    gap: 5px;
-}
+
 .player {
     position: absolute;
     top: 100px;

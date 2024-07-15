@@ -64,33 +64,37 @@ function moveItemsOnBelt(items) {
 }
 
 var playerIsCarrying = null;
-
+document.addEventListener('keypress', (event) => {
+    if (event.code == "KeyP") {
+        pickUpBin(event);
+    }
+    if (event.code == "Enter"){ 
+        closePackage(event);
+    }
+    if (event.code == "Space"){
+        pickUpItem(event);
+    }
+});
 function pickUpItem(event) { 
     for (let r in receipts) {
         var playerReferencePointX = playerX + player.offsetWidth/2; //center of the head
         var playerReferencePointY = playerY + player.offsetWidth/2;
-        var distances = [
-            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - receipts[r].x), 2)) + (Math.pow(Math.abs(playerReferencePointY - receipts[r].y), 2))),
-            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (receipts[r].x + receiptElements[r].offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY - receipts[r].y), 2))),
-            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (receipts[r].x + receiptElements[r].offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY - (receipts[r].y + receiptElements[r].offsetHeight)), 2))),
-            Math.sqrt((Math.pow(Math.abs(playerReferencePointX - receipts[r].x), 2)) + (Math.pow(Math.abs(playerY - (receipts[r].y + receiptElements[r].offsetHeight)), 2))),
-        ]; 
+        var distances = distancesFromObject(receipts[r]);
+       
         
+    
 for(let d of distances){
-    console.log(d);
     if (d <= 50 && event.code == "Space"){
         playKeys["Space"] = !playKeys["Space"];
         if (playKeys["Space"] == true) {
-            playerIsCarrying = receiptElements[r];
+            playerIsCarrying = receipts[r].element;
         }
         else{
             playerIsCarrying = null;
         }
         return;
 }
-    else{
-    console.log('get closer!');
-    }
+    
 }
 }
     for (let i in items) {
@@ -126,7 +130,7 @@ for(let d of distances){
                         function frame() {
 
                             var itemIsOnScreen = posY < 878;
-                            for (bin in containers){
+                            for ( let bin in containers){
                             var curBin = containers[bin];
                             
                             var itemIsAboveBin = posY < curBin.y;
@@ -136,7 +140,7 @@ for(let d of distances){
                             
                             if (!itemIsOnScreen || (!itemIsAboveBin && itemIsInsideLeftWallOfBin && itemIsInsideRightWallOfBin) ) {
                                if(itemIsOnScreen){
-                                posY += curBin.element.offsetHeight-items[i].element.offsetHeight - curBin.element.offsetHeight/2;
+                                posY += curBin.element.offsetHeight-items[i].element.offsetHeight - 10;
                                 items[i].element.style.top = posY + 'px';
                                 items[i].inPackageId = `${bin}`;
                                 containers[bin].itemIdsInBin.push(i);
@@ -182,10 +186,10 @@ var conveyorBelt = document.createElement('div');
 
 
 var containers = {
-    bin1: { element: document.createElement('img'), x: 100, y: 600, itemIdsInBin: [] },
-    bin2: { element: document.createElement('img'), x: 300, y: 600, itemIdsInBin: [] },
-    bin3: { element: document.createElement('img'), x: 600, y: 600, itemIdsInBin: [] },
-    bin4: { element: document.createElement('img'), x: 1000, y:600, itemIdsInBin: [] }
+    bin1: { element: document.createElement('img'), x: 100, y: 700, itemIdsInBin: [], shipped: false },
+    bin2: { element: document.createElement('img'), x: 350, y: 700, itemIdsInBin: [], shipped: false },
+    bin3: { element: document.createElement('img'), x: 650, y: 700, itemIdsInBin: [], shipped: false },
+    bin4: { element: document.createElement('img'), x: 1000, y:700, itemIdsInBin: [], shipped: false }
 };
 
 
@@ -204,23 +208,23 @@ function paintBins() {
 
 }
 function paintShippingArea(){
-    var shippingTable = {element: document.createElement('img'), x: 910, y: 300};
-    shippingTable.element.src = 'rect.jpg';
+    var shippingTable = {element: document.createElement('img'), x: 1100, y: 200};
+    shippingTable.element.src = 'shipping-area.svg';
     shippingTable.element.alt = 'shipping area';
     shippingTable.element.style.left = shippingTable.x + 'px';
     shippingTable.element.style.top = shippingTable.y + 'px';
     shippingTable.element.style.position = 'absolute';
-    shippingTable.element.style.transform = 'rotate(90deg)';
+    shippingTable.element.style.height = '400px';
     wrapper.appendChild(shippingTable.element);
     
 }
 
-var receipts = [];
+
 
 var itemSrcs = { 'type1': "type1.svg" , 'type2': "type2.svg" , 'type3': "type3.svg" , 'type4': "type4.svg", 'type5': "type5.svg", 'type6': "type6.svg" };
 
 
-receiptElements = []; //parallel with receipts
+
 function paintReceipts(){
    //document.getElementById('wrapper').appendChild(receiptsSection);  
     for (let i in receipts){
@@ -228,23 +232,26 @@ function paintReceipts(){
         var receiptDiv = document.createElement('div');
         receiptDiv.style.backgroundImage = "url('receipt paper.png')";
         receiptDiv.style.position = 'absolute';
-        // receiptDiv.src = "tan_inlay.png";
-        // receiptDiv.alt = `receipt paper ${i}`;
+        receiptDiv.style.width = 120 + 'px';
+        receiptDiv.style.height = 120 + 'px';
+
         var receipt = receipts[i]; 
         receiptDiv.innerHTML += ` Order No. ${Math.floor(Math.random()*999999)} <br>`;
         
-        for ( var itemType in receipt){ //itemType is the key
-            if( itemType != 'x' && itemType != 'y'){
-            var amount = receipt[itemType]; //this is the value
+        for ( var itemType in receipt.receiptContent){ //itemType is the key
+            
+            var amount = receipt.receiptContent[itemType]; //this is the value
             receiptDiv.innerHTML += `<img src = ${itemSrcs[itemType]}> x ${amount} </img>  <br>`;
-            }
+            
         }
         receiptDiv.style.top = receipt.y + 'px';
         receiptDiv.style.left = receipt.x + 'px';
+      
        
        // receiptsSection.appendChild(receiptDiv);
        document.getElementById('wrapper').appendChild(receiptDiv);
-       receiptElements.push(receiptDiv);
+       receipt['element'] = receiptDiv;
+       
     }
     }
 
@@ -300,28 +307,39 @@ function paintScreen() {
 
 var typesOfItems = ["type1", "type2", "type3", "type4", "type5", "type6"];
 
-var lastEmptyReceiptPosition = 150;
+
+var receipts = [];
+var receiptElements = []; //parallel with receipts
+var lastEmptyReceiptPosition = 170;
+
+var maxItemsInBox = 5;
+var numberOfOrdersGenerated = 0;
 function generateOrder() {
 
     //start with a box of max 5 items
-    var maxItemsInBox = 5;
+    
 
     
-    var chosenItems = {};
+    var chosenItems = {x: 0, y: 0, receiptContent: {}};
+   
     for (var i = 0; i < maxItemsInBox; i++) {
         var randomItem = Math.floor(Math.random() * typesOfItems.length);
-        if (typesOfItems[randomItem] in chosenItems) {
-            chosenItems[typesOfItems[randomItem]]++;
+        if (typesOfItems[randomItem] in chosenItems.receiptContent) {
+            chosenItems.receiptContent[typesOfItems[randomItem]]++;
         }
         else {
-            chosenItems[typesOfItems[randomItem]] = 1;
+            chosenItems.receiptContent[typesOfItems[randomItem]] = 1;
         }
-       
     }
-    chosenItems['x'] = 0;
-    chosenItems['y'] = lastEmptyReceiptPosition;
-    lastEmptyReceiptPosition += 120;
+    chosenItems.x = 0;
+    
+    chosenItems.y = lastEmptyReceiptPosition;
+    lastEmptyReceiptPosition += 150;
+
     receipts.push(chosenItems);
+    numberOfOrdersGenerated ++;
+    
+    
 
     
 
@@ -350,9 +368,10 @@ var viewportHeight = window.innerHeight;
 var playKeys = {};  
 playKeys["Space"] = false;
 playKeys["KeyP"] = false;
+playKeys["Enter"] = false;
 
 function keyBeingPressed(event) {
-    if (event.code != "Space" && event.code != "KeyP") {
+    if (event.code != "Space" && event.code != "KeyP" && event.code != "Enter") {
         playKeys[event.code] = true;
         
     }
@@ -360,7 +379,7 @@ function keyBeingPressed(event) {
 
 
 function keyNotBeingPressed(event) {
-    if (event.code != "Space" && event.code != "KeyP") {
+    if (event.code != "Space" && event.code != "KeyP" && event.code != "Enter") {
         playKeys[event.code] = false;
     }
 }
@@ -390,20 +409,16 @@ function movePlayer() {
     playerX += changeInX;
     for (let i in items) {  //i can definitely clean these up with a separate method
         if (items[i] == playerIsCarrying && playerIsCarrying != null) {
-            playerIsCarrying.x += changeInX;
-            playerIsCarrying.y += changeInY;
-            items[i].x = playerIsCarrying.x;
-            items[i].y = playerIsCarrying.y;
+            items[i].x += changeInX;
+            items[i].y += changeInY;
             items[i].element.style.left = items[i].x + 'px';
             items[i].element.style.top = items[i].y + 'px';
         }
     }
     for (let c in containers){
         if (containers[c] == playerIsCarrying && playerIsCarrying != null) {
-            playerIsCarrying.x += changeInX;
-            playerIsCarrying.y += changeInY;
-            containers[c].x = playerIsCarrying.x;
-            containers[c].y = playerIsCarrying.y;
+            containers[c].x += changeInX;
+            containers[c].y += changeInY;
             containers[c].element.style.left = containers[c].x + 'px';
             containers[c].element.style.top = containers[c].y + 'px';
             for (let i of containers[c].itemIdsInBin){
@@ -418,13 +433,11 @@ function movePlayer() {
         }  
     }
     for (let r in receipts) {
-        if (receiptElements[r] == playerIsCarrying && playerIsCarrying != null) {
-            playerIsCarrying.x += changeInX;
-            playerIsCarrying.y += changeInY;
-            receipts[r].x = playerIsCarrying.x;
-            receipts[r].y = playerIsCarrying.y;
-            receiptElements[r].style.left = receipts[r].x + 'px';
-            receiptElements[r].style.top = receipts[r].y + 'px';
+        if (receipts[r].element == playerIsCarrying && playerIsCarrying != null) {
+            receipts[r].x += changeInX;
+            receipts[r].y += changeInY;
+            receipts[r].element.style.left = receipts[r].x + 'px';
+            receipts[r].element.style.top = receipts[r].y + 'px';
         }
     }
     player.style.top = playerY + 'px';
@@ -432,41 +445,70 @@ function movePlayer() {
     
 }
 
-document.addEventListener('keypress', (event) => {
-    if (event.code == "KeyP") {
-        pickUpBin(event);
-    }
-    if (event.code == "Enter"){ //placing receipt in box
-        checkOffReceipt(event);
-    }
-    if (event.code == "Space"){
-        pickUpItem(event);
-    }
-});
-var lastRemovedReceiptIndex = -1;
 
-function checkOffReceipt(event){
-//enter drops receipt in box and closes the box
-for (let i of receipts){
-    if (playerIsCarrying = receiptElements[i]){
-        for (let bin in containers){
-        distances = distancesFromObject(containers[bin]);
-        for (let i of distances){
-            if(i < 50 && event.code == "Enter" ){ //place receipt in bin and close the box!
-                playerIsCarrying = null;
-                receiptElements.splice(i, 1);
-                receipts.splice(i, 1);
+function closePackage(event){
+for (let r in receipts){
+    if (playerIsCarrying == receipts[r].element){
+        
+//put containers loop in here to close a pakcage by place the receipt on it
+for (let bin in containers){
+    distances = distancesFromObject(containers[bin]);
+   
+    for (let i of distances){
+        if(i < 70 && event.code == "Enter" ){ 
+            playKeys["Enter"] = !playKeys["Enter"];
+            if (playKeys["Enter"]== true){
+                
+            containers[bin].element.src = "darkbrownboxclosed.svg";
+            containers[bin].receiptContent = receipts[r].receiptContent;
+            receipts[r].element.remove();
+            receipts.splice(r, 1);
+          
+            return;
+            }
+            else{
+             
+                containers[bin].element.src = "darkbrownbox.svg"; 
+                return; 
+            }
+            receipts.splice(r, 1);
+            
+        }       
+} 
+}
+    }
+}
+        
+
+
+}
+var finishedPackages = [];
+function getScore(){
+    var totalScore = 0;
+    for (let package of finishedPackages){
+        var thisPackage = containers[package];
+        var thisReceipt = thisPackage.receiptContent;
+        var itemsInPackage = thisPackage.itemIdsInBin;
+        console.log(thisReceipt);
+        for ( let i of itemsInPackage){
+            for (let itemType in thisReceipt){
+            if (itemType == items[i].type){ //this item is on the assigned receipt 
+                if (thisReceipt[itemType] > 0){
+                thisReceipt[itemType] -= 1;
+                }
             }
         }
+            
+        }
+        var score = maxItemsInBox;
+        for (let itemType in thisReceipt){
+                score -= thisReceipt[itemType]; //any items not accounted for go against you!
+        }
+        totalScore += score;
     }
-    }
-    
-    
-
+    return totalScore;
 }
 
-
-}
 function distancesFromObject(object){
     var playerReferencePointX = playerX + player.offsetWidth/2; //center of the head
     var playerReferencePointY = playerY + player.offsetWidth / 2;
@@ -482,9 +524,8 @@ function pickUpBin(event){
     for (let i in containers) {
         var thisBin = containers[i];
         var distances = distancesFromObject(thisBin);
-       
         for ( let dist of distances){
-            if (dist <= 50 && event.code == 'KeyP'){
+            if (dist <= 50 && event.code == 'KeyP' && !thisBin.shipped ){
                 playKeys["KeyP"]= !playKeys["KeyP"];
             if (playKeys["KeyP"] == true) {
                 console.log(`this package ${i} will be picked up!`);
@@ -493,6 +534,17 @@ function pickUpBin(event){
         }
             else{
                 console.log(`this package ${i} will be dropped off!`);
+                if (thisBin.x + thisBin.element.offsetWidth/2 > 1000 && thisBin.y +  thisBin.element.offsetHeight/2 > 300){
+                    finishedPackages.push(i);
+                    containers[i].shipped = true;
+                    containers[i].element.style.width = '40px';
+                    containers[i].element.style.height = '40px';
+                    containers[i].element.style.left = '1150px';
+                    for (let i of thisBin.itemIdsInBin){
+                        items[i].element.style.width = '1px';
+                        items[i].element.style.height = '1px';
+                    }
+                }
                 playerIsCarrying = null;
                 return;
             }
@@ -502,41 +554,60 @@ function pickUpBin(event){
 
 }
 
-function paintMovingReceipt(){
-    for(let r in receiptElements){
-    if (playerIsCarrying = receiptElements[r]){
-    receiptElements[r].style.left = receipts[r].x + 'px';
-    receiptElements[r].style.top = receipts[r].y + 'px';
+function repaintMovingReceiptOrBin(){
+    for(let r in receipts){
+    if (playerIsCarrying == receipts[r].element){
+    receipts[r].element.style.left = receipts[r].x + 'px';
+    receipts[r].element.style.top = receipts[r].y + 'px';
     return;
+    }
+    for (let bin in containers){
+        if (playerIsCarrying == containers[bin]){
+            containers[bin].element.style.left = containers[bin].x;
+            containers[bin].element.style.top = containers[bin].y;
+        }
     }
 }
 }
-function sleep(ms) {
+function sleep(ms) { //need to randomly generate orders and items on beltt
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 var start = true;
 function gameLoop() {
 
     var targetFPS = 60;
-    paintAllItems(items);
-    paintBins();
-    paintMovingReceipt();
+   
     movePlayer();
-    moveItemsOnBelt(items);
+   moveItemsOnBelt(items);
+   paintAllItems(items);
+   repaintMovingReceiptOrBin();
+   if(numberOfOrdersGenerated == finishedPackages.length){
+    showScore();
+    return;
+    }
+  
     requestAnimationFrame(() => {
         setTimeout(gameLoop, targetFPS);
        
     });
+
     
 
+}
+function showScore() {
+    var popup = window.open("", "Game Over", "width=600,height=400");
+    popup.document.write(`<h1>Score: ${getScore()} </h1> }`);
 }
 
 paintScreen();
 paintAllItems(items);
+paintShippingArea();
+paintBins();
 generateOrder();
 generateOrder();
 paintReceipts();
 
-//paintShippingArea();
-paintBins();
+
+
 gameLoop();
+
