@@ -2,7 +2,7 @@ var player;
 var playerX = 400;
 var playerY = 200;
 
-//an object in js is a set of key-value pairs
+
 var items = [
     { element: document.createElement('img'), x: 800, y: 70, onBelt: true, inPackageId: null, type: 'type1' },
     { element: document.createElement('img'), x: 600, y: 70, onBelt: true, inPackageId: null, type: 'type2' },
@@ -37,12 +37,15 @@ items[5].element.src = "type6.svg";
 items[5].element.id = '5';
 items[5].element.alt = "item6";
 items[5].element.className = 'item6';
-function paintAllItems(items) { 
+
+function paintAllItems(items) {
+
 
     for (let i in items) {
         items[i].element.style.left = items[i].x + 'px';
         items[i].element.style.top = items[i].y + 'px';
         document.getElementById('wrapper').appendChild(items[i].element);
+
     }
 }
 function moveItemsOnBelt(items) { 
@@ -59,11 +62,13 @@ function moveItemsOnBelt(items) {
             }
 
         }
+        
 
     }
 }
 
 var playerIsCarrying = null;
+
 document.addEventListener('keypress', (event) => {
     if (event.code == "KeyP") {
         pickUpBin(event);
@@ -105,12 +110,14 @@ for(let d of distances){
             if (j <= 50 && event.code == "Space") {
                 playKeys["Space"] = !playKeys["Space"];
 
+
                 if (playKeys["Space"] == true) {
                     playerIsCarrying = thisItem; //pick up
                     items[i].onBelt = false;
                     if (items[i].inPackageId != null){
                         containers[items[i].inPackageId].itemIdsInBin.splice(items.indexOf(i), 1); //remove item from bin it was just in
                     }
+
                    return;
                 }
                 else {
@@ -121,6 +128,7 @@ for(let d of distances){
                        return;
                     }
                     else {
+
                         var posY = items[i].y;
                          var posX = items[i].x;
 
@@ -139,8 +147,10 @@ for(let d of distances){
                            
                             
                             if (!itemIsOnScreen || (!itemIsAboveBin && itemIsInsideLeftWallOfBin && itemIsInsideRightWallOfBin) ) {
+
                                if(itemIsOnScreen){
                                 posY += curBin.element.offsetHeight-items[i].element.offsetHeight - 10;
+
                                 items[i].element.style.top = posY + 'px';
                                 items[i].inPackageId = `${bin}`;
                                 containers[bin].itemIdsInBin.push(i);
@@ -181,15 +191,18 @@ function isThereACollision() {
 
 }
 
+
 var wrapper = document.getElementById('wrapper');
 var conveyorBelt = document.createElement('div');
 
 
 var containers = {
+
     bin1: { element: document.createElement('img'), x: 100, y: 700, itemIdsInBin: [], shipped: false },
     bin2: { element: document.createElement('img'), x: 350, y: 700, itemIdsInBin: [], shipped: false },
     bin3: { element: document.createElement('img'), x: 650, y: 700, itemIdsInBin: [], shipped: false },
     bin4: { element: document.createElement('img'), x: 1000, y:700, itemIdsInBin: [], shipped: false }
+
 };
 
 
@@ -199,12 +212,14 @@ function paintBins() {
         containers[i].element.style.left = containers[i].x;
         containers[i].element.style.top = containers[i].y;
         containers[i].element.className = `${i}`;
-        containers[i].element.id = `{i}`;
+        containers[i].element.id = `${i}`;
         containers[i].element.src = 'darkbrownbox.svg';
         containers[i].element.alt = 'orange box';
         wrapper.appendChild(containers[i].element);
         
+
     }
+
 
 }
 function paintShippingArea(){
@@ -231,9 +246,11 @@ function paintReceipts(){
         
         var receiptDiv = document.createElement('div');
         receiptDiv.style.backgroundImage = "url('receipt paper.png')";
+
         receiptDiv.style.position = 'absolute';
         receiptDiv.style.width = 120 + 'px';
         receiptDiv.style.height = 120 + 'px';
+
 
         var receipt = receipts[i]; 
         receiptDiv.innerHTML += ` Order No. ${Math.floor(Math.random()*999999)} <br>`;
@@ -253,6 +270,7 @@ function paintReceipts(){
        receipt['element'] = receiptDiv;
        
     }
+
     }
 
 function paintScreen() {
@@ -365,7 +383,9 @@ function generateNewItemOnBelt() {
 
 var viewportWidth = window.innerWidth;
 var viewportHeight = window.innerHeight;
+
 var playKeys = {};  
+
 playKeys["Space"] = false;
 playKeys["KeyP"] = false;
 playKeys["Enter"] = false;
@@ -446,6 +466,7 @@ function movePlayer() {
 }
 
 
+
 function closePackage(event){
 for (let r in receipts){
     if (playerIsCarrying == receipts[r].element){
@@ -476,6 +497,7 @@ for (let bin in containers){
         }       
 } 
 }
+
     }
 }
         
@@ -521,6 +543,7 @@ function distancesFromObject(object){
     return distances;
 }
 function pickUpBin(event){ 
+
     for (let i in containers) {
         var thisBin = containers[i];
         var distances = distancesFromObject(thisBin);
@@ -545,6 +568,7 @@ function pickUpBin(event){
                         items[i].element.style.height = '1px';
                     }
                 }
+
                 playerIsCarrying = null;
                 return;
             }
@@ -576,6 +600,7 @@ var start = true;
 function gameLoop() {
 
     var targetFPS = 60;
+<
    
     movePlayer();
    moveItemsOnBelt(items);
@@ -586,6 +611,7 @@ function gameLoop() {
     return;
     }
   
+=
     requestAnimationFrame(() => {
         setTimeout(gameLoop, targetFPS);
        
@@ -601,11 +627,13 @@ function showScore() {
 
 paintScreen();
 paintAllItems(items);
+
 paintShippingArea();
 paintBins();
 generateOrder();
 generateOrder();
 paintReceipts();
+
 
 
 
