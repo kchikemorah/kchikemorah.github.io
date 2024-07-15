@@ -599,19 +599,18 @@ function sleep(ms) { //need to randomly generate orders and items on beltt
 var start = true;
 function gameLoop() {
 
-    var targetFPS = 60;
-<
-   
-    movePlayer();
+    var targetFPS = 60;  
+     movePlayer();
    moveItemsOnBelt(items);
    paintAllItems(items);
    repaintMovingReceiptOrBin();
+
    if(numberOfOrdersGenerated == finishedPackages.length){
     showScore();
     return;
     }
   
-=
+
     requestAnimationFrame(() => {
         setTimeout(gameLoop, targetFPS);
        
