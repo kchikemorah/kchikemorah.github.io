@@ -53,7 +53,6 @@ function moveItemsOnBelt(items) {
         if (items[i].onBelt) {
             items[i].x += 10;
             if (items[i].x > viewportWidth) {
-                generateNewItemOnBelt();
                 items[i].onBelt = false;
                 var itemDumpX = Math.random() * 50 + 100;
                 var itemDumpY = Math.random() * 50 + 500;
@@ -242,32 +241,26 @@ var itemSrcs = { 'type1': "type1.svg" , 'type2': "type2.svg" , 'type3': "type3.s
 
 function paintReceipts(){
    //document.getElementById('wrapper').appendChild(receiptsSection);  
-    for (let i in receipts){
-        
-        var receiptDiv = document.createElement('div');
-        receiptDiv.style.backgroundImage = "url('receipt paper.png')";
-
-        receiptDiv.style.position = 'absolute';
-        receiptDiv.style.width = 120 + 'px';
-        receiptDiv.style.height = 120 + 'px';
-
+    for (let i in receipts){   
 
         var receipt = receipts[i]; 
-        receiptDiv.innerHTML += ` Order No. ${Math.floor(Math.random()*999999)} <br>`;
+        if(receipts[i].element.innerHTML == ""){
+        receipts[i].element.innerHTML += ` Order No. ${Math.floor(Math.random()*999999)} <br>`;
         
         for ( var itemType in receipt.receiptContent){ //itemType is the key
             
             var amount = receipt.receiptContent[itemType]; //this is the value
-            receiptDiv.innerHTML += `<img src = ${itemSrcs[itemType]}> x ${amount} </img>  <br>`;
+            receipts[i].element.innerHTML += `<img src = ${itemSrcs[itemType]}> x ${amount} </img>  <br>`;
             
         }
-        receiptDiv.style.top = receipt.y + 'px';
-        receiptDiv.style.left = receipt.x + 'px';
+        receipts[i].element.style.top = receipt.y + 'px';
+        receipts[i].element.style.left = receipt.x + 'px';
       
        
        // receiptsSection.appendChild(receiptDiv);
-       document.getElementById('wrapper').appendChild(receiptDiv);
-       receipt['element'] = receiptDiv;
+       document.getElementById('wrapper').appendChild(receipts[i].element);
+    }
+       
        
     }
 
@@ -336,9 +329,16 @@ function generateOrder() {
 
     //start with a box of max 5 items
     
-
+    var receiptDiv = document.createElement('div');
+    receiptDiv.style.backgroundImage = "url('receipt paper.png')";
+    receiptDiv.style.position = 'absolute';
+    receiptDiv.style.width = 120 + 'px';
+    receiptDiv.style.height = 120 + 'px';
     
-    var chosenItems = {x: 0, y: 0, receiptContent: {}};
+    var chosenItems = {x: 0, y: 0, receiptContent: {}, element: receiptDiv};
+   
+    
+    
    
     for (var i = 0; i < maxItemsInBox; i++) {
         var randomItem = Math.floor(Math.random() * typesOfItems.length);
@@ -356,6 +356,8 @@ function generateOrder() {
 
     receipts.push(chosenItems);
     numberOfOrdersGenerated ++;
+    paintReceipts();
+    setTimeout(generateOrder, 30000);
     
     
 
@@ -375,7 +377,7 @@ function generateNewItemOnBelt() {
     newItemElement.style.width = 40 + 'px';
     newItemElement.style.height = 40 + 'px';
     items.push({ element: newItemElement, x: 0, y: 70, onBelt: true, inPackageId: null, type: itemType });
-
+    setTimeout(generateNewItemOnBelt, 1000);
 
 }
 
@@ -630,11 +632,8 @@ paintAllItems(items);
 paintShippingArea();
 paintBins();
 generateOrder();
-generateOrder();
-paintReceipts();
 
-
-
-
+setTimeout(generateOrder, 30000);
+setTimeout(generateNewItemOnBelt, 1000);
 gameLoop();
 
