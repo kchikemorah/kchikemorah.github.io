@@ -27,6 +27,7 @@ items[2].element.src = "type3.svg";
 items[2].element.alt = "item3";
 items[3].element.src = "type4.svg";
 items[3].element.alt = "item4";
+
 items.push({ element: document.createElement('img'), x: 800, y: 80, onBelt: true, type: 'type5' });
 items[4].element.id = '4';
 items[4].element.src = "type5.svg";
@@ -84,6 +85,7 @@ document.addEventListener('keypress', (event) => {
 var pickup = new Audio('pickup-sound.mp3');
 var drop = new Audio('drop-sound.mp3');
 var ship = new Audio('ship-package-sound.mp3');
+
 function pickUpItem(event) {
     for (let r in receipts) {
         var playerReferencePointX = playerX + player.offsetWidth / 2; //center of the head
@@ -94,6 +96,7 @@ function pickUpItem(event) {
 
         for (let d of distances) {
             if (d <= 50 && event.code == "Space") {
+
                 pickup.play();
                 playKeys["Space"] = !playKeys["Space"];
                 if (playKeys["Space"] == true) {
@@ -108,6 +111,7 @@ function pickUpItem(event) {
                             -= 150;
                         }
                     }, 1000);
+
                 }
                 else {
                     playerIsCarrying = null;
@@ -137,7 +141,9 @@ function pickUpItem(event) {
                     return;
                 }
                 else {
+
                     pickup.play();
+
                     playerIsCarrying = null;
                     items[i].onBelt = false;
                     if (items[i].y <= 70 && items[i].y >= 0) {
@@ -167,7 +173,8 @@ function pickUpItem(event) {
                                 if (!itemIsOnScreen || (!itemIsAboveBin && itemIsInsideLeftWallOfBin && itemIsInsideRightWallOfBin)) {
 
                                     if (itemIsOnScreen) {
-                                        drop.play();
+                                     drop.play();
+
                                         posY += curBin.element.offsetHeight - items[i].element.offsetHeight - 10;
 
                                         items[i].element.style.top = posY + 'px';
@@ -259,6 +266,7 @@ var itemSrcs = { 'type1': "type1.svg", 'type2': "type2.svg", 'type3': "type3.svg
 
 
 
+
 function paintReceipts() { 
     for (let i in receipts) {
 
@@ -267,6 +275,7 @@ function paintReceipts() {
             receipts[i].element.innerHTML += ` Order No. ${Math.floor(Math.random() * 999999)} <br>`;
 
             for (var itemType in receipt.receiptContent) { //itemType is the key
+
 
                 var amount = receipt.receiptContent[itemType]; //this is the value
                 receipts[i].element.innerHTML += `<img src = ${itemSrcs[itemType]}> x ${amount} </img>  <br>`;
@@ -286,6 +295,8 @@ function paintReceipts() {
 }
 
 function paintConveyorBelt() {
+
+       
 
     wrapper.innerHTML = `
         
@@ -350,6 +361,7 @@ function generateOrder() {
 
     //start with a box of max 5 items
 
+
     var receiptDiv = document.createElement('div');
     receiptDiv.style.backgroundImage = "url('receipt paper.png')";
     receiptDiv.style.position = 'absolute';
@@ -357,6 +369,7 @@ function generateOrder() {
     receiptDiv.style.height = 120 + 'px';
 
     var chosenItems = { x: 0, y: 0, receiptContent: {}, element: receiptDiv };
+
 
 
 
@@ -377,9 +390,11 @@ function generateOrder() {
 
     receipts.push(chosenItems);
     numberOfOrdersGenerated++;
+
     // paintReceipts();
 
     //setTimeout(generateOrder, 30000);
+
 
 
 
@@ -437,12 +452,15 @@ document.addEventListener('keyup', keyNotBeingPressed);
 function movePlayer() {
     var changeInX = 0;
     var changeInY = 0;
+
     if (playKeys['KeyW'] && playerY - 10 > 0 && playerY - 10 > 100) {
         changeInY -= 10;
+
     }
     if (playKeys['KeyS'] && playerY + player.offsetHeight + 10 < viewportHeight && playerY + 10 < 710 -player.offsetHeight) {
         changeInY += 10;
 }
+
 
     if (playKeys['KeyA'] && playerX - 10 > 0 && playerX - 10 > 110) {
         changeInX -= 10;
@@ -548,11 +566,13 @@ function getScore() {
 
         }
         var score = maxItemsInBox;
+
         if (thisReceipt) {
             for (let itemType in thisReceipt) {
                 score -= thisReceipt[itemType]; //any items not accounted for go against you!
             }
             totalScore += score;
+
         }
 
     }
@@ -579,6 +599,7 @@ function pickUpBin(event) {
             if (dist <= 50 && event.code == 'KeyP' && !thisBin.shipped) {
                 playKeys["KeyP"] = !playKeys["KeyP"];
                 if (playKeys["KeyP"] == true) {
+
                     pickup.play();
                     console.log(`this package ${i} will be picked up!`);
                     playerIsCarrying = thisBin;
@@ -602,6 +623,7 @@ function pickUpBin(event) {
                     playerIsCarrying = null;
                     return;
                 }
+
             }
         }
     }
@@ -624,6 +646,7 @@ function repaintMovingReceiptOrBin() {
     }
 }
 
+
 function showScore() {
     var popup = window.open("", "Game Over", "width=600,height=400");
     popup.document.write(`<h1>Score: ${getScore()} </h1> `);
@@ -641,10 +664,12 @@ function gameLoop() {
     paintReceipts();
     repaintMovingReceiptOrBin();
 
+
     if (numberOfOrdersGenerated == finishedPackages.length) {
         showScore();
         return;
     }
+
 
     requestAnimationFrame(() => {
         setTimeout(gameLoop, targetFPS);
