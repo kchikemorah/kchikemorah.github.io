@@ -86,6 +86,15 @@ var pickup = new Audio('pickup-sound.mp3');
 var drop = new Audio('drop-sound.mp3');
 var ship = new Audio('ship-package-sound.mp3');
 
+function shiftReceiptsUp(removedReceipt){
+    var receiptsToMove = receipts.filter((receipt) => {
+        return receipt.x == 0 && receipt.y > removedReceipt.y;
+    });
+    for ( var receipt of receiptsToMove){
+        receipt.y  -= 150;
+    }
+}
+
 function pickUpItem(event) {
     for (let r in receipts) {
         var playerReferencePointX = playerX + player.offsetWidth / 2; //center of the head
@@ -102,14 +111,7 @@ function pickUpItem(event) {
                 if (playKeys["Space"] == true) {
 
                     playerIsCarrying = receipts[r].element;
-                    setTimeout(() => {
-                        var receiptsToMove = receipts.filter((receipt) => {
-                            return receipt.x == 0 && receipt.y > receipts[r].y;
-                        });
-                        for ( var receipt of receiptsToMove){
-                            receipt.y  -= 150;
-                        }
-                    }, 1000);
+                    setTimeout(() => shiftReceiptsUp(receipts[r]), 1000);
 
                 }
                 else {
@@ -271,6 +273,7 @@ function paintReceipts() {
 
         var receipt = receipts[i];
         if (receipts[i].element.innerHTML == "") { //checks if this receipt is already being displayed
+            receipts[i].element.innerHTML += `<div class='timer' > <div class='timer-timeElapsed' id='timer${i}'></div></div>`;
             receipts[i].element.innerHTML += ` Order No. ${Math.floor(Math.random() * 999999)} <br>`;
 
             for (var itemType in receipt.receiptContent) { //itemType is the key
@@ -283,32 +286,44 @@ function paintReceipts() {
             
             
             wrapper.appendChild(receipts[i].element);
-            receipts[i] = createTimer(receipts[i], i);
+            //receipts[i] = createTimer(receipts[i], i);
            
         }
+        receipts[i].element.style.top = receipt.y + 'px';
+        receipts[i].element.style.left = receipt.x + 'px';
+
         //increment timer
+        var timeElapsed = document.getElementById(`timer${i}`);
+        if (timeElapsed.offsetWidth<= 0){
+
+            
+            setTimeout(shiftReceiptsUp(receipts[i]), 1000);
+            receipts[i].element.remove()
+        }
+        var newWidth = timeElapsed.offsetWidth -=2;
         
+        document.getElementById(`timer${i}`).style.width = newWidth +  'px';
+       
         
     }
+    setTimeout(paintReceipts, 1000);
 
 }
-function createTimer(receipt, i){
-    receipt.element.style.top = receipt.y + 'px';
-    receipt.element.style.left = receipt.x + 'px';
+// function createTimer(receipt, i){
+//     receipt.element.style.top = receipt.y + 'px';
+//     receipt.element.style.left = receipt.x + 'px';
 
-    var timerY = receipt.y -7;
-    var timerX = receipt.x ;
-    receipt.element.style.top = receipt.y + 'px';
-    receipt.element.style.left = receipt.x + 'px';
-    receipt.timer.style.top = timerY;
-    receipt.timer.style.left = timerX;
-    var timeElapsed = document.createElement('div');
-    timeElapsed.className = "timer-timeElapsed";
-    timeElapsed.id = `timer${i}`;
-    receipt.timer.appendChild(timeElapsed);
-    wrapper.appendChild(receipt.timer);
-    return receipt;
-}
+//     var timerY = receipt.y -7;
+//     var timerX = receipt.x ;
+//     receipt.timer.style.top = timerY + 'px';
+//     receipt.timer.style.left = timerX + 'px';
+//     var timeElapsed = document.createElement('div');
+//     timeElapsed.className = "timer-timeElapsed";
+//     timeElapsed.id = `timer${i}`;
+//     receipt.timer.appendChild(timeElapsed);
+//     wrapper.appendChild(receipt.timer);
+//     return receipt;
+// }
 function countdownTimer(){
     for (i in receipts){
         if (timeElapsed.style.offsetWidth <= 0 ){
@@ -691,7 +706,7 @@ function gameLoop() {
     movePlayer();
     moveItemsOnBelt(items);
    paintAllItems(items);
-    paintReceipts();
+    //paintReceipts();
     repaintMovingReceiptOrBin();
 
 
@@ -724,6 +739,7 @@ generateOrder();
 //
 
 setTimeout(generateOrder, 30000);
-setTimeout(generateNewItemOnBelt, 1000);
+generateNewItemOnBelt;
+paintReceipts();
 gameLoop();
 
