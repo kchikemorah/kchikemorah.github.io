@@ -147,3 +147,21 @@
     width: 40px;
     height: 40px;
 }
+.timer {
+    position: absolute;
+    border-style: solid;
+    height: 4px;
+    border-color: black;
+    background-color:black;
+    width: 120px;
+    top: 300px;
+
+}
+.timer-timeElapsed{
+   
+    background-color: orange;
+    width: 120px;
+    height: 2px;
+
+
+}

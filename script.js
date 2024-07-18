@@ -107,8 +107,7 @@ function pickUpItem(event) {
                             return receipt.x == 0 && receipt.y > receipts[r].y;
                         });
                         for ( var receipt of receiptsToMove){
-                            receipt.y 
-                            -= 150;
+                            receipt.y  -= 150;
                         }
                     }, 1000);
 
@@ -283,15 +282,42 @@ function paintReceipts() {
             }
             
             
-            // receiptsSection.appendChild(receiptDiv);
-            document.getElementById('wrapper').appendChild(receipts[i].element);
+            wrapper.appendChild(receipts[i].element);
+            receipts[i] = createTimer(receipts[i], i);
+           
         }
+        //increment timer
         
-        receipts[i].element.style.top = receipt.y + 'px';
-        receipts[i].element.style.left = receipt.x + 'px';
-
+        
     }
 
+}
+function createTimer(receipt, i){
+    receipt.element.style.top = receipt.y + 'px';
+    receipt.element.style.left = receipt.x + 'px';
+
+    var timerY = receipt.y -7;
+    var timerX = receipt.x ;
+    receipt.element.style.top = receipt.y + 'px';
+    receipt.element.style.left = receipt.x + 'px';
+    receipt.timer.style.top = timerY;
+    receipt.timer.style.left = timerX;
+    var timeElapsed = document.createElement('div');
+    timeElapsed.className = "timer-timeElapsed";
+    timeElapsed.id = `timer${i}`;
+    receipt.timer.appendChild(timeElapsed);
+    wrapper.appendChild(receipt.timer);
+    return receipt;
+}
+function countdownTimer(){
+    for (i in receipts){
+        if (timeElapsed.style.offsetWidth <= 0 ){
+            receipts[i].element.remove();
+        }
+        var timeElapsed = receipts[i].timer.getElementById(`timer${i}`);
+        var newWidth = timeElapsed.style.offsetwidth -2;
+        timeElapsed.style.width  = newWidth +'px';
+    }
 }
 
 function paintConveyorBelt() {
@@ -367,8 +393,12 @@ function generateOrder() {
     receiptDiv.style.position = 'absolute';
     receiptDiv.style.width = 120 + 'px';
     receiptDiv.style.height = 120 + 'px';
+    var timerDiv = document.createElement('div');
+    timerDiv.className = 'timer';
 
-    var chosenItems = { x: 0, y: 0, receiptContent: {}, element: receiptDiv };
+    var chosenItems = { x: 0, y: 0, receiptContent: {}, element: receiptDiv, timer: timerDiv };
+
+ 
 
 
 
@@ -660,7 +690,7 @@ function gameLoop() {
     var targetFPS = 60;
     movePlayer();
     moveItemsOnBelt(items);
-    paintAllItems(items);
+   paintAllItems(items);
     paintReceipts();
     repaintMovingReceiptOrBin();
 
@@ -682,7 +712,7 @@ function gameLoop() {
 
 
 paintConveyorBelt();
-paintAllItems(items);
+//paintAllItems(items);
 
 paintShippingArea();
 paintBins();
@@ -691,7 +721,9 @@ generateOrder();
 generateOrder();
 generateOrder();
 
-//setTimeout(generateOrder, 30000);
+//
+
+setTimeout(generateOrder, 30000);
 setTimeout(generateNewItemOnBelt, 1000);
 gameLoop();
 
