@@ -2,7 +2,7 @@ var player;
 var playerX = 400;
 var playerY = 200;
 
-
+var playing = true;
 var items = [
     { element: document.createElement('img'), x: 700, y: 70, onBelt: true, inPackageId: null, type: 'type1' },
     { element: document.createElement('img'), x: 600, y: 70, onBelt: true, inPackageId: null, type: 'type2' },
@@ -90,9 +90,12 @@ function shiftReceiptsUp(removedReceipt){
     var receiptsToMove = receipts.filter((receipt) => {
         return receipt.x == 0 && receipt.y > removedReceipt.y;
     });
+    if (receiptsToMove.length > 0){
     for ( var receipt of receiptsToMove){
         receipt.y  -= 150;
     }
+}
+    lastEmptyReceiptPosition -=150;;
 }
 
 function pickUpItem(event) {
@@ -294,21 +297,29 @@ function paintReceipts() {
 
         //increment timer
         var timeElapsed = document.getElementById(`timer${i}`);
+        if (timeElapsed){
         if (timeElapsed.offsetWidth<= 0){
 
             
-            setTimeout(shiftReceiptsUp(receipts[i]), 1000);
-            receipts[i].element.remove()
+            setTimeout(shiftReceiptsUp(receipts[i]), 500);
+            receipts[i].element.remove();
+            removedReceipts++;
         }
         var newWidth = timeElapsed.offsetWidth -=2;
         
-        document.getElementById(`timer${i}`).style.width = newWidth +  'px';
-       
+        timeElapsed.style.width = newWidth +  'px';
+    }
+      
         
+    }
+    if(!playing){
+        return;
     }
     setTimeout(paintReceipts, 1000);
 
 }
+
+var removedReceipts = 0;
 // function createTimer(receipt, i){
 //     receipt.element.style.top = receipt.y + 'px';
 //     receipt.element.style.left = receipt.x + 'px';
@@ -324,16 +335,16 @@ function paintReceipts() {
 //     wrapper.appendChild(receipt.timer);
 //     return receipt;
 // }
-function countdownTimer(){
-    for (i in receipts){
-        if (timeElapsed.style.offsetWidth <= 0 ){
-            receipts[i].element.remove();
-        }
-        var timeElapsed = receipts[i].timer.getElementById(`timer${i}`);
-        var newWidth = timeElapsed.style.offsetwidth -2;
-        timeElapsed.style.width  = newWidth +'px';
-    }
-}
+// function countdownTimer(){
+//     for (i in receipts){
+//         if (timeElapsed.style.offsetWidth <= 0 ){
+//             receipts[i].element.remove();
+//         }
+//         var timeElapsed = receipts[i].timer.getElementById(`timer${i}`);
+//         var newWidth = timeElapsed.style.offsetwidth -2;
+//         timeElapsed.style.width  = newWidth +'px';
+//     }
+// }
 
 function paintConveyorBelt() {
 
@@ -408,10 +419,10 @@ function generateOrder() {
     receiptDiv.style.position = 'absolute';
     receiptDiv.style.width = 120 + 'px';
     receiptDiv.style.height = 120 + 'px';
-    var timerDiv = document.createElement('div');
-    timerDiv.className = 'timer';
+   
+    
 
-    var chosenItems = { x: 0, y: 0, receiptContent: {}, element: receiptDiv, timer: timerDiv };
+    var chosenItems = { x: 0, y: 0, receiptContent: {}, element: receiptDiv};
 
  
 
@@ -438,7 +449,7 @@ function generateOrder() {
 
     // paintReceipts();
 
-    //setTimeout(generateOrder, 30000);
+    setTimeout(generateOrder, 30000);
 
 
 
@@ -570,8 +581,10 @@ function closePackage(event) {
                             close.play();
                             containers[bin].element.src = "darkbrownboxclosed.svg";
                             containers[bin].receiptContent = receipts[r].receiptContent;
+                            setTimeout(shiftReceiptsUp(receipts[r]), 1000);
                             receipts[r].element.remove();
-                            receipts.splice(r, 1);
+                            removedReceipts++;
+                            receipts = receipts.filter((receipt) => receipt != receipts[r]);
 
                             return;
                         }
@@ -580,7 +593,7 @@ function closePackage(event) {
                             containers[bin].element.src = "darkbrownbox.svg";
                             return;
                         }
-                        receipts.splice(r, 1);
+                  
 
                     }
                 }
@@ -619,8 +632,12 @@ function getScore() {
             totalScore += score;
 
         }
+       
 
     }
+    var missedOrders = numberOfOrdersGenerated-finishedPackages.length;
+    totalScore -= missedOrders*3;
+    if (totalScore<0){ return 0;}
     return totalScore;
 }
 
@@ -710,7 +727,8 @@ function gameLoop() {
     repaintMovingReceiptOrBin();
 
 
-    if (numberOfOrdersGenerated == finishedPackages.length) {
+    if (numberOfOrdersGenerated == removedReceipts) {
+        playing = false;
         showScore();
         return;
     }
@@ -733,13 +751,12 @@ paintShippingArea();
 paintBins();
 paintPlayer();
 generateOrder();
-generateOrder();
-generateOrder();
+
 
 //
 
-setTimeout(generateOrder, 30000);
-generateNewItemOnBelt;
+
+generateNewItemOnBelt();
 paintReceipts();
 gameLoop();
 
