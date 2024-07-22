@@ -1,8 +1,38 @@
 var player;
 var playerX = 400;
 var playerY = 200;
-
+var timerDisplay = document.getElementById('gameTimer');
 var playing = true;
+function gameTimer(){
+    var min = 3;
+    var sec = 0;
+    var timer = setInterval( function countdown(){
+       
+        if (sec == 0){
+            timerDisplay.innerHTML = '<h1>' + min + ':00 </h1>';
+            sec = 59;
+            min--;
+        }
+        else{
+        if( sec < 10){
+            timerDisplay.innerHTML = '<h1>' + min + ':0' + sec + '</h1>';
+            sec--;
+        }
+        else{
+        timerDisplay.innerHTML ='<h1>' + min + ':' + sec + '</h1>';
+        sec--;
+        }
+    }
+       
+        if (min == -1) {
+            playing = false;    
+            clearInterval(timer);
+            showScore();
+           
+        }
+    }, 1000);
+}
+
 var items = [
     { element: document.createElement('img'), x: 700, y: 70, onBelt: true, inPackageId: null, type: 'type1' },
     { element: document.createElement('img'), x: 600, y: 70, onBelt: true, inPackageId: null, type: 'type2' },
@@ -272,6 +302,9 @@ var itemSrcs = { 'type1': "type1.svg", 'type2': "type2.svg", 'type3': "type3.svg
 
 
 function paintReceipts() { 
+    if(!playing){
+        return;
+    }
     for (let i in receipts) {
 
         var receipt = receipts[i];
@@ -312,9 +345,7 @@ function paintReceipts() {
       
         
     }
-    if(!playing){
-        return;
-    }
+    
     setTimeout(paintReceipts, 1000);
 
 }
@@ -349,10 +380,6 @@ var removedReceipts = 0;
 function paintConveyorBelt() {
 
        
-
-    wrapper.innerHTML = `
-        
-        <div style='height: 60px;'></div>`
     var conveyorBelt = document.createElement('div');
     conveyorBelt.className = 'conveyorBelt';
     conveyorBelt.id = 'conveyorBelt';
@@ -710,8 +737,10 @@ function repaintMovingReceiptOrBin() {
 
 
 function showScore() {
-    var popup = window.open("", "Game Over", "width=600,height=400");
-    popup.document.write(`<h1>Score: ${getScore()} </h1> `);
+    var scoreScreen = document.createElement('div');
+    scoreScreen.className = "score";
+    scoreScreen.innerHTML = `<h1>Score: ${getScore()} </h1> `;
+    wrapper.appendChild(scoreScreen);
 }
 
 var gameMusic = new Audio('game-music.mp3');
@@ -727,8 +756,7 @@ function gameLoop() {
     repaintMovingReceiptOrBin();
 
 
-    if (numberOfOrdersGenerated == removedReceipts) {
-        playing = false;
+    if (!playing) {
         showScore();
         return;
     }
@@ -743,7 +771,7 @@ function gameLoop() {
 
 }
 
-
+gameTimer();
 paintConveyorBelt();
 //paintAllItems(items);
 
@@ -751,6 +779,7 @@ paintShippingArea();
 paintBins();
 paintPlayer();
 generateOrder();
+
 
 
 //

@@ -156,10 +156,21 @@
 
 }
 .timer-timeElapsed{
-   
     background-color: orange;
     width: 120px;
     height: 2px;
 
+}
 
+.score{
+    position: absolute;
+    left: 400px;
+    top: 100px;
+    width: 400px;
+    height: 150px;
+    background-color: orange;
+    border-style: solid;
+    border-color: white;
+    text-align: center;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
