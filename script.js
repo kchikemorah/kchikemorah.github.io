@@ -4,9 +4,9 @@ var playerY = 200;
 
 
 var items = [
-    { element: document.createElement('img'), x: 800, y: 70, onBelt: true, inPackageId: null, type: 'type1' },
+    { element: document.createElement('img'), x: 700, y: 70, onBelt: true, inPackageId: null, type: 'type1' },
     { element: document.createElement('img'), x: 600, y: 70, onBelt: true, inPackageId: null, type: 'type2' },
-    { element: document.createElement('img'), x: 200, y: 90, onBelt: true, inPackageId: null, type: 'type3' },
+    { element: document.createElement('img'), x: 200, y: 70, onBelt: true, inPackageId: null, type: 'type3' },
     { element: document.createElement('img'), x: 400, y: 70, onBelt: true, inPackageId: null, type: 'type4' }
 ];
 
@@ -27,12 +27,13 @@ items[2].element.src = "type3.svg";
 items[2].element.alt = "item3";
 items[3].element.src = "type4.svg";
 items[3].element.alt = "item4";
-items.push({ element: document.createElement('img'), x: 1000, y: 80, onBelt: true, type: 'type5' });
+
+items.push({ element: document.createElement('img'), x: 800, y: 80, onBelt: true, type: 'type5' });
 items[4].element.id = '4';
 items[4].element.src = "type5.svg";
 items[4].element.alt = "item5";
 items[4].element.className = 'item5';
-items.push({ element: document.createElement('img'), x: 1200, y: 75, onBelt: true, type: 'type6' });
+items.push({ element: document.createElement('img'), x: 900, y: 75, onBelt: true, type: 'type6' });
 items[5].element.src = "type6.svg";
 items[5].element.id = '5';
 items[5].element.alt = "item6";
@@ -53,12 +54,12 @@ function moveItemsOnBelt(items) {
         if (items[i].onBelt) {
             items[i].x += 10;
             if (items[i].x > viewportWidth) {
-                generateNewItemOnBelt();
                 items[i].onBelt = false;
+                items[i].element.remove();
                 var itemDumpX = Math.random() * 50 + 100;
                 var itemDumpY = Math.random() * 50 + 500;
-                items[i].x += -itemDumpX;
-                items[i].y = itemDumpY;
+                // items[i].x += -itemDumpX;
+                // items[i].y = itemDumpY;
             }
 
         }
@@ -80,6 +81,11 @@ document.addEventListener('keypress', (event) => {
         pickUpItem(event);
     }
 });
+
+var pickup = new Audio('pickup-sound.mp3');
+var drop = new Audio('drop-sound.mp3');
+var ship = new Audio('ship-package-sound.mp3');
+
 function pickUpItem(event) {
     for (let r in receipts) {
         var playerReferencePointX = playerX + player.offsetWidth / 2; //center of the head
@@ -90,9 +96,22 @@ function pickUpItem(event) {
 
         for (let d of distances) {
             if (d <= 50 && event.code == "Space") {
+
+                pickup.play();
                 playKeys["Space"] = !playKeys["Space"];
                 if (playKeys["Space"] == true) {
+
                     playerIsCarrying = receipts[r].element;
+                    setTimeout(() => {
+                        var receiptsToMove = receipts.filter((receipt) => {
+                            return receipt.x == 0 && receipt.y > receipts[r].y;
+                        });
+                        for ( var receipt of receiptsToMove){
+                            receipt.y 
+                            -= 150;
+                        }
+                    }, 1000);
+
                 }
                 else {
                     playerIsCarrying = null;
@@ -112,6 +131,7 @@ function pickUpItem(event) {
 
 
                 if (playKeys["Space"] == true) {
+                    pickup.play();
                     playerIsCarrying = thisItem; //pick up
                     items[i].onBelt = false;
                     if (items[i].inPackageId != null) {
@@ -121,9 +141,13 @@ function pickUpItem(event) {
                     return;
                 }
                 else {
+
+                    pickup.play();
+
                     playerIsCarrying = null;
                     items[i].onBelt = false;
                     if (items[i].y <= 70 && items[i].y >= 0) {
+
                         items[i].onBelt = true;
                         return;
                     }
@@ -149,6 +173,8 @@ function pickUpItem(event) {
                                 if (!itemIsOnScreen || (!itemIsAboveBin && itemIsInsideLeftWallOfBin && itemIsInsideRightWallOfBin)) {
 
                                     if (itemIsOnScreen) {
+                                     drop.play();
+
                                         posY += curBin.element.offsetHeight - items[i].element.offsetHeight - 10;
 
                                         items[i].element.style.top = posY + 'px';
@@ -240,40 +266,37 @@ var itemSrcs = { 'type1': "type1.svg", 'type2': "type2.svg", 'type3': "type3.svg
 
 
 
-function paintReceipts() {
-    //document.getElementById('wrapper').appendChild(receiptsSection);  
+
+function paintReceipts() { 
     for (let i in receipts) {
 
-        var receiptDiv = document.createElement('div');
-        receiptDiv.style.backgroundImage = "url('receipt paper.png')";
-
-        receiptDiv.style.position = 'absolute';
-        receiptDiv.style.width = 120 + 'px';
-        receiptDiv.style.height = 120 + 'px';
-
-
         var receipt = receipts[i];
-        receiptDiv.innerHTML += ` Order No. ${Math.floor(Math.random() * 999999)} <br>`;
+        if (receipts[i].element.innerHTML == "") { //checks if this receipt is already being displayed
+            receipts[i].element.innerHTML += ` Order No. ${Math.floor(Math.random() * 999999)} <br>`;
 
-        for (var itemType in receipt.receiptContent) { //itemType is the key
+            for (var itemType in receipt.receiptContent) { //itemType is the key
 
-            var amount = receipt.receiptContent[itemType]; //this is the value
-            receiptDiv.innerHTML += `<img src = ${itemSrcs[itemType]}> x ${amount} </img>  <br>`;
 
+                var amount = receipt.receiptContent[itemType]; //this is the value
+                receipts[i].element.innerHTML += `<img src = ${itemSrcs[itemType]}> x ${amount} </img>  <br>`;
+
+            }
+            
+            
+            // receiptsSection.appendChild(receiptDiv);
+            document.getElementById('wrapper').appendChild(receipts[i].element);
         }
-        receiptDiv.style.top = receipt.y + 'px';
-        receiptDiv.style.left = receipt.x + 'px';
-
-
-        // receiptsSection.appendChild(receiptDiv);
-        document.getElementById('wrapper').appendChild(receiptDiv);
-        receipt['element'] = receiptDiv;
+        
+        receipts[i].element.style.top = receipt.y + 'px';
+        receipts[i].element.style.left = receipt.x + 'px';
 
     }
 
 }
 
-function paintScreen() {
+function paintConveyorBelt() {
+
+       
 
     wrapper.innerHTML = `
         
@@ -313,6 +336,9 @@ function paintScreen() {
 
 
 
+    
+}
+ function paintPlayer(){
     player = document.createElement('img');
     player.src = "character.svg";
     player.alt = "my character";
@@ -321,13 +347,12 @@ function paintScreen() {
     player.style.left = playerX + 'px';
     wrapper.appendChild(player);
 
-}
+ }
 
 var typesOfItems = ["type1", "type2", "type3", "type4", "type5", "type6"];
 
 
 var receipts = [];
-var receiptElements = []; //parallel with receipts
 var lastEmptyReceiptPosition = 170;
 
 var maxItemsInBox = 5;
@@ -337,8 +362,17 @@ function generateOrder() {
     //start with a box of max 5 items
 
 
+    var receiptDiv = document.createElement('div');
+    receiptDiv.style.backgroundImage = "url('receipt paper.png')";
+    receiptDiv.style.position = 'absolute';
+    receiptDiv.style.width = 120 + 'px';
+    receiptDiv.style.height = 120 + 'px';
 
-    var chosenItems = { x: 0, y: 0, receiptContent: {} };
+    var chosenItems = { x: 0, y: 0, receiptContent: {}, element: receiptDiv };
+
+
+
+
 
     for (var i = 0; i < maxItemsInBox; i++) {
         var randomItem = Math.floor(Math.random() * typesOfItems.length);
@@ -356,6 +390,11 @@ function generateOrder() {
 
     receipts.push(chosenItems);
     numberOfOrdersGenerated++;
+
+    // paintReceipts();
+
+    //setTimeout(generateOrder, 30000);
+
 
 
 
@@ -375,7 +414,7 @@ function generateNewItemOnBelt() {
     newItemElement.style.width = 40 + 'px';
     newItemElement.style.height = 40 + 'px';
     items.push({ element: newItemElement, x: 0, y: 70, onBelt: true, inPackageId: null, type: itemType });
-
+    setTimeout(generateNewItemOnBelt, 1000);
 
 }
 
@@ -391,6 +430,7 @@ playKeys["KeyP"] = false;
 playKeys["Enter"] = false;
 
 function keyBeingPressed(event) {
+    gameMusic.play();
     if (event.code != "Space" && event.code != "KeyP" && event.code != "Enter") {
         playKeys[event.code] = true;
 
@@ -412,17 +452,20 @@ document.addEventListener('keyup', keyNotBeingPressed);
 function movePlayer() {
     var changeInX = 0;
     var changeInY = 0;
-    if (playKeys['KeyW'] && playerY - 5 > 0) {
-        changeInY -= 10;
-    }
-    if (playKeys['KeyS'] && playerY + player.offsetHeight + 5 < viewportHeight) {
-        changeInY += 10;
-    }
 
-    if (playKeys['KeyA'] && playerX - 5 > 0) {
+    if (playKeys['KeyW'] && playerY - 10 > 0 && playerY - 10 > 100) {
+        changeInY -= 10;
+
+    }
+    if (playKeys['KeyS'] && playerY + player.offsetHeight + 10 < viewportHeight && playerY + 10 < 710 -player.offsetHeight) {
+        changeInY += 10;
+}
+
+
+    if (playKeys['KeyA'] && playerX - 10 > 0 && playerX - 10 > 110) {
         changeInX -= 10;
     }
-    if (playKeys['KeyD'] && playerX + player.offsetWidth + 5 < viewportWidth) {
+    if (playKeys['KeyD'] && playerX + player.offsetWidth + 10 < viewportWidth) {
         changeInX += 10;
     }
     playerY += changeInY;
@@ -466,7 +509,7 @@ function movePlayer() {
 }
 
 
-
+var close = new Audio('close-box.mp3');
 function closePackage(event) {
     for (let r in receipts) {
         if (playerIsCarrying == receipts[r].element) {
@@ -479,7 +522,7 @@ function closePackage(event) {
                     if (i < 70 && event.code == "Enter") {
                         playKeys["Enter"] = !playKeys["Enter"];
                         if (playKeys["Enter"] == true) {
-
+                            close.play();
                             containers[bin].element.src = "darkbrownboxclosed.svg";
                             containers[bin].receiptContent = receipts[r].receiptContent;
                             receipts[r].element.remove();
@@ -523,10 +566,15 @@ function getScore() {
 
         }
         var score = maxItemsInBox;
-        for (let itemType in thisReceipt) {
-            score -= thisReceipt[itemType]; //any items not accounted for go against you!
+
+        if (thisReceipt) {
+            for (let itemType in thisReceipt) {
+                score -= thisReceipt[itemType]; //any items not accounted for go against you!
+            }
+            totalScore += score;
+
         }
-        totalScore += score;
+
     }
     return totalScore;
 }
@@ -551,6 +599,8 @@ function pickUpBin(event) {
             if (dist <= 50 && event.code == 'KeyP' && !thisBin.shipped) {
                 playKeys["KeyP"] = !playKeys["KeyP"];
                 if (playKeys["KeyP"] == true) {
+
+                    pickup.play();
                     console.log(`this package ${i} will be picked up!`);
                     playerIsCarrying = thisBin;
                     return;
@@ -558,6 +608,7 @@ function pickUpBin(event) {
                 else {
                     console.log(`this package ${i} will be dropped off!`);
                     if (thisBin.x + thisBin.element.offsetWidth / 2 > 1000 && thisBin.y + thisBin.element.offsetHeight / 2 > 300) {
+                        ship.play()
                         finishedPackages.push(i);
                         containers[i].shipped = true;
                         containers[i].element.style.width = '40px';
@@ -568,10 +619,11 @@ function pickUpBin(event) {
                             items[i].element.style.height = '1px';
                         }
                     }
-
+                    pickup.play();
                     playerIsCarrying = null;
                     return;
                 }
+
             }
         }
     }
@@ -593,17 +645,25 @@ function repaintMovingReceiptOrBin() {
         }
     }
 }
-function sleep(ms) { //need to randomly generate orders and items on beltt
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-var start = true;
-function gameLoop() {
 
+
+function showScore() {
+    var popup = window.open("", "Game Over", "width=600,height=400");
+    popup.document.write(`<h1>Score: ${getScore()} </h1> `);
+}
+
+var gameMusic = new Audio('game-music.mp3');
+gameMusic.loop = true;
+
+
+function gameLoop() {
     var targetFPS = 60;
     movePlayer();
     moveItemsOnBelt(items);
     paintAllItems(items);
+    paintReceipts();
     repaintMovingReceiptOrBin();
+
 
     if (numberOfOrdersGenerated == finishedPackages.length) {
         showScore();
@@ -619,22 +679,19 @@ function gameLoop() {
 
 
 }
-function showScore() {
-    var popup = window.open("", "Game Over", "width=600,height=400");
-    popup.document.write(`<h1>Score: ${getScore()} </h1> }`);
-}
 
-paintScreen();
+
+paintConveyorBelt();
 paintAllItems(items);
 
 paintShippingArea();
 paintBins();
+paintPlayer();
 generateOrder();
 generateOrder();
-paintReceipts();
+generateOrder();
 
-
-
-
+//setTimeout(generateOrder, 30000);
+setTimeout(generateNewItemOnBelt, 1000);
 gameLoop();
 
