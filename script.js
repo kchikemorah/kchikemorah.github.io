@@ -149,7 +149,7 @@ function pickUpItem(event) {
                 playKeys["Space"] = !playKeys["Space"];
                 if (playKeys["Space"] == true) {
 
-                    playerIsCarrying = receipts[r].element;
+                    playerIsCarrying = receipts[r];
 
                     if(receipts[r].x == 0){
                     setTimeout(() => shiftReceiptsUp(receipts[r]), 1000);
@@ -202,7 +202,7 @@ function pickUpItem(event) {
                         setIntervalCallIds[i] = setInterval(frame, 10);
                         function frame() {
 
-                            var itemisOnScreen = posY < 878;
+                            var itemIsOnScreen = posY < 878;
                             for (let bin in containers) {
                                 var curBin = containers[bin];
 
@@ -313,21 +313,20 @@ function paintReceipts() {
     for (let i in receipts) {
 
         var receipt = receipts[i];
-        if (receipts[i].element.innerHTML == "") { //checks if this receipt is already being displayed
+        if (receipts[i].element.innerHTML == "") { 
             receipts[i].element.innerHTML += `<div class='timer' > <div class='timer-timeElapsed' id='timer${i}'></div></div>`;
             receipts[i].element.innerHTML += ` Order No. ${Math.floor(Math.random() * 999999)} <br>`;
 
-            for (var itemType in receipt.receiptContent) { //itemType is the key
+            for (var itemType in receipt.receiptContent) { 
 
 
-                var amount = receipt.receiptContent[itemType]; //this is the value
+                var amount = receipt.receiptContent[itemType]; 
                 receipts[i].element.innerHTML += `<img src = ${itemSrcs[itemType]}> x ${amount} </img>  <br>`;
 
             }
             
             
             wrapper.appendChild(receipts[i].element);
-            //receipts[i] = createTimer(receipts[i], i);
            
         }
         receipts[i].element.style.top = receipt.y + 'px';
@@ -514,7 +513,7 @@ function keyNotBeingPressed(event) {
 document.addEventListener('keydown', keyBeingPressed);
 document.addEventListener('keyup', keyNotBeingPressed);
 function isCollisionBelowPlayer(){
-    var anObstacle =null;
+    var anObstacle = null;
         for (let r in receipts){
             if(isCollision(receipts[r])){
             if((playerY + player.offsetHeight) == receipts[r].y){
@@ -537,7 +536,7 @@ function isCollisionBelowPlayer(){
     return anObstacle;
 }
 function isCollisionAbovePlayer(){
-    var anObstacle =null;
+    var anObstacle = null;
     for (let r in receipts){
         if(isCollision(receipts[r])){
         if(playerY == (receipts[r].y +receipts[r].element.offsetHeight)){
@@ -561,7 +560,7 @@ return anObstacle;
 
 }
 function isCollisionRightOfPlayer(){
-    var anObstacle =null;
+    var anObstacle = null;
     for (let r in receipts){
         if(isCollision(receipts[r])){
         if((playerX + player.offsetWidth) == receipts[r].x){
@@ -611,21 +610,19 @@ function movePlayer() {
     var changeInX = 0;
     var changeInY = 0;
 
-    if (playKeys['KeyW'] && playerY - 10 > 0 && playerY - 10 > 100 && (isCollisionAbovePlayer() == null || isCollisionAbovePlayer().element == playerIsCarrying)) {
+    if (playKeys['KeyW'] && playerY - 10 > 0 && playerY - 10 > 100 && (isCollisionAbovePlayer() == null || isCollisionAbovePlayer() == playerIsCarrying)) {
         changeInY -= 10;
 
     }
-    if (playKeys['KeyS'] && playerY + player.offsetHeight + 10 < viewportHeight &&  (isCollisionBelowPlayer() == null || isCollisionBelowPlayer().element == playerIsCarrying)) {
+    console.log(isCollisionBelowPlayer());
+    console.log(playerIsCarrying);
+    if (playKeys['KeyS'] && playerY + player.offsetHeight + 10 < viewportHeight &&  (isCollisionBelowPlayer() == null || isCollisionBelowPlayer() == playerIsCarrying)) {
         changeInY += 10;
         }
-    console.log(isCollisionLeftOfPlayer() == playerIsCarrying);
-    console.log(playerIsCarrying);
-    console.log(isCollisionLeftOfPlayer());
-    
-    if (playKeys['KeyA'] && playerX - 10 > 0 && (isCollisionLeftOfPlayer() == null || isCollisionLeftOfPlayer().element == playerIsCarrying)) {
+    if (playKeys['KeyA'] && playerX - 10 > 0 && (isCollisionLeftOfPlayer() == null || isCollisionLeftOfPlayer()== playerIsCarrying)) {
         changeInX -= 10;
     }
-    if (playKeys['KeyD'] && playerX + player.offsetWidth + 10 < viewportWidth && (isCollisionRightOfPlayer() == null || isCollisionRightOfPlayer().element == playerIsCarrying)) {
+    if (playKeys['KeyD'] && playerX + player.offsetWidth + 10 < viewportWidth && (isCollisionRightOfPlayer() == null || isCollisionRightOfPlayer() == playerIsCarrying)) {
         changeInX += 10;
     }
     playerY += changeInY;
@@ -656,7 +653,7 @@ function movePlayer() {
         }
     }
     for (let r in receipts) {
-        if (receipts[r].element == playerIsCarrying && playerIsCarrying != null) {
+        if (receipts[r] == playerIsCarrying && playerIsCarrying != null) {
             receipts[r].x += changeInX;
             receipts[r].y += changeInY;
             receipts[r].element.style.left = receipts[r].x + 'px';
@@ -672,7 +669,7 @@ function movePlayer() {
 var close = new Audio('close-box.mp3');
 function closePackage(event) {
     for (let r in receipts) {
-        if (playerIsCarrying == receipts[r].element) {
+        if (playerIsCarrying == receipts[r]) {
 
            
             for (let bin in containers) {
@@ -713,7 +710,6 @@ function getScore() {
         var thisPackage = containers[package];
         var thisReceipt = thisPackage.receiptContent;
         var itemsInPackage = thisPackage.itemIdsInBin;
-        console.log(thisReceipt);
         for (let i of itemsInPackage) {
             for (let itemType in thisReceipt) {
                 if (itemType == items[i].type) { //this item is on the assigned receipt 
@@ -767,10 +763,10 @@ function pickUpBin(event) {
                 }
                 else {
                     console.log(`this package ${i} will be dropped off!`);
-                    if (thisBin.x + thisBin.element.offsetWidth / 2 > 1000 && thisBin.y + thisBin.element.offsetHeight / 2 > 300) {
-                        ship.play()
+                    // if (thisBin.x + thisBin.element.offsetWidth / 2 > 1000 && thisBin.y + thisBin.element.offsetHeight / 2 > 300) {
+                    if(isCollision(shippingTable)){
+                        ship.play();
                         finishedPackages.push(i);
-                        var newBin = {element: thisBin.element, x: thisBin.x, y: thisBin.y, shipped: false};
                         containers[i].shipped = true;
                         containers[i].element.style.width = '40px';
                         containers[i].element.style.height = '40px';
@@ -780,8 +776,6 @@ function pickUpBin(event) {
                             items[i].element.style.height = '1px';
                         }
                        
-                        containers.push(newBin);
-                        console.log(containers);
                     }
                     pickup.play();
                     playerIsCarrying = null;
@@ -796,7 +790,7 @@ function pickUpBin(event) {
 
 function repaintMovingReceiptOrBin() {
     for (let r in receipts) {
-        if (playerIsCarrying == receipts[r].element) {
+        if (playerIsCarrying == receipts[r]) {
             receipts[r].element.style.left = receipts[r].x + 'px';
             receipts[r].element.style.top = receipts[r].y + 'px';
             return;
@@ -826,7 +820,7 @@ function gameLoop() {
     moveItemsOnBelt(items);
    paintAllItems(items);
     repaintMovingReceiptOrBin();
-    paintBins();
+   
 
     if (!playing) {
         showScore();
@@ -846,10 +840,12 @@ function gameLoop() {
 gameTimer();
 paintConveyorBelt();
 paintShippingArea();
-
+paintBins();
 paintPlayer();
+
 generateOrder();
 generateNewItemOnBelt();
 paintReceipts();
 gameLoop();
+
 });
