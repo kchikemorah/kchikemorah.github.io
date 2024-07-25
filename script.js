@@ -1,8 +1,22 @@
+
+ var startScreen = document.getElementById("startScreen");
+var startButton = document.getElementById("startButton");
+var pickup = new Audio('pickup-sound.mp3');
+var drop = new Audio('drop-sound.mp3');
+var ship = new Audio('ship-package-sound.mp3');
+var gameMusic = new Audio('game-music.mp3');
+gameMusic.loop = true;
+startButton.addEventListener("click", () => {
+    gameMusic.play();
+    startScreen.style.display = 'none';
+var wrapper = document.getElementById('wrapper');
+wrapper.className = "wrapper";
 var player;
 var playerX = 400;
 var playerY = 200;
 var timerDisplay = document.getElementById('gameTimer');
-var playing = true;
+ playing = true;
+
 function gameTimer(){
     var min = 3;
     var sec = 0;
@@ -112,9 +126,7 @@ document.addEventListener('keypress', (event) => {
     }
 });
 
-var pickup = new Audio('pickup-sound.mp3');
-var drop = new Audio('drop-sound.mp3');
-var ship = new Audio('ship-package-sound.mp3');
+
 
 function shiftReceiptsUp(removedReceipt){
     var receiptsToMove = receipts.filter((receipt) => {
@@ -130,14 +142,8 @@ function shiftReceiptsUp(removedReceipt){
 
 function pickUpItem(event) {
     for (let r in receipts) {
-        var playerReferencePointX = playerX + player.offsetWidth / 2; //center of the head
-        var playerReferencePointY = playerY + player.offsetWidth / 2;
-        var distances = distancesFromObject(receipts[r]);
-
-
-
-        for (let d of distances) {
-            if (d <= 50 && event.code == "Space") {
+    var thisReceipt = receipts[r];
+            if (isCollision(thisReceipt)) {
 
                 pickup.play();
                 playKeys["Space"] = !playKeys["Space"];
@@ -153,14 +159,11 @@ function pickUpItem(event) {
                 return;
             }
 
-        }
+        
     }
     for (let i in items) {
         var thisItem = items[i];
-
-        var distances = distancesFromObject(thisItem);
-        for (let j of distances) {
-            if (j <= 50 && event.code == "Space") {
+            if (isCollision(thisItem)) {
                 playKeys["Space"] = !playKeys["Space"];
 
 
@@ -233,7 +236,7 @@ function pickUpItem(event) {
 
 
 
-        }
+        
     }
 }
 
@@ -247,12 +250,10 @@ function pickUpItem(event) {
 
 var setIntervalCallIds = { item1: null, item2: null, item3: null, item4: null };
 
-function isThereACollision() {
-
-}
 
 
-var wrapper = document.getElementById('wrapper');
+
+
 var conveyorBelt = document.createElement('div');
 
 
@@ -282,8 +283,8 @@ function paintBins() {
 
 
 }
+var shippingTable = { element: document.createElement('img'), x: 1100, y: 200 };
 function paintShippingArea() {
-    var shippingTable = { element: document.createElement('img'), x: 1100, y: 200 };
     shippingTable.element.src = 'shipping-area.svg';
     shippingTable.element.alt = 'shipping area';
     shippingTable.element.style.left = shippingTable.x + 'px';
@@ -333,8 +334,9 @@ function paintReceipts() {
         if (timeElapsed){
         if (timeElapsed.offsetWidth<= 0){
 
-            
+            if(receipts[i].x == 0){
             setTimeout(shiftReceiptsUp(receipts[i]), 500);
+            }
             receipts[i].element.remove();
             removedReceipts++;
         }
@@ -513,7 +515,7 @@ playKeys["KeyP"] = false;
 playKeys["Enter"] = false;
 
 function keyBeingPressed(event) {
-    gameMusic.play();
+   
     if (event.code != "Space" && event.code != "KeyP" && event.code != "Enter") {
         playKeys[event.code] = true;
 
@@ -531,29 +533,137 @@ function keyNotBeingPressed(event) {
 
 document.addEventListener('keydown', keyBeingPressed);
 document.addEventListener('keyup', keyNotBeingPressed);
+// function isThereAnObstacle(){
+//     var isObstacle = false;
+//     for (let r in receipts){
+//         if(isCollision(receipts[r])){
+//         isObstacle = true;
+//         }
+//     }
+//     for (let bin in containers){
+//         if(isCollision(containers[bin])){
+//         isObstacle = true;
+//         }
+//     }
+//      if(isCollision(shippingTable)){
+//         isObstacle = true;
+//      }
+//      return isObstacle;
+// }
+function isCollisionBelowPlayer(){
+    var isObstacle = false;
+        for (let r in receipts){
+            if(isCollision(receipts[r])){
+            if((playerY + player.offsetHeight) == receipts[r].y){
+            isObstacle = true;
+            }
+        }
+        }
+        for (let bin in containers){
+            if(isCollision(containers[bin])){
+            if((playerY + player.offsetHeight) == containers[bin].y){
+            isObstacle = true;
+            }
+        }
+        }
+        if(isCollision(shippingTable)){
+         if((playerY + player.offsetHeight) == shippingTable.y){
+            isObstacle = true;
+         }
+        }
+    return isObstacle;
+}
+function isCollisionAbovePlayer(){
+    var isObstacle = false;
+    for (let r in receipts){
+        if(isCollision(receipts[r])){
+        if(playerY == (receipts[r].y +receipts[r].element.offsetHeight)){
+        isObstacle = true;
+        }
+    }
+    }
+    for (let bin in containers){
+        if(isCollision(containers[bin])){
+        if(playerY == (containers[bin].y +containers[bin].element.offsetHeight)){
+        isObstacle = true;
+        }
+    }
+    }
+    if(isCollision(shippingTable)){
+     if(playerY == (shippingTable.y +shippingTable.element.offsetHeight)){
+        isObstacle = true;
+     }
+    }
+return isObstacle;
 
+}
+function isCollisionRightOfPlayer(){
+    var isObstacle = false;
+    for (let r in receipts){
+        if(isCollision(receipts[r])){
+        if((playerX + player.offsetWidth) == receipts[r].x){
+        isObstacle = true;
+        }
+    }
+    }
+    for (let bin in containers){
+        if(isCollision(containers[bin])){
+        if((playerX + player.offsetWidth) == containers[bin].x){
+        isObstacle = true;
+        }
+    }
+    }
+    if(isCollision(shippingTable)){
+     if((playerX + player.offsetWidth) == shippingTable.x){
+        isObstacle = true;
+     }
+    }
+    return isObstacle;
+}
+function isCollisionLeftOfPlayer(){
+    var isObstacle = false;
+    for (let r in receipts){
+        if(isCollision(receipts[r])){
+            if(playerX == (receipts[r].x + receipts[r].element.offsetWidth)){
+        isObstacle = true;
+            }
+        }
+    }
+    for (let bin in containers){
+        if(isCollision(containers[bin])){
+            if(playerX == (containers[bin].x + containers[bin].element.offsetWidth)){   
+        isObstacle = true;
+        }
+    }
+    }
+     if(isCollision(shippingTable)){
+        if(playerX == (shippingTable.x + shippingTable.element.offsetWidth)){
+        isObstacle = true;
+     }
+    }
+    return isObstacle;
+    
+}
 function movePlayer() {
     var changeInX = 0;
     var changeInY = 0;
 
-    if (playKeys['KeyW'] && playerY - 10 > 0 && playerY - 10 > 100) {
+    if (playKeys['KeyW'] && playerY - 10 > 0 && playerY - 10 > 100 && !isCollisionAbovePlayer()) {
         changeInY -= 10;
 
     }
-    if (playKeys['KeyS'] && playerY + player.offsetHeight + 10 < viewportHeight && playerY + 10 < 710 -player.offsetHeight) {
+    if (playKeys['KeyS'] && playerY + player.offsetHeight + 10 < viewportHeight && !isCollisionBelowPlayer()) {
         changeInY += 10;
-}
-
-
-    if (playKeys['KeyA'] && playerX - 10 > 0 && playerX - 10 > 110) {
+        }
+    if (playKeys['KeyA'] && playerX - 10 > 0 && !isCollisionLeftOfPlayer()) {
         changeInX -= 10;
     }
-    if (playKeys['KeyD'] && playerX + player.offsetWidth + 10 < viewportWidth) {
+    if (playKeys['KeyD'] && playerX + player.offsetWidth + 10 < viewportWidth && !isCollisionRightOfPlayer()) {
         changeInX += 10;
     }
     playerY += changeInY;
     playerX += changeInX;
-    for (let i in items) {  //i can definitely clean these up with a separate method
+    for (let i in items) {  
         if (items[i] == playerIsCarrying && playerIsCarrying != null) {
             items[i].x += changeInX;
             items[i].y += changeInY;
@@ -599,10 +709,8 @@ function closePackage(event) {
 
             //put containers loop in here to close a pakcage by place the receipt on it
             for (let bin in containers) {
-                distances = distancesFromObject(containers[bin]);
 
-                for (let i of distances) {
-                    if (i < 70 && event.code == "Enter") {
+                    if (isCollision(containers[bin])) {
                         playKeys["Enter"] = !playKeys["Enter"];
                         if (playKeys["Enter"] == true) {
                             close.play();
@@ -623,7 +731,7 @@ function closePackage(event) {
                   
 
                     }
-                }
+                
             }
 
         }
@@ -668,24 +776,21 @@ function getScore() {
     return totalScore;
 }
 
-function distancesFromObject(object) {
-    var playerReferencePointX = playerX + player.offsetWidth / 2; //center of the head
-    var playerReferencePointY = playerY + player.offsetWidth / 2;
-    var distances = [
-        Math.sqrt((Math.pow(Math.abs(playerReferencePointX - object.x), 2)) + (Math.pow(Math.abs(playerReferencePointY - object.y), 2))),
-        Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (object.x + object.element.offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY - object.y), 2))),
-        Math.sqrt((Math.pow(Math.abs(playerReferencePointX - (object.x + object.element.offsetWidth)), 2)) + (Math.pow(Math.abs(playerReferencePointY - (object.y + object.element.offsetHeight)), 2))),
-        Math.sqrt((Math.pow(Math.abs(playerReferencePointX - object.x), 2)) + (Math.pow(Math.abs(playerY - (object.y + object.element.offsetHeight)), 2))),
-    ];
-    return distances;
+function isCollision(object) { 
+     return !((playerY + player.offsetHeight) <object.y || 
+    playerY > (object.y +object.element.offsetHeight) ||
+    (playerX + player.offsetWidth) <object.x ||
+    playerX > (object.x +object.element.offsetWidth));
+    
 }
+
 function pickUpBin(event) {
 
     for (let i in containers) {
         var thisBin = containers[i];
-        var distances = distancesFromObject(thisBin);
-        for (let dist of distances) {
-            if (dist <= 50 && event.code == 'KeyP' && !thisBin.shipped) {
+        
+         
+            if(isCollision(thisBin)){
                 playKeys["KeyP"] = !playKeys["KeyP"];
                 if (playKeys["KeyP"] == true) {
 
@@ -714,7 +819,7 @@ function pickUpBin(event) {
                 }
 
             }
-        }
+        //}
     }
 
 }
@@ -743,8 +848,6 @@ function showScore() {
     wrapper.appendChild(scoreScreen);
 }
 
-var gameMusic = new Audio('game-music.mp3');
-gameMusic.loop = true;
 
 
 function gameLoop() {
@@ -773,19 +876,15 @@ function gameLoop() {
 
 gameTimer();
 paintConveyorBelt();
+
+
 //paintAllItems(items);
 
 paintShippingArea();
 paintBins();
 paintPlayer();
 generateOrder();
-
-
-
-//
-
-
 generateNewItemOnBelt();
 paintReceipts();
 gameLoop();
-
+});

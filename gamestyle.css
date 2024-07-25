@@ -1,7 +1,70 @@
+@font-face {
+    font-family: 'Rowdies';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('fonts/Rowdies-Regular.ttf');
+  }
+  @font-face {
+    font-family: 'Rowdies-Light';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('fonts/Rowdies-Light.ttf');
+  }
+  p{
+    font-family: 'Rowdies-Light';
+  }
+.startScreen{
+    width: 1000px;
+    height: 600px;
+    background-color: #cb942dfd;
+    margin: auto;
+    top: 100px;
+    border-style:groove;
+    padding: 10px;
+}
+.startButton{
+    border-style: solid;
+    border-color: black;
+    font-family: 'Rowdies';
+    width: 100px;
+    height: 40px;
+    border-radius: 5px;
+    height: 100px;
+    width: 200px;
+    background-color:#473509;
+    color: white;
+    font-size: 30px;
+  
+}
+.startButton:hover{
+    background-color:green;
+
+}
+.keyButton{
+    border-style:solid;
+    font-family: "Rowdies-Light";
+    color: white;
+    border-color:black;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px black;
+    padding: 10px 15px;
+    display: inline-block;
+    background-color: #473509;
+}
+.wrapperHidden {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 10;
+    display: none;
+}
 .wrapper {
     width: 100%;
     height: 100%;
     position: relative;
+    z-index: 10;
 }
 
 .conveyorBelt {
@@ -43,7 +106,7 @@
 
 .bin3 {
     position: absolute;
-    width: 300px;
+    width: 200px;
     height: 170px;
 }
 
