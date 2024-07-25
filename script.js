@@ -133,11 +133,11 @@ function shiftReceiptsUp(removedReceipt){
         return receipt.x == 0 && receipt.y > removedReceipt.y;
     });
     if (receiptsToMove.length > 0){
-    for ( var receipt of receiptsToMove){
+    for (var receipt of receiptsToMove){
         receipt.y  -= 150;
     }
 }
-    lastEmptyReceiptPosition -=150;;
+    
 }
 
 function pickUpItem(event) {
@@ -150,7 +150,11 @@ function pickUpItem(event) {
                 if (playKeys["Space"] == true) {
 
                     playerIsCarrying = receipts[r].element;
+
+                    if(receipts[r].x == 0){
                     setTimeout(() => shiftReceiptsUp(receipts[r]), 1000);
+                    lastEmptyReceiptPosition -=150;
+                    }
 
                 }
                 else {
@@ -198,7 +202,7 @@ function pickUpItem(event) {
                         setIntervalCallIds[i] = setInterval(frame, 10);
                         function frame() {
 
-                            var itemIsOnScreen = posY < 878;
+                            var itemisOnScreen = posY < 878;
                             for (let bin in containers) {
                                 var curBin = containers[bin];
 
@@ -336,6 +340,7 @@ function paintReceipts() {
 
             if(receipts[i].x == 0){
             setTimeout(shiftReceiptsUp(receipts[i]), 500);
+            lastEmptyReceiptPosition -=150;
             }
             receipts[i].element.remove();
             removedReceipts++;
@@ -353,31 +358,6 @@ function paintReceipts() {
 }
 
 var removedReceipts = 0;
-// function createTimer(receipt, i){
-//     receipt.element.style.top = receipt.y + 'px';
-//     receipt.element.style.left = receipt.x + 'px';
-
-//     var timerY = receipt.y -7;
-//     var timerX = receipt.x ;
-//     receipt.timer.style.top = timerY + 'px';
-//     receipt.timer.style.left = timerX + 'px';
-//     var timeElapsed = document.createElement('div');
-//     timeElapsed.className = "timer-timeElapsed";
-//     timeElapsed.id = `timer${i}`;
-//     receipt.timer.appendChild(timeElapsed);
-//     wrapper.appendChild(receipt.timer);
-//     return receipt;
-// }
-// function countdownTimer(){
-//     for (i in receipts){
-//         if (timeElapsed.style.offsetWidth <= 0 ){
-//             receipts[i].element.remove();
-//         }
-//         var timeElapsed = receipts[i].timer.getElementById(`timer${i}`);
-//         var newWidth = timeElapsed.style.offsetwidth -2;
-//         timeElapsed.style.width  = newWidth +'px';
-//     }
-// }
 
 function paintConveyorBelt() {
 
@@ -476,7 +456,7 @@ function generateOrder() {
     receipts.push(chosenItems);
     numberOfOrdersGenerated++;
 
-    // paintReceipts();
+   
 
     setTimeout(generateOrder, 30000);
 
@@ -533,132 +513,119 @@ function keyNotBeingPressed(event) {
 
 document.addEventListener('keydown', keyBeingPressed);
 document.addEventListener('keyup', keyNotBeingPressed);
-// function isThereAnObstacle(){
-//     var isObstacle = false;
-//     for (let r in receipts){
-//         if(isCollision(receipts[r])){
-//         isObstacle = true;
-//         }
-//     }
-//     for (let bin in containers){
-//         if(isCollision(containers[bin])){
-//         isObstacle = true;
-//         }
-//     }
-//      if(isCollision(shippingTable)){
-//         isObstacle = true;
-//      }
-//      return isObstacle;
-// }
 function isCollisionBelowPlayer(){
-    var isObstacle = false;
+    var anObstacle =null;
         for (let r in receipts){
             if(isCollision(receipts[r])){
             if((playerY + player.offsetHeight) == receipts[r].y){
-            isObstacle = true;
+            anObstacle = receipts[r];
             }
         }
         }
         for (let bin in containers){
             if(isCollision(containers[bin])){
             if((playerY + player.offsetHeight) == containers[bin].y){
-            isObstacle = true;
+            anObstacle = containers[bin];
             }
         }
         }
         if(isCollision(shippingTable)){
          if((playerY + player.offsetHeight) == shippingTable.y){
-            isObstacle = true;
+            anObstacle = shippingTable;
          }
         }
-    return isObstacle;
+    return anObstacle;
 }
 function isCollisionAbovePlayer(){
-    var isObstacle = false;
+    var anObstacle =null;
     for (let r in receipts){
         if(isCollision(receipts[r])){
         if(playerY == (receipts[r].y +receipts[r].element.offsetHeight)){
-        isObstacle = true;
+        anObstacle = receipts[r];
         }
     }
     }
     for (let bin in containers){
         if(isCollision(containers[bin])){
         if(playerY == (containers[bin].y +containers[bin].element.offsetHeight)){
-        isObstacle = true;
+        anObstacle = containers[bin];
         }
     }
     }
     if(isCollision(shippingTable)){
      if(playerY == (shippingTable.y +shippingTable.element.offsetHeight)){
-        isObstacle = true;
+        anObstacle = shippingTable;
      }
     }
-return isObstacle;
+return anObstacle;
 
 }
 function isCollisionRightOfPlayer(){
-    var isObstacle = false;
+    var anObstacle =null;
     for (let r in receipts){
         if(isCollision(receipts[r])){
         if((playerX + player.offsetWidth) == receipts[r].x){
-        isObstacle = true;
+        anObstacle = receipts[r];
         }
     }
     }
     for (let bin in containers){
         if(isCollision(containers[bin])){
         if((playerX + player.offsetWidth) == containers[bin].x){
-        isObstacle = true;
+        anObstacle = containers[bin];
         }
     }
     }
     if(isCollision(shippingTable)){
      if((playerX + player.offsetWidth) == shippingTable.x){
-        isObstacle = true;
+        anObstacle = shippingTable;
      }
     }
-    return isObstacle;
+    return anObstacle;
 }
 function isCollisionLeftOfPlayer(){
-    var isObstacle = false;
+    var anObstacle = null;
     for (let r in receipts){
         if(isCollision(receipts[r])){
             if(playerX == (receipts[r].x + receipts[r].element.offsetWidth)){
-        isObstacle = true;
+        anObstacle = receipts[r];
             }
         }
     }
     for (let bin in containers){
         if(isCollision(containers[bin])){
             if(playerX == (containers[bin].x + containers[bin].element.offsetWidth)){   
-        isObstacle = true;
+        anObstacle = containers[bin];
         }
     }
     }
      if(isCollision(shippingTable)){
         if(playerX == (shippingTable.x + shippingTable.element.offsetWidth)){
-        isObstacle = true;
+        anObstacle = shippingTable;
      }
     }
-    return isObstacle;
+    return anObstacle;
     
 }
 function movePlayer() {
     var changeInX = 0;
     var changeInY = 0;
 
-    if (playKeys['KeyW'] && playerY - 10 > 0 && playerY - 10 > 100 && !isCollisionAbovePlayer()) {
+    if (playKeys['KeyW'] && playerY - 10 > 0 && playerY - 10 > 100 && (isCollisionAbovePlayer() == null || isCollisionAbovePlayer().element == playerIsCarrying)) {
         changeInY -= 10;
 
     }
-    if (playKeys['KeyS'] && playerY + player.offsetHeight + 10 < viewportHeight && !isCollisionBelowPlayer()) {
+    if (playKeys['KeyS'] && playerY + player.offsetHeight + 10 < viewportHeight &&  (isCollisionBelowPlayer() == null || isCollisionBelowPlayer().element == playerIsCarrying)) {
         changeInY += 10;
         }
-    if (playKeys['KeyA'] && playerX - 10 > 0 && !isCollisionLeftOfPlayer()) {
+    console.log(isCollisionLeftOfPlayer() == playerIsCarrying);
+    console.log(playerIsCarrying);
+    console.log(isCollisionLeftOfPlayer());
+    
+    if (playKeys['KeyA'] && playerX - 10 > 0 && (isCollisionLeftOfPlayer() == null || isCollisionLeftOfPlayer().element == playerIsCarrying)) {
         changeInX -= 10;
     }
-    if (playKeys['KeyD'] && playerX + player.offsetWidth + 10 < viewportWidth && !isCollisionRightOfPlayer()) {
+    if (playKeys['KeyD'] && playerX + player.offsetWidth + 10 < viewportWidth && (isCollisionRightOfPlayer() == null || isCollisionRightOfPlayer().element == playerIsCarrying)) {
         changeInX += 10;
     }
     playerY += changeInY;
@@ -707,7 +674,7 @@ function closePackage(event) {
     for (let r in receipts) {
         if (playerIsCarrying == receipts[r].element) {
 
-            //put containers loop in here to close a pakcage by place the receipt on it
+           
             for (let bin in containers) {
 
                     if (isCollision(containers[bin])) {
@@ -716,7 +683,6 @@ function closePackage(event) {
                             close.play();
                             containers[bin].element.src = "darkbrownboxclosed.svg";
                             containers[bin].receiptContent = receipts[r].receiptContent;
-                            setTimeout(shiftReceiptsUp(receipts[r]), 1000);
                             receipts[r].element.remove();
                             removedReceipts++;
                             receipts = receipts.filter((receipt) => receipt != receipts[r]);
@@ -804,6 +770,7 @@ function pickUpBin(event) {
                     if (thisBin.x + thisBin.element.offsetWidth / 2 > 1000 && thisBin.y + thisBin.element.offsetHeight / 2 > 300) {
                         ship.play()
                         finishedPackages.push(i);
+                        var newBin = {element: thisBin.element, x: thisBin.x, y: thisBin.y, shipped: false};
                         containers[i].shipped = true;
                         containers[i].element.style.width = '40px';
                         containers[i].element.style.height = '40px';
@@ -812,6 +779,9 @@ function pickUpBin(event) {
                             items[i].element.style.width = '1px';
                             items[i].element.style.height = '1px';
                         }
+                       
+                        containers.push(newBin);
+                        console.log(containers);
                     }
                     pickup.play();
                     playerIsCarrying = null;
@@ -819,7 +789,7 @@ function pickUpBin(event) {
                 }
 
             }
-        //}
+        
     }
 
 }
@@ -855,9 +825,8 @@ function gameLoop() {
     movePlayer();
     moveItemsOnBelt(items);
    paintAllItems(items);
-    //paintReceipts();
     repaintMovingReceiptOrBin();
-
+    paintBins();
 
     if (!playing) {
         showScore();
@@ -876,12 +845,8 @@ function gameLoop() {
 
 gameTimer();
 paintConveyorBelt();
-
-
-//paintAllItems(items);
-
 paintShippingArea();
-paintBins();
+
 paintPlayer();
 generateOrder();
 generateNewItemOnBelt();
