@@ -147,3 +147,30 @@
     width: 40px;
     height: 40px;
 }
+.timer {
+    border-style: solid;
+    height: 4px;
+    border-color: black;
+    background-color:black;
+    width: 120px;
+
+}
+.timer-timeElapsed{
+    background-color: orange;
+    width: 120px;
+    height: 2px;
+
+}
+
+.score{
+    position: absolute;
+    left: 400px;
+    top: 100px;
+    width: 400px;
+    height: 150px;
+    background-color: orange;
+    border-style: solid;
+    border-color: white;
+    text-align: center;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
