@@ -1,10 +1,11 @@
 <html>
     <head>
-    <title> Play </title>
+    <title> Enchanter's Inventory </title>
     <link rel='stylesheet' href='gamestyle.css'/>      
     </head>
      <body  style="margin:0; overflow: hidden; background-image: url('backgroundtile.svg')">
         <div class="startScreen" id="startScreen">
+            <h1 style="font-family:'Rowdies'"><center> Enchanter's Inventory <center> </h1>
             <p> Ship as many custom-made packages as you can! </p>
             <h2 style="font-family:'Rowdies'"> <center> instructions: </center></h2>
             <p> 1. use the keys <span class ='keyButton'>W</span> , 
