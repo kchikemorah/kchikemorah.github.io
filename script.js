@@ -612,8 +612,7 @@ startButton.addEventListener("click", () => {
             changeInY -= 10;
 
         }
-        console.log(isCollisionBelowPlayer());
-        console.log(playerIsCarrying);
+
         if (playKeys['KeyS'] && playerY + player.offsetHeight + 10 < viewportHeight && (isCollisionBelowPlayer() == null || isCollisionBelowPlayer() == playerIsCarrying)) {
             changeInY += 10;
         }
@@ -755,12 +754,12 @@ startButton.addEventListener("click", () => {
                 if (playKeys["KeyP"] == true) {
 
                     pickup.play();
-                    console.log(`package ${b} will be picked up!`);
+                   
                     playerIsCarrying = thisBin;
                     return;
                 }
                 else {
-                    console.log(`package ${b} will be dropped off!`);
+                    
                     // if (thisBin.x + thisBin.element.offsetWidth / 2 > 1000 && thisBin.y + thisBin.element.offsetHeight / 2 > 300) {
                     if (isCollision(shippingTable)) {
                         ship.play();
