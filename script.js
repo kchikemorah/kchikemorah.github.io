@@ -709,40 +709,40 @@ startButton.addEventListener("click", () => {
 
     }
     var finishedPackages = [];
-    function getScore() {
-        var totalScore = 0;
-        for (let package of finishedPackages) {
-            var thisPackage = containers[package];
-            var thisReceipt = thisPackage.receiptContent;
-            var itemsInPackage = thisPackage.itemIdsInBin;
-            for (let i of itemsInPackage) {
-                for (let itemType in thisReceipt) {
-                    if (itemType == items[i].type) { //this item is on the assigned receipt 
-                        if (thisReceipt[itemType] > 0) {
-                            thisReceipt[itemType] -= 1;
-                        }
-                    }
-                }
+    // function getScore() {
+    //     var totalScore = 0;
+    //     for (let package of finishedPackages) {
+    //         var thisPackage = containers[package];
+    //         var thisReceipt = thisPackage.receiptContent;
+    //         var itemsInPackage = thisPackage.itemIdsInBin;
+    //         for (let i of itemsInPackage) {
+    //             for (let itemType in thisReceipt) {
+    //                 if (itemType == items[i].type) { //this item is on the assigned receipt 
+    //                     if (thisReceipt[itemType] > 0) {
+    //                         thisReceipt[itemType] -= 1;
+    //                     }
+    //                 }
+    //             }
 
-            }
-            var score = maxItemsInBox;
+    //         }
+    //         var score = maxItemsInBox;
 
-            if (thisReceipt) {
-                for (let itemType in thisReceipt) {
-                    score -= thisReceipt[itemType]; //any items not accounted for go against you!
-                }
-                totalScore += score;
+    //         if (thisReceipt) {
+    //             for (let itemType in thisReceipt) {
+    //                 score -= thisReceipt[itemType]; //any items not accounted for go against you!
+    //             }
+    //             totalScore += score;
 
-            }
+    //         }
 
 
-        }
-        // var missedOrders = numberOfOrdersGenerated - finishedPackages.length;
-        // totalScore -= missedOrders * 3;
-        //this is here bc i might wanrt to subtract score again later?
-        if (totalScore <= 0) { return 0; }
-        return totalScore;
-    }
+    //     }
+    //     // var missedOrders = numberOfOrdersGenerated - finishedPackages.length;
+    //     // totalScore -= missedOrders * 3;
+    //     //this is here bc i might wanrt to subtract score again later?
+    //     if (totalScore <= 0) { return 0; }
+    //     return totalScore;
+    // }
 
     function isCollision(object) {
         return !((playerY + player.offsetHeight) < object.y ||
@@ -861,7 +861,7 @@ function getScoreOfPackage(package){
     function showScore() {
         var scoreScreen = document.createElement('div');
         scoreScreen.className = "score";
-        scoreScreen.innerHTML = `<h1> GAME OVER! </h1><h1>Score: ${getScore()} </h1> `;
+        scoreScreen.innerHTML = `<h1> GAME OVER! </h1><h1>Score: ${CurrentScoreValue} </h1> `;
         wrapper.appendChild(scoreScreen);
     }
 
