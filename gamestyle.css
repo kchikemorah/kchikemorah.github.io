@@ -97,23 +97,27 @@
     position: absolute;
     width: 200px;
     height: 100px;
+    z-index: 20;
 }
 .bin2 {
     position: absolute;
     width: 250px;
     height: 140px;
+    z-index: 20;
 }
 
 .bin3 {
     position: absolute;
     width: 200px;
     height: 170px;
+    z-index: 20;
 }
 
 .bin4 {
     position: absolute;
     width: 130px;
-    height: 150px;    
+    height: 150px; 
+    z-index: 20;   
 }
 
 .player {
@@ -236,4 +240,10 @@
     border-color: white;
     text-align: center;
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.currentScore{
+    position: absolute;
+    left: 20px;
+    top: 5px;
+    
 }

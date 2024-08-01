@@ -28,7 +28,8 @@
 </div>
            
         </div>
-    <div id='wrapper' class = 'wrapperHidden'>        
+    <div id='wrapper' class = 'wrapperHidden'>
+        <div class = 'currentScore' id='currentScore'> <h2>Score: 0 </h2> </div>        
         <div style='height: 60px; text-align: center; background-color: #AA7D47' id = 'gameTimer'></div>
 
 

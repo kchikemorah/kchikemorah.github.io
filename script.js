@@ -175,10 +175,6 @@ startButton.addEventListener("click", () => {
                     pickup.play();
                     playerIsCarrying = thisItem; //pick up
                     items[i].onBelt = false;
-                    if (items[i].inPackageId != null) {
-                        containers[items[i].inPackageId].itemIdsInBin.splice(items.indexOf(i), 1); //remove item from bin it was just in
-                    }
-
                     return;
                 }
                 else {
@@ -215,9 +211,10 @@ startButton.addEventListener("click", () => {
 
                                     if (itemIsOnScreen) {
                                         drop.play();
-
+                                        
                                         posY += curBin.element.offsetHeight - items[i].element.offsetHeight - 10;
-
+                                        console.log(posY);
+                                        items[i].y = posY;
                                         items[i].element.style.top = posY + 'px';
                                         items[i].inPackageId = `${b}`;
                                         containers[b].itemIdsInBin.push(i);
@@ -262,10 +259,10 @@ startButton.addEventListener("click", () => {
 
 
     var containers = [
-        { element: document.createElement('img'), x: 100, y: 700, itemIdsInBin: [], shipped: false },
-        { element: document.createElement('img'), x: 350, y: 700, itemIdsInBin: [], shipped: false },
-        { element: document.createElement('img'), x: 650, y: 700, itemIdsInBin: [], shipped: false },
-        { element: document.createElement('img'), x: 900, y: 700, itemIdsInBin: [], shipped: false }
+        { element: document.createElement('img'), x: 100, y: 650, itemIdsInBin: [], shipped: false },
+        { element: document.createElement('img'), x: 350, y: 650, itemIdsInBin: [], shipped: false },
+        { element: document.createElement('img'), x: 600, y: 650, itemIdsInBin: [], shipped: false },
+        { element: document.createElement('img'), x: 850, y:650, itemIdsInBin: [], shipped: false }
     ];
 
 
@@ -312,7 +309,7 @@ startButton.addEventListener("click", () => {
 
             var receipt = receipts[i];
             if (receipts[i].element.innerHTML == "") {
-                receipts[i].element.innerHTML += `<div class='timer' > <div class='timer-timeElapsed' id='timer${i}'></div></div>`;
+                receipts[i].element.innerHTML += `<div class='timer' > <div class='timer-timeElapsed' id='timer${receipt.id}'></div></div>`;
                 receipts[i].element.innerHTML += ` Order No. ${Math.floor(Math.random() * 999999)} <br>`;
 
                 for (var itemType in receipt.receiptContent) {
@@ -331,7 +328,8 @@ startButton.addEventListener("click", () => {
             receipts[i].element.style.left = receipt.x + 'px';
 
             //increment timer
-            var timeElapsed = document.getElementById(`timer${i}`);
+            var timeElapsed = document.getElementById(`timer${receipt.id}`);
+
             if (timeElapsed) {
                 if (timeElapsed.offsetWidth <= 0) {
 
@@ -415,6 +413,7 @@ startButton.addEventListener("click", () => {
 
     var maxItemsInBox = 5;
     var numberOfOrdersGenerated = 0;
+    var newReceiptId = 0;
     function generateOrder() {
 
         //start with a box of max 5 items
@@ -428,12 +427,8 @@ startButton.addEventListener("click", () => {
 
 
 
-        var chosenItems = { x: 0, y: 0, receiptContent: {}, element: receiptDiv };
-
-
-
-
-
+        var chosenItems = { x: 0, y: 0, receiptContent: {}, element: receiptDiv, id: newReceiptId};
+        newReceiptId++;
 
 
         for (var i = 0; i < maxItemsInBox; i++) {
@@ -511,116 +506,129 @@ startButton.addEventListener("click", () => {
     document.addEventListener('keydown', keyBeingPressed);
     document.addEventListener('keyup', keyNotBeingPressed);
     function isCollisionBelowPlayer() {
-        var anObstacle = null;
+        var obstacleBelow = null;
         for (let r in receipts) {
             if (isCollision(receipts[r])) {
-                if ((playerY + player.offsetHeight) == receipts[r].y) {
-                    anObstacle = receipts[r];
+                // if ((playerY + player.offsetHeight) == receipts[r].y) {
+                if(Math.abs((playerY + player.offsetHeight) - receipts[r].y) <= 5){
+                    obstacleBelow = receipts[r];
                 }
             }
         }
         for (let b in containers) {
             if (isCollision(containers[b])) {
-                if ((playerY + player.offsetHeight) == containers[b].y) {
-                    anObstacle = containers[b];
+                // if ((playerY + player.offsetHeight) == containers[b].y) {
+                if(Math.abs((playerY + player.offsetHeight) - containers[b].y) <= 10){
+                    obstacleBelow = containers[b];
                 }
             }
         }
         if (isCollision(shippingTable)) {
-            if ((playerY + player.offsetHeight) == shippingTable.y) {
-                anObstacle = shippingTable;
+            // if ((playerY + player.offsetHeight) == shippingTable.y) {
+            if(Math.abs((playerY + player.offsetHeight) - shippingTable.y) <= 10){
+                obstacleBelow = shippingTable;
             }
         }
-        return anObstacle;
+       
+        return obstacleBelow;
     }
     function isCollisionAbovePlayer() {
-        var anObstacle = null;
+        var obstacleAbove = null;
         for (let r in receipts) {
             if (isCollision(receipts[r])) {
-                if (playerY == (receipts[r].y + receipts[r].element.offsetHeight)) {
-                    anObstacle = receipts[r];
+                // if (playerY == (receipts[r].y + receipts[r].element.offsetHeight)) {
+                if(Math.abs(playerY - (receipts[r].y + receipts[r].element.offsetHeight)) <= 5){
+                    obstacleAbove = receipts[r];
                 }
             }
         }
         for (let b in containers) {
             if (isCollision(containers[b])) {
-                if (playerY == (containers[b].y + containers[b].element.offsetHeight)) {
-                    anObstacle = containers[b];
+                // if (playerY == (containers[b].y + containers[b].element.offsetHeight)) {
+                if(Math.abs(playerY - (containers[b].y + containers[b].element.offsetHeight)) <= 10){
+                    obstacleAbove = containers[b];
                 }
             }
         }
         if (isCollision(shippingTable)) {
-            if (playerY == (shippingTable.y + shippingTable.element.offsetHeight)) {
-                anObstacle = shippingTable;
+            // if (playerY == (shippingTable.y + shippingTable.element.offsetHeight)) {
+            if(Math.abs(playerY - (shippingTable.y + shippingTable.element.offsetHeight)) <= 10){
+                obstacleAbove = shippingTable;
             }
         }
-        return anObstacle;
+        return obstacleAbove;
 
     }
     function isCollisionRightOfPlayer() {
-        var anObstacle = null;
+        var obstacleRight = null;
         for (let r in receipts) {
             if (isCollision(receipts[r])) {
-                if ((playerX + player.offsetWidth) == receipts[r].x) {
-                    anObstacle = receipts[r];
+                // if ((playerX + player.offsetWidth) == receipts[r].x) {
+                if(Math.abs((playerX + player.offsetWidth) - receipts[r].x) <= 5){
+                    obstacleRight = receipts[r];
                 }
             }
         }
         for (let b in containers) {
             if (isCollision(containers[b])) {
-                if ((playerX + player.offsetWidth) == containers[b].x) {
-                    anObstacle = containers[b];
+                // if ((playerX + player.offsetWidth) == containers[b].x) {
+                if(Math.abs((playerX + player.offsetWidth) - containers[b].x) <= 10){
+                    obstacleRight = containers[b];
                 }
             }
         }
         if (isCollision(shippingTable)) {
-            if ((playerX + player.offsetWidth) == shippingTable.x) {
-                anObstacle = shippingTable;
+            // if ((playerX + player.offsetWidth) == shippingTable.x) {
+            if(Math.abs((playerX + player.offsetWidth) - shippingTable.x) <= 10){
+                obstacleRight = shippingTable;
             }
         }
-        return anObstacle;
+        return obstacleRight;
     }
     function isCollisionLeftOfPlayer() {
-        var anObstacle = null;
+        var obstacleLeft = null;
         for (let r in receipts) {
             if (isCollision(receipts[r])) {
-                if (playerX == (receipts[r].x + receipts[r].element.offsetWidth)) {
-                    anObstacle = receipts[r];
+                // if (playerX == (receipts[r].x + receipts[r].element.offsetWidth)) {
+                if(Math.abs(playerX - (receipts[r].x + receipts[r].element.offsetWidth)) <= 5){
+                    obstacleLeft = receipts[r];
                 }
             }
         }
         for (let b in containers) {
             if (isCollision(containers[b])) {
-                if (playerX == (containers[b].x + containers[b].element.offsetWidth)) {
-                    anObstacle = containers[b];
+                // if (playerX == (containers[b].x + containers[b].element.offsetWidth)) {
+                if(Math.abs(playerX - (containers[b].x + containers[b].element.offsetWidth)) <= 10){
+                    obstacleLeft = containers[b];
                 }
             }
         }
         if (isCollision(shippingTable)) {
-            if (playerX == (shippingTable.x + shippingTable.element.offsetWidth)) {
-                anObstacle = shippingTable;
+            // if (playerX == (shippingTable.x + shippingTable.element.offsetWidth)) {
+            if(Math.abs(playerX - (shippingTable.x + shippingTable.element.offsetWidth)) <= 10){
+                obstacleLeft = shippingTable;
             }
         }
-        return anObstacle;
+        return obstacleLeft;
 
     }
     function movePlayer() {
         var changeInX = 0;
         var changeInY = 0;
 
-        if (playKeys['KeyW'] && playerY - 10 > 0 && playerY - 10 > 100 && (isCollisionAbovePlayer() == null || isCollisionAbovePlayer() == playerIsCarrying)) {
-            changeInY -= 10;
+        if (playKeys['KeyW'] && playerY - 20 > 0 && playerY - 20 > 100 && (isCollisionAbovePlayer() == null || isCollisionAbovePlayer() == playerIsCarrying)) {
+            changeInY -= 15;
 
         }
 
-        if (playKeys['KeyS'] && playerY + player.offsetHeight + 10 < viewportHeight && (isCollisionBelowPlayer() == null || isCollisionBelowPlayer() == playerIsCarrying)) {
-            changeInY += 10;
+        if (playKeys['KeyS'] && playerY + player.offsetHeight + 15 < viewportHeight && (isCollisionBelowPlayer() == null || isCollisionBelowPlayer() == playerIsCarrying)) {
+            changeInY += 15;
         }
-        if (playKeys['KeyA'] && playerX - 10 > 0 && (isCollisionLeftOfPlayer() == null || isCollisionLeftOfPlayer() == playerIsCarrying)) {
-            changeInX -= 10;
+        if (playKeys['KeyA'] && playerX - 15 > 0 && (isCollisionLeftOfPlayer() == null || isCollisionLeftOfPlayer() == playerIsCarrying)) {
+            changeInX -= 15;
         }
-        if (playKeys['KeyD'] && playerX + player.offsetWidth + 10 < viewportWidth && (isCollisionRightOfPlayer() == null || isCollisionRightOfPlayer() == playerIsCarrying)) {
-            changeInX += 10;
+        if (playKeys['KeyD'] && playerX + player.offsetWidth + 15 < viewportWidth && (isCollisionRightOfPlayer() == null || isCollisionRightOfPlayer() == playerIsCarrying)) {
+            changeInX += 15;
         }
         playerY += changeInY;
         playerX += changeInX;
@@ -677,9 +685,9 @@ startButton.addEventListener("click", () => {
                             close.play();
                             containers[b].element.src = "darkbrownboxclosed.svg";
                             containers[b].receiptContent = receipts[r].receiptContent;
-                            receipts[r].element.remove();
+                            receipts[r].element.remove(); //timer gets stopped
                             removedReceipts++;
-                            receipts = receipts.filter((receipt) => receipt != receipts[r]);
+                            receipts = receipts.filter((receipt) => receipt != receipts[r]); //pop elements?
 
                             return;
                         }
@@ -729,9 +737,10 @@ startButton.addEventListener("click", () => {
 
 
         }
-        var missedOrders = numberOfOrdersGenerated - finishedPackages.length;
-        totalScore -= missedOrders * 3;
-        if (totalScore < 0) { return 0; }
+        // var missedOrders = numberOfOrdersGenerated - finishedPackages.length;
+        // totalScore -= missedOrders * 3;
+        //this is here bc i might wanrt to subtract score again later?
+        if (totalScore <= 0) { return 0; }
         return totalScore;
     }
 
@@ -742,7 +751,34 @@ startButton.addEventListener("click", () => {
             playerX > (object.x + object.element.offsetWidth));
 
     }
+ var currentScore = document.getElementById('currentScore');
+ var currentScoreValue = 0;
+ function updateCurrentScore(){
+    currentScore.innerHTML = `<h1> Score: ${currentScoreValue} </h1>`;
+ }
+function getScoreOfPackage(package){
+        var receipt = package.receiptContent;
+        var itemsInPackage = package.itemIdsInBin;
+        for (let i of itemsInPackage) {
+            for (let itemType in receipt) {
+                if (itemType == items[i].type) { //this item is on the assigned receipt 
+                    if (receipt[itemType] > 0) {
+                        receipt[itemType] -= 1;
+                    }
+                }
+            }
 
+        }
+        var score = maxItemsInBox;
+
+        if (receipt) {
+            for (let itemType in receipt) {
+                score -= receipt[itemType]; //any items not accounted for go against you!
+            }
+        currentScoreValue += score;
+
+    }
+}
     function pickUpBin(event) {
 
         for (let b in containers) {
@@ -769,12 +805,14 @@ startButton.addEventListener("click", () => {
                         containers[b].element.style.height = '40px';
                         containers[b].x = 1150;
                         containers[b].element.style.left = containers[b].x + 'px';
+                       
 
                         for (let i of thisBin.itemIdsInBin) {
                             items[i].element.style.width = '1px';
                             items[i].element.style.height = '1px';
                         }
-
+                        getScoreOfPackage(containers[b]);
+                        updateCurrentScore();
                     }
                     pickup.play();
                     playerIsCarrying = null;
@@ -813,10 +851,10 @@ startButton.addEventListener("click", () => {
         var bin2 = document.createElement('img');
         var bin3 = document.createElement('img');
         var bin4 = document.createElement('img');
-        containers.push({ element: bin1, x: 100, y: 700, itemIdsInBin: [], shipped: false });
-        containers.push({ element: bin2, x: 350, y: 700, itemIdsInBin: [], shipped: false });
-        containers.push({ element: bin3, x: 650, y: 700, itemIdsInBin: [], shipped: false });
-        containers.push({ element: bin4, x: 900, y: 700, itemIdsInBin: [], shipped: false });
+        containers.push({ element: bin1, x: 100, y: 650, itemIdsInBin: [], shipped: false });
+        containers.push({ element: bin2, x: 350, y: 650, itemIdsInBin: [], shipped: false });
+        containers.push({ element: bin3, x: 650, y: 650, itemIdsInBin: [], shipped: false });
+        containers.push({ element: bin4, x: 900, y: 650, itemIdsInBin: [], shipped: false });
         paintBins();
     }
 
