@@ -861,7 +861,7 @@ function getScoreOfPackage(package){
     function showScore() {
         var scoreScreen = document.createElement('div');
         scoreScreen.className = "score";
-        scoreScreen.innerHTML = `<h1> GAME OVER! </h1><h1>Score: ${CurrentScoreValue} </h1> `;
+        scoreScreen.innerHTML = `<h1> GAME OVER! </h1><h1>Score: ${currentScoreValue} </h1> `;
         wrapper.appendChild(scoreScreen);
     }
 
